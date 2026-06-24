@@ -1,161 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arena Monstros - Quanto mais mata, mais aparece!</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
-        body {
-            background: #1a1a2e;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .game-container {
-            background: #16213e;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        canvas {
-            border: 2px solid #0f3460;
-            border-radius: 12px;
-            background: #1a1a2e;
-            cursor: crosshair;
-            display: block;
-        }
-        .status-panel {
-            width: 100%;
-            margin-top: 15px;
-            background: #0f3460;
-            border-radius: 12px;
-            padding: 12px 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            color: #eee;
-            font-size: 16px;
-            font-weight: 500;
-            gap: 8px 15px;
-        }
-        .status-panel .stat {
-            background: #1a1a2e;
-            padding: 4px 14px;
-            border-radius: 30px;
-            display: inline-block;
-            border: 1px solid #533483;
-        }
-        .status-panel .stat span {
-            color: #f5a623;
-            font-weight: bold;
-        }
-        .status-panel .stat .hp-bar {
-            display: inline-block;
-            width: 100px;
-            height: 10px;
-            background: #333;
-            border-radius: 10px;
-            margin-left: 6px;
-            vertical-align: middle;
-            overflow: hidden;
-        }
-        .status-panel .stat .hp-bar .fill {
-            height: 100%;
-            background: #e94560;
-            border-radius: 10px;
-            transition: width 0.2s;
-        }
-        .btn-restart {
-            background: #e94560;
-            color: white;
-            border: none;
-            padding: 6px 18px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-left: 10px;
-        }
-        .btn-restart:hover {
-            background: #c73652;
-            transform: scale(1.03);
-        }
-        .game-over-msg {
-            color: #e94560;
-            font-weight: bold;
-            font-size: 18px;
-            margin-right: 15px;
-            display: none;
-        }
-        .game-over-msg.show {
-            display: inline;
-        }
-        @media (max-width: 850px) {
-            canvas {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 800/600;
-            }
-            .status-panel {
-                font-size: 14px;
-                padding: 10px;
-            }
-            .status-panel .stat .hp-bar {
-                width: 70px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arena Monstros (versão estável)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      background: #0b0e1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .game-container {
+      background: #12182b;
+      padding: 20px;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    canvas {
+      border: 2px solid #2a3a6e;
+      border-radius: 16px;
+      background: #1a1f33;
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 800 / 600;
+      cursor: crosshair;
+    }
+    .status-panel {
+      width: 100%;
+      margin-top: 16px;
+      background: #1a2542;
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      color: #e0e7ff;
+      font-size: 15px;
+      font-weight: 500;
+      gap: 6px 12px;
+      border: 1px solid #2f4172;
+    }
+    .stat {
+      background: #0e1528;
+      padding: 4px 14px;
+      border-radius: 30px;
+      border: 1px solid #3b4e8a;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat span {
+      color: #facc15;
+      font-weight: 700;
+    }
+    .hp-bar {
+      display: inline-block;
+      width: 110px;
+      height: 10px;
+      background: #2a2f4a;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-left: 6px;
+    }
+    .hp-bar .fill {
+      height: 100%;
+      background: #f87171;
+      border-radius: 10px;
+      transition: width 0.2s;
+    }
+    .btn-restart {
+      background: #f87171;
+      border: none;
+      color: #0b0e1a;
+      font-weight: bold;
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-restart:hover {
+      background: #fca5a5;
+      transform: scale(1.03);
+    }
+    .game-over-msg {
+      color: #f87171;
+      font-weight: 700;
+      font-size: 18px;
+      margin-right: 10px;
+      display: none;
+    }
+    .game-over-msg.show {
+      display: inline;
+    }
+  </style>
 </head>
 <body>
 <div class="game-container">
-    <canvas id="arena" width="800" height="600"></canvas>
-    <div class="status-panel">
-        <div class="stat">❤️ <span id="hpDisplay">100</span> / <span id="maxHpDisplay">100</span> <span class="hp-bar"><span class="fill" id="hpFill" style="width:100%"></span></span></div>
-        <div class="stat">⚔️ Dano: <span id="danoDisplay">10</span></div>
-        <div class="stat">⭐ Nível: <span id="nivelDisplay">1</span></div>
-        <div class="stat">✨ XP: <span id="xpDisplay">0</span> / <span id="xpNextDisplay">50</span></div>
-        <div class="stat">👹 Monstros: <span id="monstrosDisplay">0</span></div>
-        <div class="stat">💀 Mortes: <span id="mortesDisplay">0</span></div>
-        <div>
-            <span class="game-over-msg" id="gameOverMsg">💀 GAME OVER</span>
-            <button class="btn-restart" id="restartBtn">🔄 Reiniciar</button>
-        </div>
+  <canvas id="arena" width="800" height="600"></canvas>
+  <div class="status-panel">
+    <div class="stat">❤️ <span id="hpDisplay">100</span>/<span id="maxHpDisplay">100</span> <span class="hp-bar"><span class="fill" id="hpFill" style="width:100%"></span></span></div>
+    <div class="stat">⚔️ <span id="danoDisplay">10</span></div>
+    <div class="stat">⭐ Nv <span id="nivelDisplay">1</span></div>
+    <div class="stat">✨ XP <span id="xpDisplay">0</span>/<span id="xpNextDisplay">50</span></div>
+    <div class="stat">👹 <span id="monstrosDisplay">0</span></div>
+    <div class="stat">💀 <span id="mortesDisplay">0</span></div>
+    <div>
+      <span class="game-over-msg" id="gameOverMsg">💀 GAME OVER</span>
+      <button class="btn-restart" id="restartBtn">🔄 Reiniciar</button>
     </div>
+  </div>
 </div>
 
 <script>
-    // -------- CONFIGURAÇÕES --------
-    const CONFIG = {
-        JOGADOR_RAIO: 22,
-        MONSTRO_RAIO: 16,
-        VIDA_INICIAL: 100,
-        DANO_INICIAL: 10,
-        VIDA_MONSTRO_BASE: 30,
-        DANO_MONSTRO_BASE: 6,
-        ATAQUE_COOLDOWN_MONSTRO: 2.0, // segundos
-        XP_POR_MORTE_BASE: 10,
-        XP_POR_NIVEL_BASE: 50,
-        VIDA_POR_NIVEL: 25,
-        DANO_POR_NIVEL: 5,
-        MAX_MONSTROS: 200,
-        DISTANCIA_MIN_JOGADOR: 80,
-        DISTANCIA_MIN_MONSTROS: 30,
+  (function() {
+    // ----- CONFIG -----
+    const CFG = {
+      JOGADOR_RAIO: 24,
+      MONSTRO_RAIO: 18,
+      VIDA_INICIAL: 100,
+      DANO_INICIAL: 10,
+      VIDA_MONSTRO_BASE: 30,
+      DANO_MONSTRO_BASE: 6,
+      ATAQUE_COOLDOWN: 2.0,          // segundos
+      XP_POR_MORTE_BASE: 10,
+      XP_POR_NIVEL_BASE: 50,
+      VIDA_POR_NIVEL: 25,
+      DANO_POR_NIVEL: 5,
+      MAX_MONSTROS: 200,
+      DIST_MIN_JOGADOR: 80,
+      DIST_MIN_MONSTROS: 35,
     };
 
-    // -------- ELEMENTOS DOM --------
+    // ----- DOM -----
     const canvas = document.getElementById('arena');
     const ctx = canvas.getContext('2d');
     const hpDisplay = document.getElementById('hpDisplay');
@@ -170,368 +161,336 @@
     const gameOverMsg = document.getElementById('gameOverMsg');
     const restartBtn = document.getElementById('restartBtn');
 
-    // -------- ESTADO DO JOGO --------
+    // ----- ESTADO -----
     let jogador = {
-        x: 400,
-        y: 300,
-        raio: CONFIG.JOGADOR_RAIO,
-        hp: CONFIG.VIDA_INICIAL,
-        maxHp: CONFIG.VIDA_INICIAL,
-        dano: CONFIG.DANO_INICIAL,
-        nivel: 1,
-        xp: 0,
-        xpProximo: CONFIG.XP_POR_NIVEL_BASE,
-        mortes: 0,
-        vivo: true,
+      x: 400, y: 300,
+      raio: CFG.JOGADOR_RAIO,
+      hp: CFG.VIDA_INICIAL,
+      maxHp: CFG.VIDA_INICIAL,
+      dano: CFG.DANO_INICIAL,
+      nivel: 1,
+      xp: 0,
+      xpProximo: CFG.XP_POR_NIVEL_BASE,
+      mortes: 0,
+      vivo: true
     };
 
     let monstros = [];
     let ultimoTempo = 0;
 
-    // -------- FUNÇÕES AUXILIARES --------
-    function distancia(x1, y1, x2, y2) {
-        return Math.hypot(x2 - x1, y2 - y1);
+    // ----- UTILITÁRIOS -----
+    function dist(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
     }
 
-    function aleatorio(min, max) {
-        return Math.random() * (max - min) + min;
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
     }
 
-    function gerarPosicaoMonstro() {
-        const margem = 30;
-        let tentativas = 0;
-        while (tentativas < 100) {
-            const x = aleatorio(margem, canvas.width - margem);
-            const y = aleatorio(margem, canvas.height - margem);
-            // longe do jogador
-            if (distancia(x, y, jogador.x, jogador.y) < CONFIG.DISTANCIA_MIN_JOGADOR) {
-                tentativas++;
-                continue;
-            }
-            // longe de outros monstros
-            let colide = false;
-            for (let m of monstros) {
-                if (distancia(x, y, m.x, m.y) < CONFIG.DISTANCIA_MIN_MONSTROS + CONFIG.MONSTRO_RAIO) {
-                    colide = true;
-                    break;
-                }
-            }
-            if (!colide) return { x, y };
-            tentativas++;
+    // ----- GERAR POSIÇÃO VÁLIDA PARA MONSTRO -----
+    function posicaoValida() {
+      const margem = 30;
+      for (let tent = 0; tent < 150; tent++) {
+        const x = rand(margem, canvas.width - margem);
+        const y = rand(margem, canvas.height - margem);
+        const p = { x, y };
+        // longe do jogador
+        if (dist(p, jogador) < CFG.DIST_MIN_JOGADOR) continue;
+        // longe de outros monstros
+        let colide = false;
+        for (const m of monstros) {
+          if (dist(p, m) < CFG.DIST_MIN_MONSTROS + CFG.MONSTRO_RAIO) {
+            colide = true;
+            break;
+          }
         }
-        // fallback: posição aleatória sem restrições
-        return { x: aleatorio(margem, canvas.width - margem), y: aleatorio(margem, canvas.height - margem) };
+        if (!colide) return p;
+      }
+      // fallback: centro da tela com deslocamento
+      return { x: rand(100, 700), y: rand(100, 500) };
     }
 
+    // ----- CRIAR MONSTRO -----
     function criarMonstro() {
-        const pos = gerarPosicaoMonstro();
-        return {
-            x: pos.x,
-            y: pos.y,
-            raio: CONFIG.MONSTRO_RAIO,
-            hp: CONFIG.VIDA_MONSTRO_BASE,
-            maxHp: CONFIG.VIDA_MONSTRO_BASE,
-            dano: CONFIG.DANO_MONSTRO_BASE,
-            attackCooldown: CONFIG.ATAQUE_COOLDOWN_MONSTRO,
-            attackTimer: aleatorio(0, CONFIG.ATAQUE_COOLDOWN_MONSTRO), // ataque assíncrono
-            vivo: true,
-        };
+      const pos = posicaoValida();
+      return {
+        x: pos.x,
+        y: pos.y,
+        raio: CFG.MONSTRO_RAIO,
+        hp: CFG.VIDA_MONSTRO_BASE,
+        maxHp: CFG.VIDA_MONSTRO_BASE,
+        dano: CFG.DANO_MONSTRO_BASE,
+        attackCooldown: CFG.ATAQUE_COOLDOWN,
+        attackTimer: rand(0, CFG.ATAQUE_COOLDOWN),
+        vivo: true
+      };
     }
 
+    // ----- ADICIONAR MONSTROS -----
     function adicionarMonstros(quantidade) {
-        for (let i = 0; i < quantidade; i++) {
-            if (monstros.length >= CONFIG.MAX_MONSTROS) break;
-            monstros.push(criarMonstro());
-        }
+      for (let i = 0; i < quantidade; i++) {
+        if (monstros.length >= CFG.MAX_MONSTROS) break;
+        monstros.push(criarMonstro());
+      }
     }
 
-    // -------- LÓGICA DE NÍVEL / XP --------
+    // ----- GANHAR XP / SUBIR NÍVEL -----
     function ganharXP(quantidade) {
-        jogador.xp += quantidade;
-        while (jogador.xp >= jogador.xpProximo) {
-            // sobe de nível
-            jogador.xp -= jogador.xpProximo;
-            jogador.nivel++;
-            jogador.xpProximo = Math.floor(CONFIG.XP_POR_NIVEL_BASE * jogador.nivel * 1.2);
-            // aumenta atributos
-            jogador.maxHp += CONFIG.VIDA_POR_NIVEL;
-            jogador.hp = jogador.maxHp; // cura completa
-            jogador.dano += CONFIG.DANO_POR_NIVEL;
-            // Atualiza display (feito no loop)
-        }
-        atualizarDisplay();
+      jogador.xp += quantidade;
+      while (jogador.xp >= jogador.xpProximo) {
+        jogador.xp -= jogador.xpProximo;
+        jogador.nivel++;
+        jogador.xpProximo = Math.floor(CFG.XP_POR_NIVEL_BASE * jogador.nivel * 1.2);
+        jogador.maxHp += CFG.VIDA_POR_NIVEL;
+        jogador.hp = jogador.maxHp;      // cura total
+        jogador.dano += CFG.DANO_POR_NIVEL;
+      }
     }
 
-    // -------- MATAR MONSTRO --------
+    // ----- MATAR MONSTRO (com dobra) -----
     function matarMonstro(index) {
-        const monstro = monstros[index];
-        if (!monstro || !monstro.vivo) return;
+      const m = monstros[index];
+      if (!m || !m.vivo) return;
 
-        monstro.vivo = false;
-        monstros.splice(index, 1);
-        jogador.mortes++;
+      m.vivo = false;
+      monstros.splice(index, 1);
+      jogador.mortes++;
 
-        // Ganha XP
-        const xpGanho = CONFIG.XP_POR_MORTE_BASE + jogador.nivel * 2;
-        ganharXP(xpGanho);
+      // XP
+      const xpGanho = CFG.XP_POR_MORTE_BASE + jogador.nivel * 2;
+      ganharXP(xpGanho);
 
-        // Dobra a quantidade de monstros (antes da morte)
-        const totalAntes = jogador.mortes; // na verdade, totalAntes era o número de monstros vivos ANTES da morte = mortes atuais + 1?
-        // Mas precisamos saber quantos estavam vivos antes de matar.
-        // Vamos calcular: após a remoção, temos N monstros. Queremos que o total seja 2 * (N+1) ? Não, a lógica: antes tinha N+1, depois N. Queremos que depois de adicionar, fique 2*(N+1). Então adicionamos (2*(N+1) - N) = N+2.
-        // Mas é mais simples: antes de matar, tínhamos totalAntes = monstros.length + 1 (pois acabamos de remover um).
-        // Queremos que o novo total seja 2 * totalAntes. Então adicionamos (2 * totalAntes) - (monstros.length) = 2*totalAntes - (totalAntes - 1) = totalAntes + 1.
-        // Então adicionamos totalAntes + 1 monstros.
-        const totalAntes = jogador.mortes; // não, isso é mortes totais, não número atual.
-        // Vamos usar o número atual de monstros + 1.
-        const atuais = monstros.length;
-        const totalAntesMorte = atuais + 1; // porque acabamos de remover um
-        const novos = totalAntesMorte + 1; // dobra
-        // Limita para não estourar
-        const limite = CONFIG.MAX_MONSTROS - monstros.length;
-        const adicionar = Math.min(novos, limite);
-        if (adicionar > 0) {
-            adicionarMonstros(adicionar);
-        }
-
-        // Se não houver monstros (caso raro), adiciona 1
-        if (monstros.length === 0) {
-            adicionarMonstros(1);
-        }
-
-        atualizarDisplay();
+      // Dobrar: antes da morte tínhamos N+1, agora N. Queremos que fique 2*(N+1)
+      const atuais = monstros.length;
+      const totalAntes = atuais + 1;
+      const novos = totalAntes + 1;   // dobra
+      const limite = CFG.MAX_MONSTROS - monstros.length;
+      const adicionar = Math.min(novos, limite);
+      if (adicionar > 0) adicionarMonstros(adicionar);
+      if (monstros.length === 0) adicionarMonstros(1);
     }
 
-    // -------- ATAQUE DO JOGADOR (clique) --------
+    // ----- ATAQUE DO JOGADOR (clique) -----
     function atacarMonstro(index) {
-        if (!jogador.vivo) return;
-        const monstro = monstros[index];
-        if (!monstro || !monstro.vivo) return;
-        monstro.hp -= jogador.dano;
-        if (monstro.hp <= 0) {
-            matarMonstro(index);
-        }
-        atualizarDisplay();
+      if (!jogador.vivo) return;
+      const m = monstros[index];
+      if (!m || !m.vivo) return;
+      m.hp -= jogador.dano;
+      if (m.hp <= 0) {
+        matarMonstro(index);
+      }
     }
 
-    // -------- ATAQUE DOS MONSTROS (timer) --------
-    function atualizarMonstros(deltaTime) {
-        if (!jogador.vivo) return;
-        for (let i = monstros.length - 1; i >= 0; i--) {
-            const m = monstros[i];
-            if (!m.vivo) continue;
-            m.attackTimer -= deltaTime;
-            if (m.attackTimer <= 0) {
-                // ataca o jogador
-                jogador.hp -= m.dano;
-                if (jogador.hp < 0) jogador.hp = 0;
-                m.attackTimer = m.attackCooldown;
-                // verifica morte do jogador
-                if (jogador.hp <= 0) {
-                    jogador.vivo = false;
-                    gameOverMsg.classList.add('show');
-                }
-                atualizarDisplay();
-            }
-        }
-    }
-
-    // -------- RENDERIZAÇÃO --------
-    function desenhar() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // --- Fundo / grid (opcional) ---
-        ctx.strokeStyle = '#2a2a4a';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < canvas.width; i += 40) {
-            ctx.beginPath();
-            ctx.moveTo(i, 0);
-            ctx.lineTo(i, canvas.height);
-            ctx.stroke();
-        }
-        for (let i = 0; i < canvas.height; i += 40) {
-            ctx.beginPath();
-            ctx.moveTo(0, i);
-            ctx.lineTo(canvas.width, i);
-            ctx.stroke();
-        }
-
-        // --- Monstros ---
-        for (let m of monstros) {
-            if (!m.vivo) continue;
-            // Corpo
-            ctx.shadowColor = '#e94560';
-            ctx.shadowBlur = 10;
-            ctx.beginPath();
-            ctx.arc(m.x, m.y, m.raio, 0, Math.PI * 2);
-            ctx.fillStyle = '#e94560';
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.strokeStyle = '#ff6b6b';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Barra de vida
-            const barraLarg = m.raio * 2.2;
-            const barraAlt = 5;
-            const barraX = m.x - barraLarg / 2;
-            const barraY = m.y - m.raio - 10;
-            ctx.fillStyle = '#333';
-            ctx.fillRect(barraX, barraY, barraLarg, barraAlt);
-            const vidaPercent = m.hp / m.maxHp;
-            ctx.fillStyle = vidaPercent > 0.5 ? '#51cf66' : (vidaPercent > 0.25 ? '#fcc419' : '#e94560');
-            ctx.fillRect(barraX, barraY, barraLarg * vidaPercent, barraAlt);
-
-            // Olhos (detalhe)
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(m.x - 5, m.y - 4, 4, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(m.x + 5, m.y - 4, 4, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#222';
-            ctx.beginPath();
-            ctx.arc(m.x - 6, m.y - 2, 2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(m.x + 4, m.y - 2, 2, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // --- Jogador ---
-        if (jogador.vivo) {
-            ctx.shadowColor = '#4dabf7';
-            ctx.shadowBlur = 20;
-            ctx.beginPath();
-            ctx.arc(jogador.x, jogador.y, jogador.raio, 0, Math.PI * 2);
-            ctx.fillStyle = '#4dabf7';
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.strokeStyle = '#74c0fc';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            // Rosto
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(jogador.x - 8, jogador.y - 5, 6, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(jogador.x + 8, jogador.y - 5, 6, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#222';
-            ctx.beginPath();
-            ctx.arc(jogador.x - 9, jogador.y - 3, 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(jogador.x + 7, jogador.y - 3, 3, 0, Math.PI * 2);
-            ctx.fill();
-            // sorriso
-            ctx.strokeStyle = '#222';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(jogador.x, jogador.y + 2, 8, 0.1, Math.PI - 0.1);
-            ctx.stroke();
-        } else {
-            // Game Over sobreposição
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#e94560';
-            ctx.font = 'bold 60px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('💀 GAME OVER', canvas.width/2, canvas.height/2 - 20);
-            ctx.font = '24px sans-serif';
-            ctx.fillStyle = '#fff';
-            ctx.fillText('Clique em "Reiniciar"', canvas.width/2, canvas.height/2 + 50);
-        }
-    }
-
-    // -------- ATUALIZAR DISPLAY (status) --------
-    function atualizarDisplay() {
-        hpDisplay.textContent = Math.floor(jogador.hp);
-        maxHpDisplay.textContent = jogador.maxHp;
-        hpFill.style.width = (jogador.hp / jogador.maxHp * 100) + '%';
-        danoDisplay.textContent = jogador.dano;
-        nivelDisplay.textContent = jogador.nivel;
-        xpDisplay.textContent = Math.floor(jogador.xp);
-        xpNextDisplay.textContent = Math.floor(jogador.xpProximo);
-        monstrosDisplay.textContent = monstros.filter(m => m.vivo).length;
-        mortesDisplay.textContent = jogador.mortes;
-
-        if (!jogador.vivo) {
+    // ----- ATAQUE DOS MONSTROS (timer) -----
+    function atualizarMonstros(dt) {
+      if (!jogador.vivo) return;
+      for (let i = monstros.length - 1; i >= 0; i--) {
+        const m = monstros[i];
+        if (!m.vivo) continue;
+        m.attackTimer -= dt;
+        if (m.attackTimer <= 0) {
+          jogador.hp -= m.dano;
+          if (jogador.hp < 0) jogador.hp = 0;
+          m.attackTimer = m.attackCooldown;
+          if (jogador.hp <= 0) {
+            jogador.vivo = false;
             gameOverMsg.classList.add('show');
-        } else {
-            gameOverMsg.classList.remove('show');
+          }
         }
+      }
     }
 
-    // -------- LOOP PRINCIPAL --------
-    function loop(tempo) {
-        const delta = ultimoTempo ? (tempo - ultimoTempo) / 1000 : 0.016;
-        ultimoTempo = tempo;
+    // ----- RENDERIZAÇÃO -----
+    function desenhar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        if (jogador.vivo) {
-            atualizarMonstros(delta);
-        }
+      // Fundo com grid sutil
+      ctx.strokeStyle = '#2a3050';
+      ctx.lineWidth = 0.5;
+      for (let x = 0; x < canvas.width; x += 50) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 50) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
 
-        desenhar();
-        atualizarDisplay();
+      // ----- DESENHAR MONSTROS -----
+      for (const m of monstros) {
+        if (!m.vivo) continue;
+        // Sombra
+        ctx.shadowColor = '#f87171';
+        ctx.shadowBlur = 12;
 
-        requestAnimationFrame(loop);
+        // Corpo
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.raio, 0, Math.PI * 2);
+        ctx.fillStyle = '#dc2626';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#fca5a5';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Barra de vida
+        const bw = m.raio * 2.4;
+        const bh = 6;
+        const bx = m.x - bw / 2;
+        const by = m.y - m.raio - 12;
+        ctx.fillStyle = '#1e1e2e';
+        ctx.fillRect(bx, by, bw, bh);
+        const ratio = Math.max(0, m.hp / m.maxHp);
+        ctx.fillStyle = ratio > 0.5 ? '#4ade80' : (ratio > 0.25 ? '#facc15' : '#f87171');
+        ctx.fillRect(bx, by, bw * ratio, bh);
+
+        // Olhos
+        ctx.fillStyle = '#fef9c3';
+        ctx.beginPath();
+        ctx.arc(m.x - 6, m.y - 5, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(m.x + 6, m.y - 5, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.arc(m.x - 7, m.y - 3, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(m.x + 5, m.y - 3, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // ----- DESENHAR JOGADOR -----
+      if (jogador.vivo) {
+        ctx.shadowColor = '#60a5fa';
+        ctx.shadowBlur = 25;
+        ctx.beginPath();
+        ctx.arc(jogador.x, jogador.y, jogador.raio, 0, Math.PI * 2);
+        ctx.fillStyle = '#3b82f6';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = '#93c5fd';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Olhos
+        ctx.fillStyle = '#fef9c3';
+        ctx.beginPath();
+        ctx.arc(jogador.x - 9, jogador.y - 6, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(jogador.x + 9, jogador.y - 6, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.arc(jogador.x - 10, jogador.y - 4, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(jogador.x + 8, jogador.y - 4, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        // Sorriso
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(jogador.x, jogador.y + 4, 10, 0.1, Math.PI - 0.1);
+        ctx.stroke();
+      } else {
+        // Tela de Game Over
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#f87171';
+        ctx.font = 'bold 68px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('💀 GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+        ctx.font = '24px sans-serif';
+        ctx.fillStyle = '#e0e7ff';
+        ctx.fillText('Clique em "Reiniciar"', canvas.width / 2, canvas.height / 2 + 55);
+      }
     }
 
-    // -------- EVENTOS DE CLIQUE --------
+    // ----- ATUALIZAR PAINEL -----
+    function atualizarDisplay() {
+      hpDisplay.textContent = Math.floor(jogador.hp);
+      maxHpDisplay.textContent = jogador.maxHp;
+      hpFill.style.width = (jogador.hp / jogador.maxHp * 100) + '%';
+      danoDisplay.textContent = jogador.dano;
+      nivelDisplay.textContent = jogador.nivel;
+      xpDisplay.textContent = Math.floor(jogador.xp);
+      xpNextDisplay.textContent = Math.floor(jogador.xpProximo);
+      monstrosDisplay.textContent = monstros.filter(m => m.vivo).length;
+      mortesDisplay.textContent = jogador.mortes;
+      if (!jogador.vivo) gameOverMsg.classList.add('show');
+      else gameOverMsg.classList.remove('show');
+    }
+
+    // ----- LOOP PRINCIPAL -----
+    function loop(timestamp) {
+      const dt = ultimoTempo ? (timestamp - ultimoTempo) / 1000 : 0.016;
+      ultimoTempo = timestamp;
+
+      if (jogador.vivo) {
+        atualizarMonstros(dt);
+      }
+
+      desenhar();
+      atualizarDisplay();
+      requestAnimationFrame(loop);
+    }
+
+    // ----- EVENTO DE CLIQUE NO CANVAS -----
     canvas.addEventListener('click', (e) => {
-        if (!jogador.vivo) return;
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const mouseX = (e.clientX - rect.left) * scaleX;
-        const mouseY = (e.clientY - rect.top) * scaleY;
+      if (!jogador.vivo) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const mx = (e.clientX - rect.left) * scaleX;
+      const my = (e.clientY - rect.top) * scaleY;
 
-        // verifica se clicou em algum monstro (do mais próximo para o mais distante? tanto faz)
-        // Vamos percorrer de trás para frente (últimos desenhados por cima)
-        for (let i = monstros.length - 1; i >= 0; i--) {
-            const m = monstros[i];
-            if (!m.vivo) continue;
-            const dist = distancia(mouseX, mouseY, m.x, m.y);
-            if (dist < m.raio + 10) { // margem
-                atacarMonstro(i);
-                break;
-            }
+      // Percorre de trás para frente (último desenhado por cima)
+      for (let i = monstros.length - 1; i >= 0; i--) {
+        const m = monstros[i];
+        if (!m.vivo) continue;
+        if (dist({ x: mx, y: my }, m) < m.raio + 12) {
+          atacarMonstro(i);
+          break;
         }
+      }
     });
 
-    // -------- REINICIAR --------
+    // ----- REINICIAR -----
     function reiniciar() {
-        jogador = {
-            x: 400,
-            y: 300,
-            raio: CONFIG.JOGADOR_RAIO,
-            hp: CONFIG.VIDA_INICIAL,
-            maxHp: CONFIG.VIDA_INICIAL,
-            dano: CONFIG.DANO_INICIAL,
-            nivel: 1,
-            xp: 0,
-            xpProximo: CONFIG.XP_POR_NIVEL_BASE,
-            mortes: 0,
-            vivo: true,
-        };
-        monstros = [];
-        gameOverMsg.classList.remove('show');
-        adicionarMonstros(1);
-        atualizarDisplay();
-        ultimoTempo = 0;
+      jogador = {
+        x: 400, y: 300,
+        raio: CFG.JOGADOR_RAIO,
+        hp: CFG.VIDA_INICIAL,
+        maxHp: CFG.VIDA_INICIAL,
+        dano: CFG.DANO_INICIAL,
+        nivel: 1,
+        xp: 0,
+        xpProximo: CFG.XP_POR_NIVEL_BASE,
+        mortes: 0,
+        vivo: true
+      };
+      monstros = [];
+      gameOverMsg.classList.remove('show');
+      adicionarMonstros(1);
+      atualizarDisplay();
+      ultimoTempo = 0;
     }
 
     restartBtn.addEventListener('click', reiniciar);
 
-    // -------- INICIALIZAÇÃO --------
+    // ----- INICIALIZAÇÃO -----
     adicionarMonstros(1);
     atualizarDisplay();
     requestAnimationFrame(loop);
+  })();
 </script>
 </body>
 </html>
