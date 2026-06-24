@@ -1,1678 +1,537 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌱 Ecosfera 2200 – Imersão Total</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-    }
-    body {
-      background: #0a0e12;
-      font-family: 'Courier New', monospace;
-      color: #d0dcdc;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-    }
-    #game {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background: #0a0e12;
-      overflow: hidden;
-    }
-    .screen {
-      position: absolute;
-      inset: 0;
-      display: none;
-      background: #0a0e12;
-    }
-    .screen.active {
-      display: block;
-    }
-
-    /* MENU */
-    #menu-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(ellipse at center, #0d1a1a 0%, #060a10 100%);
-      text-align: center;
-      padding: 20px;
-    }
-    #menu-screen.active {
-      display: flex;
-    }
-    #menu-screen h1 {
-      font-size: 4.6rem;
-      font-weight: 300;
-      letter-spacing: 8px;
-      color: #80d0b0;
-      text-shadow: 0 0 60px rgba(60, 200, 160, 0.15);
-      margin-bottom: 0.2rem;
-    }
-    #menu-screen .subtitle {
-      font-size: 1.1rem;
-      color: #6a8a7a;
-      letter-spacing: 5px;
-      margin-bottom: 2.8rem;
-      border-top: 1px solid #1a3a2a;
-      padding-top: 0.8rem;
-    }
-    .menu-btn {
-      background: transparent;
-      border: 1px solid #2a5a3a;
-      color: #b0d8c0;
-      padding: 14px 52px;
-      font-size: 1.2rem;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: 0.3s;
-      font-family: inherit;
-      letter-spacing: 3px;
-    }
-    .menu-btn:hover {
-      background: #1a3a2a;
-      border-color: #4a8a6a;
-      box-shadow: 0 0 50px rgba(60, 200, 160, 0.1);
-      transform: scale(1.03);
-    }
-    #menu-screen .version {
-      position: absolute;
-      bottom: 24px;
-      font-size: 0.7rem;
-      color: #3a5a4a;
-      letter-spacing: 2px;
-    }
-
-    /* LORE */
-    #lore-screen {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: #080c12;
-      padding: 20px;
-    }
-    #lore-screen.active {
-      display: flex;
-    }
-    .lore-box {
-      background: rgba(8, 16, 20, 0.9);
-      border: 1px solid #1a3a2a;
-      border-radius: 20px;
-      padding: 32px 36px;
-      max-width: 680px;
-      max-height: 80vh;
-      overflow-y: auto;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 60px rgba(0, 20, 10, 0.3);
-    }
-    .lore-box h2 {
-      color: #80d0b0;
-      font-weight: 300;
-      letter-spacing: 3px;
-      font-size: 1.5rem;
-      margin-bottom: 14px;
-      border-bottom: 1px solid #1a3a2a;
-      padding-bottom: 10px;
-    }
-    .lore-box p {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: #bcc8c0;
-      margin-bottom: 12px;
-    }
-    .lore-box .highlight {
-      color: #80d0b0;
-      font-weight: 500;
-    }
-    .lore-box .footer-note {
-      margin-top: 16px;
-      font-size: 0.9rem;
-      color: #6a8a7a;
-      border-top: 1px solid #1a2a22;
-      padding-top: 12px;
-      font-style: italic;
-    }
-    .lore-box .name-area {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 18px;
-    }
-    .lore-box .name-area label {
-      color: #8aa8a0;
-      font-size: 0.95rem;
-    }
-    .lore-box .name-area input {
-      background: #0e1a1a;
-      border: 1px solid #2a4a3a;
-      color: #d0e8e0;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 1rem;
-      width: 200px;
-      font-family: inherit;
-      outline: none;
-      transition: 0.2s;
-    }
-    .lore-box .name-area input:focus {
-      border-color: #4a9a7a;
-      box-shadow: 0 0 24px rgba(60, 200, 160, 0.08);
-    }
-    .lore-box .name-area .btn-start {
-      background: #1a3a2a;
-      border: 1px solid #3a7a5a;
-      color: #b0e0c0;
-      padding: 10px 32px;
-      border-radius: 30px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.2s;
-      font-family: inherit;
-    }
-    .lore-box .name-area .btn-start:hover {
-      background: #2a5a3a;
-      border-color: #5a9a7a;
-    }
-    .lore-box::-webkit-scrollbar {
-      width: 4px;
-    }
-    .lore-box::-webkit-scrollbar-track {
-      background: #0a1212;
-    }
-    .lore-box::-webkit-scrollbar-thumb {
-      background: #2a4a3a;
-      border-radius: 4px;
-    }
-
-    /* BUNKER CANVAS */
-    #bunker-screen {
-      background: #0e141c;
-    }
-    #bunker-canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      background: #10181e;
-      image-rendering: pixelated;
-    }
-
-    /* TERMINAL */
-    #terminal-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 20;
-      padding: 30px;
-    }
-    #terminal-overlay.active {
-      display: flex;
-    }
-    .terminal-crt {
-      background: #0a120a;
-      border: 8px solid #1a1a1a;
-      border-radius: 12px;
-      padding: 20px 24px;
-      max-width: 780px;
-      width: 100%;
-      max-height: 80vh;
-      box-shadow: 0 0 40px rgba(0, 200, 80, 0.08), inset 0 0 60px rgba(0, 20, 10, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-    .terminal-crt::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .terminal-crt::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 20, 10, 0.3) 100%);
-      pointer-events: none;
-      z-index: 1;
-    }
-    .terminal-screen {
-      background: #0a120a;
-      color: #30c060;
-      font-family: 'Courier New', monospace;
-      font-size: 15px;
-      line-height: 1.7;
-      padding: 16px;
-      min-height: 320px;
-      max-height: 60vh;
-      overflow-y: auto;
-      position: relative;
-      z-index: 0;
-      text-shadow: 0 0 6px rgba(40, 200, 80, 0.15);
-      border: 1px solid #1a2a1a;
-    }
-    .terminal-screen .prompt {
-      color: #50d080;
-    }
-    .terminal-screen .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 18px;
-      background: #30c060;
-      animation: blink 0.8s step-end infinite;
-      vertical-align: text-bottom;
-    }
-    @keyframes blink {
-      0%,
-      100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0;
-      }
-    }
-    .terminal-screen .output-line {
-      color: #70b090;
-      margin-bottom: 2px;
-    }
-    .terminal-screen .output-line .highlight {
-      color: #80d0b0;
-    }
-    .terminal-screen .output-line .warn {
-      color: #d0a050;
-    }
-    .terminal-screen .output-line .error {
-      color: #d06060;
-    }
-    .terminal-screen .input-line {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .terminal-screen .input-line span {
-      color: #50d080;
-    }
-    .terminal-screen .input-line input {
-      background: transparent;
-      border: none;
-      color: #30c060;
-      font-family: inherit;
-      font-size: 15px;
-      outline: none;
-      flex: 1;
-      caret-color: #30c060;
-      text-shadow: 0 0 6px rgba(40, 200, 80, 0.15);
-    }
-    .terminal-screen .input-line input::selection {
-      background: rgba(40, 200, 80, 0.2);
-    }
-    .terminal-close {
-      position: absolute;
-      top: 8px;
-      right: 14px;
-      color: #3a5a4a;
-      font-size: 20px;
-      cursor: pointer;
-      z-index: 5;
-      background: none;
-      border: none;
-      font-family: inherit;
-      transition: 0.2s;
-    }
-    .terminal-close:hover {
-      color: #d06060;
-    }
-    .terminal-screen::-webkit-scrollbar {
-      width: 4px;
-    }
-    .terminal-screen::-webkit-scrollbar-track {
-      background: #0a120a;
-    }
-    .terminal-screen::-webkit-scrollbar-thumb {
-      background: #1a3a2a;
-      border-radius: 4px;
-    }
-
-    /* SUPERFÍCIE */
-    #surface-screen {
-      background: #0a0e12;
-    }
-    #surface-canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      background: #0e161c;
-      image-rendering: pixelated;
-    }
-
-    /* HUD SUPERFÍCIE */
-    .surface-hud {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 6px 14px;
-      background: rgba(4, 10, 14, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 8px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(70, 140, 120, 0.12);
-      pointer-events: none;
-      z-index: 10;
-      font-size: 13px;
-    }
-    .surface-hud .left,
-    .surface-hud .right {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px 14px;
-      align-items: center;
-    }
-    .surface-hud .hud-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .surface-hud .hud-item .label {
-      color: #6a8a7a;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .surface-hud .hud-item .value {
-      font-weight: 600;
-      min-width: 24px;
-      text-align: right;
-      font-size: 13px;
-    }
-    .surface-hud .hud-bar {
-      width: 50px;
-      height: 5px;
-      background: #141e22;
-      border-radius: 3px;
-      overflow: hidden;
-      border: 1px solid #1a262a;
-    }
-    .surface-hud .hud-bar .fill {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.2s;
-    }
-    .fill-green {
-      background: #4ac0a0;
-    }
-    .fill-red {
-      background: #e05a5a;
-    }
-    .fill-blue {
-      background: #5aa8e0;
-    }
-    .fill-yellow {
-      background: #e0c04a;
-    }
-    .surface-hud .back-btn {
-      pointer-events: auto;
-      background: transparent;
-      border: 1px solid #2a4a3a;
-      color: #8ab0a0;
-      padding: 4px 18px;
-      border-radius: 30px;
-      font-size: 12px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: 0.2s;
-    }
-    .surface-hud .back-btn:hover {
-      background: #1a2a22;
-      border-color: #4a7a5a;
-      color: #b0d8c0;
-    }
-
-    @media (max-width: 700px) {
-      #menu-screen h1 {
-        font-size: 2.8rem;
-        letter-spacing: 4px;
-      }
-      #menu-screen .subtitle {
-        font-size: 0.9rem;
-        letter-spacing: 3px;
-      }
-      .menu-btn {
-        padding: 12px 30px;
-        font-size: 1rem;
-      }
-      .lore-box {
-        padding: 20px 22px;
-        max-width: 95%;
-      }
-      .lore-box p {
-        font-size: 0.9rem;
-      }
-      .lore-box .name-area input {
-        width: 140px;
-      }
-      .terminal-crt {
-        padding: 12px 14px;
-        border-width: 4px;
-      }
-      .terminal-screen {
-        font-size: 13px;
-        padding: 12px;
-        min-height: 200px;
-      }
-      .terminal-screen .input-line input {
-        font-size: 13px;
-      }
-      .surface-hud {
-        font-size: 11px;
-        padding: 6px 10px;
-      }
-      .surface-hud .hud-bar {
-        width: 34px;
-        height: 4px;
-      }
-    }
-    @media (max-width: 450px) {
-      #menu-screen h1 {
-        font-size: 2rem;
-        letter-spacing: 2px;
-      }
-      .surface-hud .left,
-      .surface-hud .right {
-        gap: 3px 8px;
-      }
-      .surface-hud .hud-item .label {
-        font-size: 8px;
-      }
-      .surface-hud .hud-item .value {
-        font-size: 10px;
-        min-width: 18px;
-      }
-      .surface-hud .hud-bar {
-        width: 26px;
-        height: 3px;
-      }
-      .terminal-screen {
-        font-size: 11px;
-        padding: 8px;
-        min-height: 150px;
-      }
-      .terminal-screen .input-line input {
-        font-size: 11px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Monstros - Quanto mais mata, mais aparece!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .game-container {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            border: 2px solid #0f3460;
+            border-radius: 12px;
+            background: #1a1a2e;
+            cursor: crosshair;
+            display: block;
+        }
+        .status-panel {
+            width: 100%;
+            margin-top: 15px;
+            background: #0f3460;
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            color: #eee;
+            font-size: 16px;
+            font-weight: 500;
+            gap: 8px 15px;
+        }
+        .status-panel .stat {
+            background: #1a1a2e;
+            padding: 4px 14px;
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid #533483;
+        }
+        .status-panel .stat span {
+            color: #f5a623;
+            font-weight: bold;
+        }
+        .status-panel .stat .hp-bar {
+            display: inline-block;
+            width: 100px;
+            height: 10px;
+            background: #333;
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        .status-panel .stat .hp-bar .fill {
+            height: 100%;
+            background: #e94560;
+            border-radius: 10px;
+            transition: width 0.2s;
+        }
+        .btn-restart {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-left: 10px;
+        }
+        .btn-restart:hover {
+            background: #c73652;
+            transform: scale(1.03);
+        }
+        .game-over-msg {
+            color: #e94560;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 15px;
+            display: none;
+        }
+        .game-over-msg.show {
+            display: inline;
+        }
+        @media (max-width: 850px) {
+            canvas {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 800/600;
+            }
+            .status-panel {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .status-panel .stat .hp-bar {
+                width: 70px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="game">
-
-    <!-- MENU -->
-    <div id="menu-screen" class="screen active">
-      <h1>ECOSFERA 2200</h1>
-      <div class="subtitle">✦ o último refúgio ✦</div>
-      <button class="menu-btn" id="btnPlay">▶ Jogar</button>
-      <div class="version">v3.0 — imersão total</div>
-    </div>
-
-    <!-- LORE -->
-    <div id="lore-screen" class="screen">
-      <div class="lore-box">
-        <h2>📖 O Colapso</h2>
-        <p><span class="highlight">Ano 2200.</span> A Terra que conhecemos não existe mais. Séculos de poluição transformaram a superfície num deserto tóxico. O ar é irrespirável, o solo está morto, a vegetação foi extinta.</p>
-        <p>A humanidade sobrevive em um único <span class="highlight">bunker subterrâneo</span>, último reduto da civilização. Mas o bunker está em colapso: energia, oxigênio e recursos se esgotam a cada dia.</p>
-        <p>Uma <span class="highlight">máquina de fotossíntese artificial</span> foi criada para purificar a atmosfera. Ela precisa de recursos que só existem na superfície.</p>
-        <p><span class="highlight">Você</span> é o último explorador. Durante o dia, sobe à superfície para coletar materiais. Durante a noite, gerencia o bunker.</p>
-        <div class="footer-note">⚠️ A superfície é perigosa. Mutantes vagam entre as ruínas. Sem recursos, o bunker não sobrevive.</div>
-        <div class="name-area">
-          <label for="playerName">👤 Nome:</label>
-          <input type="text" id="playerName" placeholder="Digite seu nome" value="Arion">
-          <button class="btn-start" id="btnStartGame">▶ Iniciar</button>
+<div class="game-container">
+    <canvas id="arena" width="800" height="600"></canvas>
+    <div class="status-panel">
+        <div class="stat">❤️ <span id="hpDisplay">100</span> / <span id="maxHpDisplay">100</span> <span class="hp-bar"><span class="fill" id="hpFill" style="width:100%"></span></span></div>
+        <div class="stat">⚔️ Dano: <span id="danoDisplay">10</span></div>
+        <div class="stat">⭐ Nível: <span id="nivelDisplay">1</span></div>
+        <div class="stat">✨ XP: <span id="xpDisplay">0</span> / <span id="xpNextDisplay">50</span></div>
+        <div class="stat">👹 Monstros: <span id="monstrosDisplay">0</span></div>
+        <div class="stat">💀 Mortes: <span id="mortesDisplay">0</span></div>
+        <div>
+            <span class="game-over-msg" id="gameOverMsg">💀 GAME OVER</span>
+            <button class="btn-restart" id="restartBtn">🔄 Reiniciar</button>
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- BUNKER -->
-    <div id="bunker-screen" class="screen">
-      <canvas id="bunker-canvas"></canvas>
-    </div>
-
-    <!-- TERMINAL -->
-    <div id="terminal-overlay">
-      <div class="terminal-crt">
-        <button class="terminal-close" id="terminalClose">✕</button>
-        <div class="terminal-screen" id="terminalScreen">
-          <div class="output-line">╔═══════════════════════════════════╗</div>
-          <div class="output-line">║  SISTEMA DE CONTROLE DO BUNKER    ║</div>
-          <div class="output-line">║  v.2.1  —  FOTOSSÍNTESE ARTIFICIAL ║</div>
-          <div class="output-line">╚═══════════════════════════════════╝</div>
-          <div class="output-line" style="margin-top:8px;">&gt; Inicializando módulos...</div>
-          <div class="output-line">&gt; <span class="highlight">Bem-vindo, OPERADOR.</span></div>
-          <div class="output-line" style="margin-top:6px;">&gt; Comandos: <span class="highlight">status</span>, <span class="highlight">plantas</span>, <span class="highlight">pesquisar</span>, <span class="highlight">sair</span></div>
-          <div class="input-line">
-            <span>$</span>
-            <input type="text" id="terminalInput" autofocus placeholder="digite um comando...">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUPERFÍCIE -->
-    <div id="surface-screen" class="screen">
-      <canvas id="surface-canvas"></canvas>
-      <div class="surface-hud">
-        <div class="left">
-          <div class="hud-item"><span class="label">❤️</span><div class="hud-bar"><div class="fill fill-red" id="surfHpBar" style="width:100%"></div></div><span class="value" id="surfHpText">100</span></div>
-          <div class="hud-item"><span class="label">💨 O₂</span><div class="hud-bar"><div class="fill fill-blue" id="surfOxyBar" style="width:100%"></div></div><span class="value" id="surfOxyText">100</span></div>
-          <div class="hud-item"><span class="label">⚡</span><div class="hud-bar"><div class="fill fill-yellow" id="surfEngBar" style="width:100%"></div></div><span class="value" id="surfEngText">100</span></div>
-          <div class="hud-item"><span class="label">🔩</span><span class="value" id="surfMetal">0</span></div>
-          <div class="hud-item"><span class="label">🧬</span><span class="value" id="surfBio">0</span></div>
-          <div class="hud-item"><span class="label">⚙️</span><span class="value" id="surfTech">0</span></div>
-        </div>
-        <div class="right">
-          <button class="back-btn" id="btnReturnBunker">⬅ Voltar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // ================================================================
-    //  ECOSFERA 2200 – IMERSÃO TOTAL (v3.0)
-    //  Movimento funcional, jogador humanoide, ambientes realistas
-    // ================================================================
-
-    // ---- DOM ----
-    const screens = {
-      menu: document.getElementById('menu-screen'),
-      lore: document.getElementById('lore-screen'),
-      bunker: document.getElementById('bunker-screen'),
-      surface: document.getElementById('surface-screen'),
+<script>
+    // -------- CONFIGURAÇÕES --------
+    const CONFIG = {
+        JOGADOR_RAIO: 22,
+        MONSTRO_RAIO: 16,
+        VIDA_INICIAL: 100,
+        DANO_INICIAL: 10,
+        VIDA_MONSTRO_BASE: 30,
+        DANO_MONSTRO_BASE: 6,
+        ATAQUE_COOLDOWN_MONSTRO: 2.0, // segundos
+        XP_POR_MORTE_BASE: 10,
+        XP_POR_NIVEL_BASE: 50,
+        VIDA_POR_NIVEL: 25,
+        DANO_POR_NIVEL: 5,
+        MAX_MONSTROS: 200,
+        DISTANCIA_MIN_JOGADOR: 80,
+        DISTANCIA_MIN_MONSTROS: 30,
     };
 
-    const bunkerCanvas = document.getElementById('bunker-canvas');
-    const bunkerCtx = bunkerCanvas.getContext('2d');
-    const surfaceCanvas = document.getElementById('surface-canvas');
-    const surfaceCtx = surfaceCanvas.getContext('2d');
+    // -------- ELEMENTOS DOM --------
+    const canvas = document.getElementById('arena');
+    const ctx = canvas.getContext('2d');
+    const hpDisplay = document.getElementById('hpDisplay');
+    const maxHpDisplay = document.getElementById('maxHpDisplay');
+    const hpFill = document.getElementById('hpFill');
+    const danoDisplay = document.getElementById('danoDisplay');
+    const nivelDisplay = document.getElementById('nivelDisplay');
+    const xpDisplay = document.getElementById('xpDisplay');
+    const xpNextDisplay = document.getElementById('xpNextDisplay');
+    const monstrosDisplay = document.getElementById('monstrosDisplay');
+    const mortesDisplay = document.getElementById('mortesDisplay');
+    const gameOverMsg = document.getElementById('gameOverMsg');
+    const restartBtn = document.getElementById('restartBtn');
 
-    const terminalOverlay = document.getElementById('terminal-overlay');
-    const terminalScreen = document.getElementById('terminalScreen');
-    const terminalInput = document.getElementById('terminalInput');
-    const terminalClose = document.getElementById('terminalClose');
-
-    // ---- ESTADO ----
-    const state = {
-      playerName: 'Arion',
-      bunker: { oxygen: 60, energy: 40, plants: 2, efficiency: 1.0, researchLevel: 0 },
-      inventory: { metal: 0, biomass: 0, tech: 0 },
-      player: {
-        x: 0,
-        y: 0,
-        hp: 100,
-        oxygen: 100,
-        energy: 100,
-        alive: true,
-        invincible: 0,
-        attackCooldown: 0,
-        speed: 130,
-        radius: 16,
-        // para animação
-        walkFrame: 0,
-        walkTimer: 0,
-      },
-      resources: [],
-      mutants: [],
-      particles: [],
-      cycle: 0,
-      time: 0,
-      started: false,
-      bunkerPlayer: { x: 560, y: 420 },
-      // teclas
-      keys: {},
-      // flag de loop
-      surfaceLoopActive: false,
+    // -------- ESTADO DO JOGO --------
+    let jogador = {
+        x: 400,
+        y: 300,
+        raio: CONFIG.JOGADOR_RAIO,
+        hp: CONFIG.VIDA_INICIAL,
+        maxHp: CONFIG.VIDA_INICIAL,
+        dano: CONFIG.DANO_INICIAL,
+        nivel: 1,
+        xp: 0,
+        xpProximo: CONFIG.XP_POR_NIVEL_BASE,
+        mortes: 0,
+        vivo: true,
     };
 
-    // ---- CONSTANTES DO BUNKER ----
-    const BUNKER_W = 1200;
-    const BUNKER_H = 800;
-    const BP = state.bunkerPlayer;
+    let monstros = [];
+    let ultimoTempo = 0;
 
-    // Paredes do bunker (colisão)
-    const bunkerWalls = [
-      { x: 0, y: 0, w: BUNKER_W, h: 20 },
-      { x: 0, y: BUNKER_H - 20, w: BUNKER_W, h: 20 },
-      { x: 0, y: 0, w: 20, h: BUNKER_H },
-      { x: BUNKER_W - 20, y: 0, w: 20, h: BUNKER_H },
-      { x: 0, y: 280, w: 340, h: 16 },
-      { x: 860, y: 280, w: 340, h: 16 },
-      { x: 340, y: 200, w: 16, h: 160 },
-      { x: 840, y: 200, w: 16, h: 160 },
-      { x: 0, y: 20, w: 340, h: 16 },
-      { x: 0, y: 20, w: 16, h: 260 },
-      { x: BUNKER_W - 340, y: 20, w: 340, h: 16 },
-      { x: BUNKER_W - 16, y: 20, w: 16, h: 260 },
-    ];
-
-    // Objetos interativos
-    const bunkerObjects = [
-      { id: 'gate', x: 540, y: 720, w: 120, h: 60, label: '🚪 SAÍDA', action: 'surface' },
-      { id: 'bed', x: 900, y: 100, w: 100, h: 60, label: '🛏️ DESCANSO', action: 'rest' },
-      { id: 'computer', x: 100, y: 100, w: 100, h: 60, label: '🖥️ CONTROLE', action: 'terminal' },
-    ];
-
-    // ---- FUNÇÕES DE TELA ----
-    function showScreen(id) {
-      Object.keys(screens).forEach(key => {
-        screens[key].classList.toggle('active', key === id);
-      });
-      if (id === 'bunker') {
-        resizeBunkerCanvas();
-        terminalOverlay.classList.remove('active');
-      }
-      if (id === 'surface') {
-        resizeSurfaceCanvas();
-        updateSurfaceHUD();
-        if (!state.surfaceLoopActive) {
-          state.surfaceLoopActive = true;
-          requestAnimationFrame(surfaceLoop);
-        }
-      }
+    // -------- FUNÇÕES AUXILIARES --------
+    function distancia(x1, y1, x2, y2) {
+        return Math.hypot(x2 - x1, y2 - y1);
     }
 
-    // ---- MENU ----
-    document.getElementById('btnPlay').addEventListener('click', () => showScreen('lore'));
-
-    // ---- LORE ----
-    document.getElementById('btnStartGame').addEventListener('click', () => {
-      const nameInput = document.getElementById('playerName');
-      state.playerName = nameInput.value.trim() || 'Arion';
-      state.started = true;
-      initSurfaceWorld();
-      showScreen('bunker');
-    });
-
-    // ---- BUNKER - CANVAS ----
-    function resizeBunkerCanvas() {
-      const rect = bunkerCanvas.parentElement.getBoundingClientRect();
-      bunkerCanvas.width = rect.width;
-      bunkerCanvas.height = rect.height;
+    function aleatorio(min, max) {
+        return Math.random() * (max - min) + min;
     }
 
-    // ---- MOVIMENTO NO BUNKER ----
-    function updateBunkerMovement(dt) {
-      const keys = state.keys;
-      let dx = 0,
-        dy = 0;
-      if (keys['w'] || keys['arrowup']) dy = -1;
-      if (keys['s'] || keys['arrowdown']) dy = 1;
-      if (keys['a'] || keys['arrowleft']) dx = -1;
-      if (keys['d'] || keys['arrowright']) dx = 1;
-      if (dx !== 0 && dy !== 0) { dx *= 0.707;
-        dy *= 0.707; }
-
-      const speed = state.player.speed * 0.7;
-      const newX = BP.x + dx * speed * dt;
-      const newY = BP.y + dy * speed * dt;
-
-      // Colisão com paredes (eixo X)
-      let canX = true,
-        canY = true;
-      const r = state.player.radius;
-      for (const wall of bunkerWalls) {
-        // Teste X
-        if (newX + r > wall.x && newX - r < wall.x + wall.w &&
-          BP.y + r > wall.y && BP.y - r < wall.y + wall.h) {
-          canX = false;
+    function gerarPosicaoMonstro() {
+        const margem = 30;
+        let tentativas = 0;
+        while (tentativas < 100) {
+            const x = aleatorio(margem, canvas.width - margem);
+            const y = aleatorio(margem, canvas.height - margem);
+            // longe do jogador
+            if (distancia(x, y, jogador.x, jogador.y) < CONFIG.DISTANCIA_MIN_JOGADOR) {
+                tentativas++;
+                continue;
+            }
+            // longe de outros monstros
+            let colide = false;
+            for (let m of monstros) {
+                if (distancia(x, y, m.x, m.y) < CONFIG.DISTANCIA_MIN_MONSTROS + CONFIG.MONSTRO_RAIO) {
+                    colide = true;
+                    break;
+                }
+            }
+            if (!colide) return { x, y };
+            tentativas++;
         }
-        // Teste Y
-        if (BP.x + r > wall.x && BP.x - r < wall.x + wall.w &&
-          newY + r > wall.y && newY - r < wall.y + wall.h) {
-          canY = false;
-        }
-      }
-      if (canX) BP.x = newX;
-      if (canY) BP.y = newY;
-
-      // Limites do mundo
-      BP.x = Math.max(r, Math.min(BUNKER_W - r, BP.x));
-      BP.y = Math.max(r, Math.min(BUNKER_H - r, BP.y));
-
-      // Animação de caminhada
-      if (dx !== 0 || dy !== 0) {
-        state.player.walkTimer += dt;
-        if (state.player.walkTimer > 0.15) {
-          state.player.walkTimer = 0;
-          state.player.walkFrame = (state.player.walkFrame + 1) % 4;
-        }
-      } else {
-        state.player.walkFrame = 0;
-        state.player.walkTimer = 0;
-      }
+        // fallback: posição aleatória sem restrições
+        return { x: aleatorio(margem, canvas.width - margem), y: aleatorio(margem, canvas.height - margem) };
     }
 
-    // ---- RENDER BUNKER (realista) ----
-    function renderBunker() {
-      const W = bunkerCanvas.width;
-      const H = bunkerCanvas.height;
-      const ctx = bunkerCtx;
-      ctx.clearRect(0, 0, W, H);
-
-      const scaleX = W / BUNKER_W;
-      const scaleY = H / BUNKER_H;
-      const scale = Math.min(scaleX, scaleY) * 0.92;
-      const offX = (W - BUNKER_W * scale) / 2;
-      const offY = (H - BUNKER_H * scale) / 2;
-
-      function toScreen(wx, wy) { return [offX + wx * scale, offY + wy * scale]; }
-
-      function toSize(s) { return s * scale; }
-
-      // Fundo com textura de concreto
-      const grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
-      grad.addColorStop(0, '#1e2a2e');
-      grad.addColorStop(1, '#0e161c');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, W, H);
-
-      // Chão com textura de grid sujo
-      ctx.fillStyle = '#141c22';
-      ctx.fillRect(offX, offY, BUNKER_W * scale, BUNKER_H * scale);
-
-      // Grade do piso (linhas de concreto)
-      ctx.strokeStyle = 'rgba(40,60,60,0.08)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < BUNKER_W; x += 50) {
-        const [sx] = toScreen(x, 0);
-        ctx.beginPath();
-        ctx.moveTo(sx, offY);
-        ctx.lineTo(sx, offY + BUNKER_H * scale);
-        ctx.stroke();
-      }
-      for (let y = 0; y < BUNKER_H; y += 50) {
-        const [, sy] = toScreen(0, y);
-        ctx.beginPath();
-        ctx.moveTo(offX, sy);
-        ctx.lineTo(offX + BUNKER_W * scale, sy);
-        ctx.stroke();
-      }
-
-      // Paredes com sombra
-      ctx.shadowColor = 'rgba(0,0,0,0.4)';
-      ctx.shadowBlur = 12;
-      ctx.fillStyle = '#1a2a32';
-      for (const wall of bunkerWalls) {
-        const [sx, sy] = toScreen(wall.x, wall.y);
-        const sw = toSize(wall.w);
-        const sh = toSize(wall.h);
-        ctx.fillRect(sx, sy, sw, sh);
-      }
-      ctx.shadowBlur = 0;
-
-      // Detalhes das paredes (tubos, fios)
-      ctx.strokeStyle = 'rgba(60,80,70,0.15)';
-      ctx.lineWidth = 2;
-      // Tubo horizontal
-      const [tx1, ty1] = toScreen(20, 120);
-      ctx.beginPath();
-      ctx.moveTo(tx1, ty1);
-      ctx.lineTo(tx1 + toSize(200), ty1);
-      ctx.stroke();
-      // Tubo vertical
-      const [tx2, ty2] = toScreen(180, 120);
-      ctx.beginPath();
-      ctx.moveTo(tx2, ty2);
-      ctx.lineTo(tx2, ty2 + toSize(100));
-      ctx.stroke();
-
-      // Luzes piscando (efeito)
-      const flicker = Math.sin(Date.now() * 0.003) * 0.5 + 0.5;
-      const lightAlpha = 0.05 + flicker * 0.06;
-      ctx.fillStyle = `rgba(200,220,150,${lightAlpha})`;
-      ctx.beginPath();
-      ctx.arc(W / 2, offY + 40 * scale, 60 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Objetos interativos
-      for (const obj of bunkerObjects) {
-        const [sx, sy] = toScreen(obj.x, obj.y);
-        const sw = toSize(obj.w);
-        const sh = toSize(obj.h);
-
-        // Base do objeto
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = 'rgba(0,30,20,0.2)';
-        ctx.fillStyle = 'rgba(20,40,40,0.6)';
-        ctx.beginPath();
-        ctx.roundRect(sx, sy, sw, sh, 6);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // Borda
-        ctx.strokeStyle = 'rgba(60,120,100,0.2)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.roundRect(sx, sy, sw, sh, 6);
-        ctx.stroke();
-
-        // Label
-        ctx.fillStyle = '#7aaa9a';
-        ctx.font = `${Math.min(16, 14 * scale)}px "Courier New", monospace`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(obj.label, sx + sw / 2, sy + sh / 2);
-
-        // Dica de interação
-        const cx = obj.x + obj.w / 2;
-        const cy = obj.y + obj.h / 2;
-        const d = Math.hypot(BP.x - cx, BP.y - cy);
-        if (d < 90) {
-          ctx.fillStyle = 'rgba(80,200,160,0.12)';
-          ctx.beginPath();
-          ctx.arc(sx + sw / 2, sy + sh / 2, 40 * scale, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = '#80d0b0';
-          ctx.font = `${Math.min(12, 11 * scale)}px "Courier New", monospace`;
-          ctx.fillText('[E] interagir', sx + sw / 2, sy + sh / 2 + 34 * scale);
-        }
-      }
-
-      // Jogador (humanoide) no bunker
-      drawHuman(ctx, BP.x, BP.y, scale, toScreen, toSize, state.player.walkFrame, false);
-
-      // UI superior (oxigênio, energia, plantas)
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(4,10,14,0.7)';
-      const uiX = offX + 12 * scale;
-      const uiY = offY + 12 * scale;
-      ctx.fillRect(uiX, uiY, 340 * scale, 36 * scale);
-      ctx.strokeStyle = 'rgba(60,120,100,0.1)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(uiX, uiY, 340 * scale, 36 * scale);
-
-      ctx.fillStyle = '#7aaa9a';
-      ctx.font = `${Math.min(13, 12 * scale)}px "Courier New", monospace`;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(`💨 O₂ ${Math.round(state.bunker.oxygen)}%  🔋 ${Math.round(state.bunker.energy)}%  🌱 ${state.bunker.plants}`, uiX + 14 * scale, uiY + 18 * scale);
-
-      // Legenda
-      ctx.fillStyle = 'rgba(60,90,80,0.15)';
-      ctx.font = `${Math.min(10, 9 * scale)}px "Courier New", monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText('WASD mover | E interagir', W / 2, H - 10 * scale);
+    function criarMonstro() {
+        const pos = gerarPosicaoMonstro();
+        return {
+            x: pos.x,
+            y: pos.y,
+            raio: CONFIG.MONSTRO_RAIO,
+            hp: CONFIG.VIDA_MONSTRO_BASE,
+            maxHp: CONFIG.VIDA_MONSTRO_BASE,
+            dano: CONFIG.DANO_MONSTRO_BASE,
+            attackCooldown: CONFIG.ATAQUE_COOLDOWN_MONSTRO,
+            attackTimer: aleatorio(0, CONFIG.ATAQUE_COOLDOWN_MONSTRO), // ataque assíncrono
+            vivo: true,
+        };
     }
 
-    // ---- DESENHA HUMANOIDE ----
-    function drawHuman(ctx, x, y, scale, toScreen, toSize, frame, onSurface) {
-      const [sx, sy] = toScreen(x, y);
-      const r = toSize(16);
-      const bodyW = r * 1.1;
-      const bodyH = r * 1.4;
-
-      // Sombra
-      ctx.shadowColor = 'rgba(0,0,0,0.3)';
-      ctx.shadowBlur = 14;
-
-      // Pernas (animação)
-      const legOffset = (frame % 2 === 0) ? r * 0.15 : -r * 0.15;
-      const legOffset2 = (frame % 2 === 0) ? -r * 0.15 : r * 0.15;
-
-      ctx.fillStyle = '#1a2a2a';
-      ctx.shadowBlur = 6;
-      // Perna esquerda
-      ctx.fillRect(sx - r * 0.35 + legOffset, sy + r * 0.2, r * 0.2, r * 0.5);
-      // Perna direita
-      ctx.fillRect(sx + r * 0.15 + legOffset2, sy + r * 0.2, r * 0.2, r * 0.5);
-
-      // Corpo (tronco)
-      ctx.fillStyle = '#2a3a3a';
-      ctx.shadowBlur = 10;
-      ctx.fillRect(sx - bodyW / 2, sy - bodyH / 2 + r * 0.1, bodyW, bodyH * 0.7);
-
-      // Braços (animação)
-      const armSwing = (frame % 2 === 0) ? r * 0.1 : -r * 0.1;
-      ctx.fillStyle = '#2a3a3a';
-      // Braço esquerdo
-      ctx.fillRect(sx - bodyW / 2 - r * 0.15, sy - r * 0.1 + armSwing, r * 0.15, r * 0.5);
-      // Braço direito
-      ctx.fillRect(sx + bodyW / 2, sy - r * 0.1 - armSwing, r * 0.15, r * 0.5);
-
-      // Cabeça
-      ctx.fillStyle = '#d4b08a';
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(sx, sy - r * 0.6, r * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Cabelo (sujeira)
-      ctx.fillStyle = '#3a2a1a';
-      ctx.beginPath();
-      ctx.arc(sx, sy - r * 0.7, r * 0.5, Math.PI, 2 * Math.PI);
-      ctx.fill();
-
-      // Olhos
-      ctx.fillStyle = '#202020';
-      ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.arc(sx - r * 0.18, sy - r * 0.65, r * 0.08, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(sx + r * 0.18, sy - r * 0.65, r * 0.08, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Brilho nos olhos
-      ctx.fillStyle = '#ffffff44';
-      ctx.beginPath();
-      ctx.arc(sx - r * 0.2, sy - r * 0.68, r * 0.03, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(sx + r * 0.16, sy - r * 0.68, r * 0.03, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Mochila (nas costas)
-      ctx.fillStyle = '#1a2a1a';
-      ctx.shadowBlur = 4;
-      ctx.fillRect(sx + r * 0.5, sy - r * 0.2, r * 0.3, r * 0.5);
-
-      // Se na superfície, adiciona um capacete de proteção
-      if (onSurface) {
-        ctx.strokeStyle = 'rgba(60,200,200,0.2)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(sx, sy - r * 0.6, r * 0.6, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.fillStyle = 'rgba(60,200,200,0.05)';
-        ctx.beginPath();
-        ctx.arc(sx, sy - r * 0.6, r * 0.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.shadowBlur = 0;
+    function adicionarMonstros(quantidade) {
+        for (let i = 0; i < quantidade; i++) {
+            if (monstros.length >= CONFIG.MAX_MONSTROS) break;
+            monstros.push(criarMonstro());
+        }
     }
 
-    // ---- INTERAÇÕES BUNKER ----
-    function checkBunkerInteraction() {
-      for (const obj of bunkerObjects) {
-        const cx = obj.x + obj.w / 2;
-        const cy = obj.y + obj.h / 2;
-        const d = Math.hypot(BP.x - cx, BP.y - cy);
-        if (d < 80) return obj.action;
-      }
-      return null;
+    // -------- LÓGICA DE NÍVEL / XP --------
+    function ganharXP(quantidade) {
+        jogador.xp += quantidade;
+        while (jogador.xp >= jogador.xpProximo) {
+            // sobe de nível
+            jogador.xp -= jogador.xpProximo;
+            jogador.nivel++;
+            jogador.xpProximo = Math.floor(CONFIG.XP_POR_NIVEL_BASE * jogador.nivel * 1.2);
+            // aumenta atributos
+            jogador.maxHp += CONFIG.VIDA_POR_NIVEL;
+            jogador.hp = jogador.maxHp; // cura completa
+            jogador.dano += CONFIG.DANO_POR_NIVEL;
+            // Atualiza display (feito no loop)
+        }
+        atualizarDisplay();
     }
 
-    function doBunkerAction(action) {
-      if (action === 'surface') {
-        state.player.hp = Math.min(100, state.player.hp + 10);
-        state.player.oxygen = Math.min(100, state.player.oxygen + 15);
-        state.player.energy = Math.min(100, state.player.energy + 10);
-        state.player.alive = true;
-        state.player.x = 400;
-        state.player.y = 300;
-        updateSurfaceHUD();
-        showScreen('surface');
-        if (!state.surfaceLoopActive) {
-          state.surfaceLoopActive = true;
-          requestAnimationFrame(surfaceLoop);
+    // -------- MATAR MONSTRO --------
+    function matarMonstro(index) {
+        const monstro = monstros[index];
+        if (!monstro || !monstro.vivo) return;
+
+        monstro.vivo = false;
+        monstros.splice(index, 1);
+        jogador.mortes++;
+
+        // Ganha XP
+        const xpGanho = CONFIG.XP_POR_MORTE_BASE + jogador.nivel * 2;
+        ganharXP(xpGanho);
+
+        // Dobra a quantidade de monstros (antes da morte)
+        const totalAntes = jogador.mortes; // na verdade, totalAntes era o número de monstros vivos ANTES da morte = mortes atuais + 1?
+        // Mas precisamos saber quantos estavam vivos antes de matar.
+        // Vamos calcular: após a remoção, temos N monstros. Queremos que o total seja 2 * (N+1) ? Não, a lógica: antes tinha N+1, depois N. Queremos que depois de adicionar, fique 2*(N+1). Então adicionamos (2*(N+1) - N) = N+2.
+        // Mas é mais simples: antes de matar, tínhamos totalAntes = monstros.length + 1 (pois acabamos de remover um).
+        // Queremos que o novo total seja 2 * totalAntes. Então adicionamos (2 * totalAntes) - (monstros.length) = 2*totalAntes - (totalAntes - 1) = totalAntes + 1.
+        // Então adicionamos totalAntes + 1 monstros.
+        const totalAntes = jogador.mortes; // não, isso é mortes totais, não número atual.
+        // Vamos usar o número atual de monstros + 1.
+        const atuais = monstros.length;
+        const totalAntesMorte = atuais + 1; // porque acabamos de remover um
+        const novos = totalAntesMorte + 1; // dobra
+        // Limita para não estourar
+        const limite = CONFIG.MAX_MONSTROS - monstros.length;
+        const adicionar = Math.min(novos, limite);
+        if (adicionar > 0) {
+            adicionarMonstros(adicionar);
         }
-      } else if (action === 'rest') {
-        state.cycle = (state.cycle + 1) % 2;
-        state.bunker.oxygen = Math.min(100, state.bunker.oxygen + 8);
-        state.bunker.energy = Math.min(100, state.bunker.energy + 5);
-        state.player.hp = Math.min(100, state.player.hp + 25);
-        state.player.oxygen = Math.min(100, state.player.oxygen + 30);
-        state.player.energy = Math.min(100, state.player.energy + 20);
-        const prod = state.bunker.plants * state.bunker.efficiency * 0.08;
-        state.bunker.oxygen = Math.min(100, state.bunker.oxygen + prod * 8);
-        const cons = state.bunker.plants * 0.03;
-        state.bunker.energy = Math.max(0, state.bunker.energy - cons * 6);
-        // Partículas de descanso
-        for (let i = 0; i < 12; i++) {
-          state.particles.push({
-            x: 900 + Math.random() * 100,
-            y: 100 + Math.random() * 60,
-            vx: (Math.random() - 0.5) * 30,
-            vy: -10 - Math.random() * 30,
-            life: 0.8 + Math.random() * 0.6,
-            maxLife: 1.4,
-            color: '#60d090',
-            size: 3 + Math.random() * 4,
-          });
+
+        // Se não houver monstros (caso raro), adiciona 1
+        if (monstros.length === 0) {
+            adicionarMonstros(1);
         }
-      } else if (action === 'terminal') {
-        terminalOverlay.classList.add('active');
-        terminalInput.focus();
-        terminalInput.value = '';
-        terminalScreen.innerHTML = `
-          <div class="output-line">╔═══════════════════════════════════╗</div>
-          <div class="output-line">║  SISTEMA DE CONTROLE DO BUNKER    ║</div>
-          <div class="output-line">║  v.2.1  —  FOTOSSÍNTESE ARTIFICIAL ║</div>
-          <div class="output-line">╚═══════════════════════════════════╝</div>
-          <div class="output-line" style="margin-top:8px;">&gt; Inicializando módulos...</div>
-          <div class="output-line">&gt; <span class="highlight">Bem-vindo, ${state.playerName}.</span></div>
-          <div class="output-line" style="margin-top:6px;">&gt; Comandos: <span class="highlight">status</span>, <span class="highlight">plantas</span>, <span class="highlight">pesquisar</span>, <span class="highlight">sair</span></div>
-          <div class="input-line">
-            <span>$</span>
-            <input type="text" id="terminalInput" autofocus placeholder="digite um comando...">
-          </div>
-        `;
-        const newInput = terminalScreen.querySelector('#terminalInput');
-        if (newInput) {
-          newInput.addEventListener('keydown', handleTerminalCommand);
-          setTimeout(() => newInput.focus(), 50);
-        }
-      }
+
+        atualizarDisplay();
     }
 
-    // ---- TERMINAL ----
-    function handleTerminalCommand(e) {
-      if (e.key === 'Enter') {
-        const input = e.target;
-        const cmd = input.value.trim().toLowerCase();
-        input.value = '';
-        const inputLine = input.closest('.input-line');
-        const output = document.createElement('div');
-        output.className = 'output-line';
-        output.innerHTML = `&gt; <span style="color:#50d080;">${cmd || '(vazio)'}</span>`;
-        inputLine.parentNode.insertBefore(output, inputLine);
+    // -------- ATAQUE DO JOGADOR (clique) --------
+    function atacarMonstro(index) {
+        if (!jogador.vivo) return;
+        const monstro = monstros[index];
+        if (!monstro || !monstro.vivo) return;
+        monstro.hp -= jogador.dano;
+        if (monstro.hp <= 0) {
+            matarMonstro(index);
+        }
+        atualizarDisplay();
+    }
 
-        let response = '';
-        if (cmd === 'status' || cmd === '') {
-          response = `
-            <span class="highlight">STATUS DO BUNKER</span><br>
-            Oxigênio: ${Math.round(state.bunker.oxygen)}%<br>
-            Energia: ${Math.round(state.bunker.energy)}%<br>
-            Plantas ativas: ${state.bunker.plants}<br>
-            Eficiência: ${state.bunker.efficiency.toFixed(1)}×<br>
-            Pesquisa: ${state.bunker.researchLevel === 0 ? 'Básica' : 'Avançada'}<br>
-            Ciclo: ${state.cycle === 0 ? 'DIA' : 'NOITE'}
-          `;
-        } else if (cmd === 'plantas') {
-          const prod = state.bunker.plants * state.bunker.efficiency * 0.08;
-          const cons = state.bunker.plants * 0.03 * (state.bunker.researchLevel === 1 ? 0.7 : 1.0);
-          response = `
-            <span class="highlight">🌱 SISTEMA DE PLANTAS</span><br>
-            Plantas: ${state.bunker.plants}<br>
-            Produção O₂: ${prod.toFixed(2)}/s<br>
-            Consumo energia: ${cons.toFixed(2)}/s<br>
-            Eficiência total: ${(state.bunker.efficiency * (state.bunker.researchLevel === 1 ? 1.3 : 1.0)).toFixed(1)}×
-          `;
-        } else if (cmd === 'pesquisar') {
-          if (state.bunker.researchLevel === 0 && state.inventory.tech >= 8) {
-            state.inventory.tech -= 8;
-            state.bunker.researchLevel = 1;
-            response = `
-              <span class="highlight">🔬 PESQUISA CONCLUÍDA!</span><br>
-              Nova tecnologia: Fotossíntese Avançada<br>
-              Produção +30%, consumo -30%
-            `;
-            updateSurfaceHUD();
-          } else if (state.bunker.researchLevel === 1) {
-            response = `<span class="warn">⚠️ Pesquisa já concluída.</span>`;
-          } else {
-            response = `<span class="error">❌ Recursos insuficientes. Precisa de 8 ⚙️ Tecnologia.</span>`;
-          }
-        } else if (cmd === 'sair') {
-          terminalOverlay.classList.remove('active');
-          return;
-        } else if (cmd === 'help') {
-          response = `
-            <span class="highlight">COMANDOS DISPONÍVEIS</span><br>
-            <span class="highlight">status</span>  — mostra status do bunker<br>
-            <span class="highlight">plantas</span> — detalhes do sistema de plantas<br>
-            <span class="highlight">pesquisar</span> — investe tecnologia em avanço<br>
-            <span class="highlight">sair</span>    — fecha o terminal
-          `;
+    // -------- ATAQUE DOS MONSTROS (timer) --------
+    function atualizarMonstros(deltaTime) {
+        if (!jogador.vivo) return;
+        for (let i = monstros.length - 1; i >= 0; i--) {
+            const m = monstros[i];
+            if (!m.vivo) continue;
+            m.attackTimer -= deltaTime;
+            if (m.attackTimer <= 0) {
+                // ataca o jogador
+                jogador.hp -= m.dano;
+                if (jogador.hp < 0) jogador.hp = 0;
+                m.attackTimer = m.attackCooldown;
+                // verifica morte do jogador
+                if (jogador.hp <= 0) {
+                    jogador.vivo = false;
+                    gameOverMsg.classList.add('show');
+                }
+                atualizarDisplay();
+            }
+        }
+    }
+
+    // -------- RENDERIZAÇÃO --------
+    function desenhar() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // --- Fundo / grid (opcional) ---
+        ctx.strokeStyle = '#2a2a4a';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < canvas.width; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
+        }
+        for (let i = 0; i < canvas.height; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, i);
+            ctx.lineTo(canvas.width, i);
+            ctx.stroke();
+        }
+
+        // --- Monstros ---
+        for (let m of monstros) {
+            if (!m.vivo) continue;
+            // Corpo
+            ctx.shadowColor = '#e94560';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, m.raio, 0, Math.PI * 2);
+            ctx.fillStyle = '#e94560';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#ff6b6b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Barra de vida
+            const barraLarg = m.raio * 2.2;
+            const barraAlt = 5;
+            const barraX = m.x - barraLarg / 2;
+            const barraY = m.y - m.raio - 10;
+            ctx.fillStyle = '#333';
+            ctx.fillRect(barraX, barraY, barraLarg, barraAlt);
+            const vidaPercent = m.hp / m.maxHp;
+            ctx.fillStyle = vidaPercent > 0.5 ? '#51cf66' : (vidaPercent > 0.25 ? '#fcc419' : '#e94560');
+            ctx.fillRect(barraX, barraY, barraLarg * vidaPercent, barraAlt);
+
+            // Olhos (detalhe)
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(m.x - 5, m.y - 4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(m.x + 5, m.y - 4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#222';
+            ctx.beginPath();
+            ctx.arc(m.x - 6, m.y - 2, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(m.x + 4, m.y - 2, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // --- Jogador ---
+        if (jogador.vivo) {
+            ctx.shadowColor = '#4dabf7';
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.arc(jogador.x, jogador.y, jogador.raio, 0, Math.PI * 2);
+            ctx.fillStyle = '#4dabf7';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#74c0fc';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Rosto
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(jogador.x - 8, jogador.y - 5, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(jogador.x + 8, jogador.y - 5, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#222';
+            ctx.beginPath();
+            ctx.arc(jogador.x - 9, jogador.y - 3, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(jogador.x + 7, jogador.y - 3, 3, 0, Math.PI * 2);
+            ctx.fill();
+            // sorriso
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(jogador.x, jogador.y + 2, 8, 0.1, Math.PI - 0.1);
+            ctx.stroke();
         } else {
-          response = `<span class="error">Comando desconhecido: "${cmd}". Digite 'help' para ajuda.</span>`;
+            // Game Over sobreposição
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#e94560';
+            ctx.font = 'bold 60px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💀 GAME OVER', canvas.width/2, canvas.height/2 - 20);
+            ctx.font = '24px sans-serif';
+            ctx.fillStyle = '#fff';
+            ctx.fillText('Clique em "Reiniciar"', canvas.width/2, canvas.height/2 + 50);
         }
-
-        const respDiv = document.createElement('div');
-        respDiv.className = 'output-line';
-        respDiv.innerHTML = response;
-        inputLine.parentNode.insertBefore(respDiv, inputLine);
-
-        const newInputLine = document.createElement('div');
-        newInputLine.className = 'input-line';
-        newInputLine.innerHTML = `<span>$</span><input type="text" class="term-input" autofocus>`;
-        inputLine.parentNode.insertBefore(newInputLine, inputLine);
-        inputLine.remove();
-
-        const newInput = newInputLine.querySelector('.term-input');
-        newInput.addEventListener('keydown', handleTerminalCommand);
-        setTimeout(() => newInput.focus(), 30);
-        terminalScreen.scrollTop = terminalScreen.scrollHeight;
-      }
     }
 
-    terminalClose.addEventListener('click', () => terminalOverlay.classList.remove('active'));
+    // -------- ATUALIZAR DISPLAY (status) --------
+    function atualizarDisplay() {
+        hpDisplay.textContent = Math.floor(jogador.hp);
+        maxHpDisplay.textContent = jogador.maxHp;
+        hpFill.style.width = (jogador.hp / jogador.maxHp * 100) + '%';
+        danoDisplay.textContent = jogador.dano;
+        nivelDisplay.textContent = jogador.nivel;
+        xpDisplay.textContent = Math.floor(jogador.xp);
+        xpNextDisplay.textContent = Math.floor(jogador.xpProximo);
+        monstrosDisplay.textContent = monstros.filter(m => m.vivo).length;
+        mortesDisplay.textContent = jogador.mortes;
 
-    // ---- SUPERFÍCIE ----
-    function resizeSurfaceCanvas() {
-      const rect = surfaceCanvas.parentElement.getBoundingClientRect();
-      surfaceCanvas.width = rect.width;
-      surfaceCanvas.height = rect.height;
-    }
-
-    function initSurfaceWorld() {
-      state.resources = [];
-      state.mutants = [];
-      state.particles = [];
-      const W = surfaceCanvas.width || 800;
-      const H = surfaceCanvas.height || 600;
-      for (let i = 0; i < 40; i++) {
-        const type = ['metal', 'biomass', 'tech'][Math.floor(Math.random() * 3)];
-        state.resources.push({
-          x: 60 + Math.random() * (W - 120),
-          y: 60 + Math.random() * (H - 120),
-          type,
-          radius: 10,
-          collected: false,
-          respawnTimer: 0,
-          value: 1 + Math.floor(Math.random() * 2),
-        });
-      }
-      for (let i = 0; i < 6; i++) spawnSurfaceMutant();
-    }
-
-    function spawnSurfaceMutant() {
-      const W = surfaceCanvas.width || 800;
-      const H = surfaceCanvas.height || 600;
-      state.mutants.push({
-        x: 80 + Math.random() * (W - 160),
-        y: 80 + Math.random() * (H - 160),
-        radius: 14 + Math.random() * 4,
-        hp: 20 + Math.random() * 10,
-        maxHp: 20 + Math.random() * 10,
-        speed: 25 + Math.random() * 20,
-        damage: 5 + Math.random() * 4,
-        attackCooldown: 0,
-        state: 'patrol',
-        targetX: 80 + Math.random() * (W - 160),
-        targetY: 80 + Math.random() * (H - 160),
-        wobble: Math.random() * 100,
-      });
-    }
-
-    function updateSurface(dt) {
-      const p = state.player;
-      if (!p.alive) return;
-
-      const W = surfaceCanvas.width || 800;
-      const H = surfaceCanvas.height || 600;
-
-      p.oxygen -= dt * 1.0;
-      p.energy -= dt * 0.35;
-      if (p.oxygen <= 0) { p.oxygen = 0;
-        p.hp -= dt * 5; }
-      if (p.energy <= 0) { p.energy = 0;
-        p.hp -= dt * 2; }
-      if (p.hp <= 0) { p.hp = 0;
-        p.alive = false;
-        updateSurfaceHUD(); return; }
-      if (p.invincible > 0) p.invincible -= dt;
-      if (p.attackCooldown > 0) p.attackCooldown -= dt;
-
-      let dx = 0,
-        dy = 0;
-      const keys = state.keys;
-      if (keys['w'] || keys['arrowup']) dy = -1;
-      if (keys['s'] || keys['arrowdown']) dy = 1;
-      if (keys['a'] || keys['arrowleft']) dx = -1;
-      if (keys['d'] || keys['arrowright']) dx = 1;
-      if (dx !== 0 && dy !== 0) { dx *= 0.707;
-        dy *= 0.707; }
-      const speed = p.speed * (p.hp < 30 ? 0.8 : 1.0);
-      p.x += dx * speed * dt;
-      p.y += dy * speed * dt;
-      p.x = Math.max(20, Math.min(W - 20, p.x));
-      p.y = Math.max(20, Math.min(H - 20, p.y));
-
-      // Animação
-      if (dx !== 0 || dy !== 0) {
-        p.walkTimer += dt;
-        if (p.walkTimer > 0.15) {
-          p.walkTimer = 0;
-          p.walkFrame = (p.walkFrame + 1) % 4;
-        }
-      } else {
-        p.walkFrame = 0;
-        p.walkTimer = 0;
-      }
-
-      // Coleta
-      for (const r of state.resources) {
-        if (r.collected) continue;
-        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + r.radius) {
-          r.collected = true;
-          r.respawnTimer = 12 + Math.random() * 18;
-          const val = r.value || 1;
-          if (r.type === 'metal') state.inventory.metal += val;
-          else if (r.type === 'biomass') state.inventory.biomass += val;
-          else if (r.type === 'tech') state.inventory.tech += val;
-          for (let i = 0; i < 6; i++) {
-            state.particles.push({
-              x: r.x,
-              y: r.y,
-              vx: (Math.random() - 0.5) * 70,
-              vy: (Math.random() - 0.5) * 70,
-              life: 0.4 + Math.random() * 0.4,
-              maxLife: 0.8,
-              color: r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : '#c0a060',
-              size: 2 + Math.random() * 4,
-            });
-          }
-          updateSurfaceHUD();
-        }
-      }
-
-      // Ataque
-      if (keys[' '] && p.attackCooldown <= 0 && p.alive) {
-        p.attackCooldown = 0.5;
-        for (const m of state.mutants) {
-          if (Math.hypot(p.x - m.x, p.y - m.y) < p.radius + m.radius + 30) {
-            m.hp -= 12;
-            for (let i = 0; i < 8; i++) {
-              state.particles.push({
-                x: m.x,
-                y: m.y,
-                vx: (Math.random() - 0.5) * 90,
-                vy: (Math.random() - 0.5) * 90,
-                life: 0.3 + Math.random() * 0.3,
-                maxLife: 0.6,
-                color: '#ff6040',
-                size: 2 + Math.random() * 5,
-              });
-            }
-            if (m.hp <= 0) {
-              const idx = state.mutants.indexOf(m);
-              if (idx > -1) state.mutants.splice(idx, 1);
-              if (Math.random() < 0.35) { state.inventory.biomass += 1;
-                updateSurfaceHUD(); }
-            }
-          }
-        }
-      }
-
-      // Mutantes
-      for (const m of state.mutants) {
-        m.wobble += dt * 0.5;
-        const d = Math.hypot(p.x - m.x, p.y - m.y);
-        if (d < 280) { m.state = 'chase';
-          m.targetX = p.x;
-          m.targetY = p.y; } else if (m.state === 'chase') { m.state = 'patrol';
-          m.targetX = 80 + Math.random() * (W - 160);
-          m.targetY = 80 + Math.random() * (H - 160); }
-        if (m.state === 'chase') {
-          const ang = Math.atan2(p.y - m.y, p.x - m.x) + Math.sin(m.wobble) * 0.04;
-          const spd = m.speed * (1 + state.cycle * 0.08);
-          m.x += Math.cos(ang) * spd * dt;
-          m.y += Math.sin(ang) * spd * dt;
-          if (d < m.radius + p.radius + 4) {
-            if (m.attackCooldown <= 0) {
-              m.attackCooldown = 0.8;
-              if (p.invincible <= 0) {
-                p.hp -= m.damage;
-                p.invincible = 0.4;
-                if (p.hp <= 0) { p.hp = 0;
-                  p.alive = false; }
-                updateSurfaceHUD();
-              }
-            }
-          }
+        if (!jogador.vivo) {
+            gameOverMsg.classList.add('show');
         } else {
-          if (Math.hypot(m.x - m.targetX, m.y - m.targetY) < 20) {
-            m.targetX = 80 + Math.random() * (W - 160);
-            m.targetY = 80 + Math.random() * (H - 160);
-          }
-          const ang = Math.atan2(m.targetY - m.y, m.targetX - m.x) + Math.sin(m.wobble * 0.7) * 0.03;
-          m.x += Math.cos(ang) * m.speed * 0.4 * dt;
-          m.y += Math.sin(ang) * m.speed * 0.4 * dt;
+            gameOverMsg.classList.remove('show');
         }
-        m.x = Math.max(10, Math.min(W - 10, m.x));
-        m.y = Math.max(10, Math.min(H - 10, m.y));
-        if (m.attackCooldown > 0) m.attackCooldown -= dt;
-      }
-
-      // Recursos respawn
-      for (const r of state.resources) {
-        if (r.collected) {
-          r.respawnTimer -= dt;
-          if (r.respawnTimer <= 0) {
-            r.collected = false;
-            r.x = 60 + Math.random() * (W - 120);
-            r.y = 60 + Math.random() * (H - 120);
-          }
-        }
-      }
-
-      // Partículas de névoa
-      if (Math.random() < 0.02) {
-        state.particles.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          vx: (Math.random() - 0.5) * 4,
-          vy: -0.5 - Math.random() * 1.5,
-          life: 4 + Math.random() * 6,
-          maxLife: 10,
-          color: `rgba(60,80,60,${0.02 + Math.random() * 0.03})`,
-          size: 20 + Math.random() * 40,
-        });
-      }
-
-      for (let i = state.particles.length - 1; i >= 0; i--) {
-        const pt = state.particles[i];
-        pt.x += pt.vx * dt;
-        pt.y += pt.vy * dt;
-        pt.life -= dt;
-        if (pt.life <= 0) state.particles.splice(i, 1);
-      }
-
-      updateSurfaceHUD();
     }
 
-    function renderSurface() {
-      const W = surfaceCanvas.width || 800;
-      const H = surfaceCanvas.height || 600;
-      const ctx = surfaceCtx;
-      ctx.clearRect(0, 0, W, H);
+    // -------- LOOP PRINCIPAL --------
+    function loop(tempo) {
+        const delta = ultimoTempo ? (tempo - ultimoTempo) / 1000 : 0.016;
+        ultimoTempo = tempo;
 
-      // Céu poluído
-      const skyGrad = ctx.createRadialGradient(W / 2, H * 0.3, 0, W / 2, H * 0.3, W * 0.8);
-      skyGrad.addColorStop(0, '#1a2a28');
-      skyGrad.addColorStop(0.5, '#121e20');
-      skyGrad.addColorStop(1, '#080e10');
-      ctx.fillStyle = skyGrad;
-      ctx.fillRect(0, 0, W, H);
-
-      // Chão
-      const groundY = H * 0.7;
-      const groundGrad = ctx.createLinearGradient(0, groundY, 0, H);
-      groundGrad.addColorStop(0, '#1a2218');
-      groundGrad.addColorStop(0.3, '#161e14');
-      groundGrad.addColorStop(1, '#0a100a');
-      ctx.fillStyle = groundGrad;
-      ctx.fillRect(0, groundY, W, H - groundY);
-
-      // Textura de estrada
-      ctx.fillStyle = 'rgba(30,40,30,0.15)';
-      ctx.fillRect(0, groundY + 10, W, 30);
-      ctx.strokeStyle = 'rgba(40,70,50,0.05)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([20, 30]);
-      ctx.beginPath();
-      ctx.moveTo(0, groundY + 25);
-      ctx.lineTo(W, groundY + 25);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Ruínas (prédios)
-      const buildings = [
-        { x: 40, y: groundY - 180, w: 80, h: 180, color: '#1a2620' },
-        { x: 150, y: groundY - 240, w: 60, h: 240, color: '#141e18' },
-        { x: 240, y: groundY - 140, w: 90, h: 140, color: '#1c2822' },
-        { x: 370, y: groundY - 200, w: 70, h: 200, color: '#16201a' },
-        { x: 480, y: groundY - 280, w: 100, h: 280, color: '#1a261e' },
-        { x: 610, y: groundY - 160, w: 60, h: 160, color: '#141e16' },
-        { x: 700, y: groundY - 220, w: 80, h: 220, color: '#18221c' },
-        { x: 810, y: groundY - 180, w: 70, h: 180, color: '#1a2420' },
-        { x: 910, y: groundY - 260, w: 90, h: 260, color: '#141e18' },
-        { x: 1030, y: groundY - 150, w: 60, h: 150, color: '#1c2822' },
-      ];
-
-      for (const b of buildings) {
-        ctx.shadowColor = 'rgba(0,0,0,0.4)';
-        ctx.shadowBlur = 20;
-        ctx.fillStyle = b.color;
-        ctx.fillRect(b.x, b.y, b.w, b.h);
-        ctx.shadowBlur = 0;
-
-        // Janelas quebradas
-        ctx.fillStyle = 'rgba(40,70,50,0.12)';
-        for (let wy = b.y + 15; wy < b.y + b.h - 20; wy += 25) {
-          for (let wx = b.x + 10; wx < b.x + b.w - 10; wx += 20) {
-            if (Math.random() > 0.4) ctx.fillRect(wx, wy, 8, 12);
-          }
+        if (jogador.vivo) {
+            atualizarMonstros(delta);
         }
 
-        // Detritos no topo
-        ctx.fillStyle = '#0a100a';
-        ctx.fillRect(b.x + 10, b.y - 6, 20, 10);
-        ctx.fillRect(b.x + b.w - 30, b.y - 8, 25, 12);
-        ctx.fillRect(b.x + b.w / 2 - 10, b.y - 10, 15, 14);
-      }
+        desenhar();
+        atualizarDisplay();
 
-      // Carros destruídos
-      const cars = [
-        { x: 120, y: groundY + 20, w: 50, h: 20, color: '#1a2a1a' },
-        { x: 500, y: groundY + 10, w: 40, h: 18, color: '#182218' },
-        { x: 780, y: groundY + 25, w: 55, h: 22, color: '#1a261a' },
-      ];
-      for (const c of cars) {
-        ctx.fillStyle = c.color;
-        ctx.shadowBlur = 6;
-        ctx.fillRect(c.x, c.y, c.w, c.h);
-        ctx.fillStyle = '#0a100a';
-        ctx.fillRect(c.x + 8, c.y - 4, 10, 6);
-        ctx.fillRect(c.x + c.w - 18, c.y - 4, 10, 6);
-      }
-      ctx.shadowBlur = 0;
-
-      // Recursos
-      for (const r of state.resources) {
-        if (r.collected) continue;
-        const color = r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : '#c0a060';
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 12;
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#00000055';
-        ctx.font = '10px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        const sym = { metal: '⬡', biomass: '✦', tech: '⚙' };
-        ctx.fillText(sym[r.type] || '•', r.x, r.y + 1);
-        ctx.fillStyle = '#ffffffcc';
-        ctx.fillText(sym[r.type] || '•', r.x, r.y);
-      }
-
-      // Mutantes
-      for (const m of state.mutants) {
-        ctx.shadowColor = 'rgba(180,40,60,0.15)';
-        ctx.shadowBlur = 18;
-        const hue = 340 + m.hp / m.maxHp * 20;
-        ctx.fillStyle = `hsl(${hue},60%,35%)`;
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#ff6040';
-        ctx.beginPath();
-        ctx.arc(m.x - m.radius * 0.3, m.y - m.radius * 0.15, m.radius * 0.18, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(m.x + m.radius * 0.3, m.y - m.radius * 0.15, m.radius * 0.18, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#000';
-        ctx.beginPath();
-        ctx.arc(m.x - m.radius * 0.32, m.y - m.radius * 0.15, m.radius * 0.07, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(m.x + m.radius * 0.28, m.y - m.radius * 0.15, m.radius * 0.07, 0, Math.PI * 2);
-        ctx.fill();
-        const hpPct = m.hp / m.maxHp;
-        ctx.fillStyle = 'rgba(0,0,0,0.5)';
-        ctx.fillRect(m.x - m.radius * 0.6, m.y - m.radius - 8, m.radius * 1.2, 4);
-        ctx.fillStyle = hpPct > 0.5 ? '#60c080' : '#e06040';
-        ctx.fillRect(m.x - m.radius * 0.6, m.y - m.radius - 8, m.radius * 1.2 * hpPct, 4);
-      }
-
-      // Partículas (névoa)
-      for (const pt of state.particles) {
-        const alpha = pt.life / pt.maxLife;
-        ctx.globalAlpha = alpha * 0.3;
-        ctx.fillStyle = pt.color || 'rgba(60,80,60,0.05)';
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pt.size * (0.5 + 0.5 * alpha), 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-
-      // Jogador (humanoide) na superfície
-      if (state.player.alive) {
-        drawHuman(ctx, state.player.x, state.player.y, 1,
-          (x, y) => [x, y],
-          (s) => s,
-          state.player.walkFrame,
-          true
-        );
-      }
-
-      // Marcador do bunker
-      ctx.fillStyle = 'rgba(60,180,140,0.1)';
-      ctx.beginPath();
-      ctx.arc(40, H - 40, 22, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = 'rgba(60,180,140,0.3)';
-      ctx.font = '20px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('🏛️', 40, H - 40);
-      ctx.fillStyle = 'rgba(60,120,100,0.12)';
-      ctx.font = '8px sans-serif';
-      ctx.fillText('BUNKER', 40, H - 16);
+        requestAnimationFrame(loop);
     }
 
-    // ---- HUD SUPERFÍCIE ----
-    function updateSurfaceHUD() {
-      const p = state.player;
-      document.getElementById('surfHpBar').style.width = p.hp + '%';
-      document.getElementById('surfHpText').textContent = Math.round(p.hp);
-      document.getElementById('surfOxyBar').style.width = p.oxygen + '%';
-      document.getElementById('surfOxyText').textContent = Math.round(p.oxygen);
-      document.getElementById('surfEngBar').style.width = p.energy + '%';
-      document.getElementById('surfEngText').textContent = Math.round(p.energy);
-      document.getElementById('surfMetal').textContent = state.inventory.metal;
-      document.getElementById('surfBio').textContent = state.inventory.biomass;
-      document.getElementById('surfTech').textContent = state.inventory.tech;
-    }
+    // -------- EVENTOS DE CLIQUE --------
+    canvas.addEventListener('click', (e) => {
+        if (!jogador.vivo) return;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const mouseX = (e.clientX - rect.left) * scaleX;
+        const mouseY = (e.clientY - rect.top) * scaleY;
 
-    // ---- LOOP SUPERFÍCIE ----
-    function surfaceLoop(time) {
-      if (!screens.surface.classList.contains('active')) {
-        state.surfaceLoopActive = false;
-        return;
-      }
-      const dt = 0.016;
-      updateSurface(dt);
-      renderSurface();
-      if (state.surfaceLoopActive) requestAnimationFrame(surfaceLoop);
-    }
-
-    // ---- INPUT ----
-    document.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-      state.keys[key] = true;
-      if (key === ' ') e.preventDefault();
-
-      if (screens.bunker.classList.contains('active') && key === 'e') {
-        const action = checkBunkerInteraction();
-        if (action) doBunkerAction(action);
-      }
-
-      if (screens.surface.classList.contains('active') && (key === 'escape' || key === 'b')) {
-        document.getElementById('btnReturnBunker').click();
-      }
-    });
-    document.addEventListener('keyup', (e) => {
-      state.keys[e.key.toLowerCase()] = false;
+        // verifica se clicou em algum monstro (do mais próximo para o mais distante? tanto faz)
+        // Vamos percorrer de trás para frente (últimos desenhados por cima)
+        for (let i = monstros.length - 1; i >= 0; i--) {
+            const m = monstros[i];
+            if (!m.vivo) continue;
+            const dist = distancia(mouseX, mouseY, m.x, m.y);
+            if (dist < m.raio + 10) { // margem
+                atacarMonstro(i);
+                break;
+            }
+        }
     });
 
-    // ---- BOTÕES ----
-    document.getElementById('btnReturnBunker').addEventListener('click', () => {
-      state.player.oxygen = Math.min(100, state.player.oxygen + 20);
-      state.player.energy = Math.min(100, state.player.energy + 15);
-      if (!state.player.alive) {
-        state.player.hp = 30;
-        state.player.oxygen = 40;
-        state.player.energy = 30;
-        state.player.alive = true;
-      }
-      updateSurfaceHUD();
-      showScreen('bunker');
-      state.surfaceLoopActive = false;
-    });
-
-    // ---- LOOP DO BUNKER ----
-    let lastBunkerTime = 0;
-
-    function bunkerLoop(time) {
-      if (screens.bunker.classList.contains('active')) {
-        const dt = Math.min((time - lastBunkerTime) / 1000, 0.05);
-        lastBunkerTime = time;
-        updateBunkerMovement(dt);
-        renderBunker();
-      }
-      requestAnimationFrame(bunkerLoop);
+    // -------- REINICIAR --------
+    function reiniciar() {
+        jogador = {
+            x: 400,
+            y: 300,
+            raio: CONFIG.JOGADOR_RAIO,
+            hp: CONFIG.VIDA_INICIAL,
+            maxHp: CONFIG.VIDA_INICIAL,
+            dano: CONFIG.DANO_INICIAL,
+            nivel: 1,
+            xp: 0,
+            xpProximo: CONFIG.XP_POR_NIVEL_BASE,
+            mortes: 0,
+            vivo: true,
+        };
+        monstros = [];
+        gameOverMsg.classList.remove('show');
+        adicionarMonstros(1);
+        atualizarDisplay();
+        ultimoTempo = 0;
     }
 
-    // ---- INICIALIZAÇÃO ----
-    // Polyfill roundRect
-    if (!CanvasRenderingContext2D.prototype.roundRect) {
-      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-        if (r > w / 2) r = w / 2;
-        if (r > h / 2) r = h / 2;
-        this.moveTo(x + r, y);
-        this.lineTo(x + w - r, y);
-        this.quadraticCurveTo(x + w, y, x + w, y + r);
-        this.lineTo(x + w, y + h - r);
-        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        this.lineTo(x + r, y + h);
-        this.quadraticCurveTo(x, y + h, x, y + h - r);
-        this.lineTo(x, y + r);
-        this.quadraticCurveTo(x, y, x + r, y);
-        return this;
-      };
-    }
+    restartBtn.addEventListener('click', reiniciar);
 
-    // Iniciar
-    initSurfaceWorld();
-    state.player.x = 400;
-    state.player.y = 300;
-    BP.x = 560;
-    BP.y = 420;
-
-    showScreen('menu');
-
-    // Iniciar loops
-    requestAnimationFrame(bunkerLoop);
-    window.addEventListener('resize', () => {
-      if (screens.bunker.classList.contains('active')) resizeBunkerCanvas();
-      if (screens.surface.classList.contains('active')) resizeSurfaceCanvas();
-    });
-
-    console.log('🌱 Ecosfera 2200 – Imersão Total carregada!');
-  </script>
+    // -------- INICIALIZAÇÃO --------
+    adicionarMonstros(1);
+    atualizarDisplay();
+    requestAnimationFrame(loop);
+</script>
 </body>
 </html>
