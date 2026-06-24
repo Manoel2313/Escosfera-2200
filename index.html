@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌱 Ecosfera 2200 – Estrutura</title>
+  <title>🌱 Ecosfera 2200 – Imersão</title>
   <style>
-    /* ===== RESET GLOBAL ===== */
+    /* ===== RESET ===== */
     * {
       margin: 0;
       padding: 0;
@@ -13,130 +13,139 @@
       user-select: none;
     }
     body {
-      background: #0b0e12;
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: #0a0e12;
+      font-family: 'Courier New', monospace;
       color: #d0dcdc;
       height: 100vh;
       width: 100vw;
       overflow: hidden;
     }
 
-    /* ===== CONTAINER PRINCIPAL ===== */
+    /* ===== CONTAINER ===== */
     #game {
       position: relative;
       width: 100vw;
       height: 100vh;
-      background: #0f141a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #0a0e12;
+      overflow: hidden;
     }
 
-    /* ===== TELA (screen) ===== */
+    /* ===== TELAS ===== */
     .screen {
       position: absolute;
       inset: 0;
       display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: #0f141a;
-      transition: opacity 0.3s;
+      background: #0a0e12;
     }
     .screen.active {
-      display: flex;
+      display: block;
     }
 
     /* ===== MENU ===== */
     #menu-screen {
-      background: radial-gradient(ellipse at center, #14222a 0%, #0a1018 100%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, #0d1a1a 0%, #060a10 100%);
       text-align: center;
+      padding: 20px;
+    }
+    #menu-screen.active {
+      display: flex;
     }
     #menu-screen h1 {
-      font-size: 4.2rem;
+      font-size: 4.6rem;
       font-weight: 300;
-      letter-spacing: 6px;
+      letter-spacing: 8px;
       color: #80d0b0;
-      text-shadow: 0 0 40px rgba(60, 200, 160, 0.2);
-      margin-bottom: 0.4rem;
+      text-shadow: 0 0 60px rgba(60, 200, 160, 0.15);
+      margin-bottom: 0.2rem;
     }
     #menu-screen .subtitle {
       font-size: 1.1rem;
-      color: #7a9a8a;
-      letter-spacing: 3px;
-      margin-bottom: 2.5rem;
+      color: #6a8a7a;
+      letter-spacing: 5px;
+      margin-bottom: 2.8rem;
       border-top: 1px solid #1a3a2a;
       padding-top: 0.8rem;
-      display: inline-block;
     }
     .menu-btn {
-      background: #1a2a22;
+      background: transparent;
       border: 1px solid #2a5a3a;
       color: #b0d8c0;
-      padding: 14px 48px;
-      font-size: 1.3rem;
+      padding: 14px 52px;
+      font-size: 1.2rem;
       border-radius: 40px;
       cursor: pointer;
-      transition: 0.25s;
+      transition: 0.3s;
       font-family: inherit;
-      letter-spacing: 2px;
-      box-shadow: 0 0 30px rgba(0, 30, 20, 0.2);
+      letter-spacing: 3px;
     }
     .menu-btn:hover {
-      background: #2a4a32;
+      background: #1a3a2a;
       border-color: #4a8a6a;
-      box-shadow: 0 0 50px rgba(60, 200, 160, 0.15);
-      transform: scale(1.02);
+      box-shadow: 0 0 50px rgba(60, 200, 160, 0.1);
+      transform: scale(1.03);
+    }
+    #menu-screen .version {
+      position: absolute;
+      bottom: 24px;
+      font-size: 0.7rem;
+      color: #3a5a4a;
+      letter-spacing: 2px;
     }
 
-    /* ===== LORE / INTRODUÇÃO ===== */
+    /* ===== LORE ===== */
     #lore-screen {
-      background: #0a1018;
+      display: none;
+      align-items: center;
       justify-content: center;
-      padding: 30px;
-      max-width: 720px;
-      margin: 0 auto;
+      background: #080c12;
+      padding: 20px;
     }
-    #lore-screen .lore-box {
-      background: rgba(10, 20, 24, 0.8);
+    #lore-screen.active {
+      display: flex;
+    }
+    .lore-box {
+      background: rgba(8, 16, 20, 0.9);
       border: 1px solid #1a3a2a;
-      border-radius: 24px;
-      padding: 30px 32px;
-      max-height: 70vh;
+      border-radius: 20px;
+      padding: 32px 36px;
+      max-width: 680px;
+      max-height: 80vh;
       overflow-y: auto;
-      width: 100%;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 60px rgba(0, 20, 10, 0.4);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 60px rgba(0, 20, 10, 0.3);
     }
-    #lore-screen .lore-box h2 {
+    .lore-box h2 {
       color: #80d0b0;
       font-weight: 300;
-      letter-spacing: 2px;
-      font-size: 1.6rem;
-      margin-bottom: 16px;
+      letter-spacing: 3px;
+      font-size: 1.5rem;
+      margin-bottom: 14px;
       border-bottom: 1px solid #1a3a2a;
       padding-bottom: 10px;
     }
-    #lore-screen .lore-box p {
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: #c0d0c8;
-      margin-bottom: 14px;
+    .lore-box p {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #bcc8c0;
+      margin-bottom: 12px;
     }
-    #lore-screen .lore-box .highlight {
+    .lore-box .highlight {
       color: #80d0b0;
       font-weight: 500;
     }
-    #lore-screen .lore-box .footer-note {
-      margin-top: 18px;
-      font-size: 0.95rem;
-      color: #7a9a8a;
-      font-style: italic;
+    .lore-box .footer-note {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: #6a8a7a;
       border-top: 1px solid #1a2a22;
-      padding-top: 14px;
+      padding-top: 12px;
+      font-style: italic;
     }
-    #lore-screen .name-input-area {
+    .lore-box .name-area {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -144,15 +153,15 @@
       gap: 12px;
       margin-top: 18px;
     }
-    #lore-screen .name-input-area label {
+    .lore-box .name-area label {
       color: #8aa8a0;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
-    #lore-screen .name-input-area input {
+    .lore-box .name-area input {
       background: #0e1a1a;
       border: 1px solid #2a4a3a;
       color: #d0e8e0;
-      padding: 10px 18px;
+      padding: 10px 20px;
       border-radius: 30px;
       font-size: 1rem;
       width: 200px;
@@ -160,11 +169,11 @@
       outline: none;
       transition: 0.2s;
     }
-    #lore-screen .name-input-area input:focus {
+    .lore-box .name-area input:focus {
       border-color: #4a9a7a;
-      box-shadow: 0 0 20px rgba(60, 200, 160, 0.1);
+      box-shadow: 0 0 24px rgba(60, 200, 160, 0.08);
     }
-    #lore-screen .name-input-area .btn-start {
+    .lore-box .name-area .btn-start {
       background: #1a3a2a;
       border: 1px solid #3a7a5a;
       color: #b0e0c0;
@@ -175,153 +184,195 @@
       transition: 0.2s;
       font-family: inherit;
     }
-    #lore-screen .name-input-area .btn-start:hover {
+    .lore-box .name-area .btn-start:hover {
       background: #2a5a3a;
       border-color: #5a9a7a;
     }
-    /* Scroll personalizada */
-    #lore-screen .lore-box::-webkit-scrollbar {
+    .lore-box::-webkit-scrollbar {
       width: 4px;
     }
-    #lore-screen .lore-box::-webkit-scrollbar-track {
+    .lore-box::-webkit-scrollbar-track {
       background: #0a1212;
     }
-    #lore-screen .lore-box::-webkit-scrollbar-thumb {
+    .lore-box::-webkit-scrollbar-thumb {
       background: #2a4a3a;
       border-radius: 4px;
     }
 
-    /* ===== BUNKER ===== */
+    /* ===== BUNKER (CANVAS) ===== */
     #bunker-screen {
       background: #0e141c;
-      padding: 20px;
-      justify-content: flex-start;
-      align-items: stretch;
     }
-    .bunker-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    #bunker-canvas {
+      display: block;
       width: 100%;
-      max-width: 960px;
-      padding: 12px 20px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 16px;
-      border: 1px solid #1a2a2a;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .bunker-header .title {
-      font-size: 1.4rem;
-      color: #80d0b0;
-      letter-spacing: 2px;
-    }
-    .bunker-header .player-name {
-      color: #8aa8a0;
-      font-size: 0.95rem;
-    }
-    .bunker-header .player-name span {
-      color: #c0d8d0;
-      font-weight: 600;
-    }
-    .bunker-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      width: 100%;
-      max-width: 960px;
-      flex: 1;
-      align-content: start;
-    }
-    .bunker-card {
-      background: rgba(10, 20, 24, 0.7);
-      border: 1px solid #1a2a2a;
-      border-radius: 20px;
-      padding: 24px 18px;
-      text-align: center;
-      backdrop-filter: blur(4px);
-      transition: 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      min-height: 160px;
-      justify-content: center;
-    }
-    .bunker-card:hover {
-      border-color: #2a5a3a;
-      background: rgba(16, 32, 32, 0.7);
-    }
-    .bunker-card .icon {
-      font-size: 2.6rem;
-      line-height: 1;
-    }
-    .bunker-card .label {
-      font-size: 1.1rem;
-      color: #b0c8c0;
-      font-weight: 500;
-    }
-    .bunker-card .desc {
-      font-size: 0.85rem;
-      color: #6a8a7a;
-    }
-    .bunker-card .action-btn {
-      background: #1a2a22;
-      border: 1px solid #2a5a3a;
-      color: #b0d8c0;
-      padding: 8px 24px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: 0.2s;
-      font-family: inherit;
-      margin-top: 6px;
-    }
-    .bunker-card .action-btn:hover {
-      background: #2a4a32;
-      border-color: #4a8a6a;
-    }
-    .bunker-card .action-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    .bunker-status {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 20px;
-      justify-content: center;
-      margin-top: 4px;
-      font-size: 0.9rem;
-    }
-    .bunker-status .stat {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 2px 14px;
-      border-radius: 20px;
-      border: 1px solid #1a2a22;
-    }
-    .bunker-status .stat .val {
-      font-weight: 600;
-      color: #d0e8e0;
+      height: 100%;
+      background: #10181e;
+      image-rendering: pixelated;
     }
 
-    /* ===== SUPERFÍCIE ===== */
+    /* ===== TERMINAL (overlay) ===== */
+    #terminal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      padding: 30px;
+    }
+    #terminal-overlay.active {
+      display: flex;
+    }
+    .terminal-crt {
+      background: #0a120a;
+      border: 8px solid #1a1a1a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      max-width: 780px;
+      width: 100%;
+      max-height: 80vh;
+      box-shadow:
+        0 0 40px rgba(0, 200, 80, 0.08),
+        inset 0 0 60px rgba(0, 20, 10, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Efeito CRT scanlines */
+    .terminal-crt::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.08) 2px,
+          rgba(0, 0, 0, 0.08) 4px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    /* Efeito de brilho */
+    .terminal-crt::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 20, 10, 0.3) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .terminal-screen {
+      background: #0a120a;
+      color: #30c060;
+      font-family: 'Courier New', monospace;
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 16px;
+      min-height: 320px;
+      max-height: 60vh;
+      overflow-y: auto;
+      position: relative;
+      z-index: 0;
+      text-shadow: 0 0 6px rgba(40, 200, 80, 0.15);
+      border: 1px solid #1a2a1a;
+    }
+    .terminal-screen .prompt {
+      color: #50d080;
+    }
+    .terminal-screen .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 18px;
+      background: #30c060;
+      animation: blink 0.8s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+    }
+    .terminal-screen .output-line {
+      color: #70b090;
+      margin-bottom: 2px;
+    }
+    .terminal-screen .output-line .highlight {
+      color: #80d0b0;
+    }
+    .terminal-screen .output-line .warn {
+      color: #d0a050;
+    }
+    .terminal-screen .output-line .error {
+      color: #d06060;
+    }
+    .terminal-screen .input-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .terminal-screen .input-line span {
+      color: #50d080;
+    }
+    .terminal-screen .input-line input {
+      background: transparent;
+      border: none;
+      color: #30c060;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      flex: 1;
+      caret-color: #30c060;
+      text-shadow: 0 0 6px rgba(40, 200, 80, 0.15);
+    }
+    .terminal-screen .input-line input::selection {
+      background: rgba(40, 200, 80, 0.2);
+    }
+    .terminal-close {
+      position: absolute;
+      top: 8px;
+      right: 14px;
+      color: #3a5a4a;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 5;
+      background: none;
+      border: none;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+    .terminal-close:hover {
+      color: #d06060;
+    }
+    .terminal-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+    .terminal-screen::-webkit-scrollbar-track {
+      background: #0a120a;
+    }
+    .terminal-screen::-webkit-scrollbar-thumb {
+      background: #1a3a2a;
+      border-radius: 4px;
+    }
+
+    /* ===== SUPERFÍCIE (CANVAS) ===== */
     #surface-screen {
       background: #0a0e12;
-      padding: 0;
-      overflow: hidden;
-      position: relative;
     }
     #surface-canvas {
       display: block;
       width: 100%;
       height: 100%;
-      background: #121a20;
+      background: #0e161c;
       image-rendering: pixelated;
     }
+
+    /* ===== HUD SUPERFÍCIE ===== */
     .surface-hud {
       position: absolute;
       top: 12px;
@@ -331,11 +382,11 @@
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 6px 14px;
-      background: rgba(6, 12, 16, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(4, 10, 14, 0.8);
+      backdrop-filter: blur(10px);
       padding: 8px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(70, 140, 120, 0.15);
+      border-radius: 12px;
+      border: 1px solid rgba(70, 140, 120, 0.12);
       pointer-events: none;
       z-index: 10;
       font-size: 13px;
@@ -344,7 +395,7 @@
     .surface-hud .right {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px 16px;
+      gap: 6px 14px;
       align-items: center;
     }
     .surface-hud .hud-item {
@@ -353,38 +404,47 @@
       gap: 4px;
     }
     .surface-hud .hud-item .label {
-      color: #7a9a8a;
-      font-size: 11px;
+      color: #6a8a7a;
+      font-size: 10px;
       text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .surface-hud .hud-item .value {
       font-weight: 600;
-      min-width: 28px;
+      min-width: 24px;
       text-align: right;
+      font-size: 13px;
     }
     .surface-hud .hud-bar {
-      width: 60px;
+      width: 50px;
       height: 5px;
-      background: #1a262a;
-      border-radius: 4px;
+      background: #141e22;
+      border-radius: 3px;
       overflow: hidden;
-      border: 1px solid #1a2a2a;
+      border: 1px solid #1a262a;
     }
     .surface-hud .hud-bar .fill {
       height: 100%;
-      border-radius: 4px;
+      border-radius: 3px;
       transition: width 0.2s;
     }
-    .fill-green { background: #4ac0a0; }
-    .fill-red { background: #e05a5a; }
-    .fill-blue { background: #5aa8e0; }
-    .fill-yellow { background: #e0c04a; }
-
+    .fill-green {
+      background: #4ac0a0;
+    }
+    .fill-red {
+      background: #e05a5a;
+    }
+    .fill-blue {
+      background: #5aa8e0;
+    }
+    .fill-yellow {
+      background: #e0c04a;
+    }
     .surface-hud .back-btn {
       pointer-events: auto;
-      background: #1a2a22;
-      border: 1px solid #2a5a3a;
-      color: #b0d8c0;
+      background: transparent;
+      border: 1px solid #2a4a3a;
+      color: #8ab0a0;
       padding: 4px 18px;
       border-radius: 30px;
       font-size: 12px;
@@ -393,790 +453,1289 @@
       transition: 0.2s;
     }
     .surface-hud .back-btn:hover {
-      background: #2a4a32;
-      border-color: #4a8a6a;
-    }
-    /* Dica inferior */
-    .surface-tip {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(6, 12, 16, 0.7);
-      backdrop-filter: blur(6px);
-      padding: 6px 22px;
-      border-radius: 30px;
-      border: 1px solid #1a2a22;
-      font-size: 13px;
-      color: #7a9a8a;
-      pointer-events: none;
-      z-index: 10;
-      text-align: center;
-      white-space: nowrap;
+      background: #1a2a22;
+      border-color: #4a7a5a;
+      color: #b0d8c0;
     }
 
     /* ===== RESPONSIVO ===== */
     @media (max-width: 700px) {
-      #menu-screen h1 { font-size: 2.6rem; }
-      #menu-screen .subtitle { font-size: 0.9rem; }
-      .menu-btn { padding: 12px 30px; font-size: 1rem; }
-      #lore-screen .lore-box { padding: 20px; }
-      #lore-screen .lore-box p { font-size: 0.95rem; }
-      .bunker-grid { grid-template-columns: 1fr 1fr; }
-      .bunker-card { min-height: 130px; padding: 16px; }
-      .surface-hud { font-size: 11px; padding: 6px 12px; }
-      .surface-hud .hud-bar { width: 40px; }
-      .surface-tip { font-size: 11px; padding: 4px 14px; white-space: normal; }
+      #menu-screen h1 {
+        font-size: 2.8rem;
+        letter-spacing: 4px;
+      }
+      #menu-screen .subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 3px;
+      }
+      .menu-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+      }
+      .lore-box {
+        padding: 20px 22px;
+        max-width: 95%;
+      }
+      .lore-box p {
+        font-size: 0.9rem;
+      }
+      .lore-box .name-area input {
+        width: 140px;
+      }
+      .terminal-crt {
+        padding: 12px 14px;
+        border-width: 4px;
+      }
+      .terminal-screen {
+        font-size: 13px;
+        padding: 12px;
+        min-height: 200px;
+      }
+      .terminal-screen .input-line input {
+        font-size: 13px;
+      }
+      .surface-hud {
+        font-size: 11px;
+        padding: 6px 10px;
+      }
+      .surface-hud .hud-bar {
+        width: 34px;
+        height: 4px;
+      }
     }
     @media (max-width: 450px) {
-      .bunker-grid { grid-template-columns: 1fr; }
-      .bunker-header .title { font-size: 1.1rem; }
-      #lore-screen .name-input-area input { width: 140px; }
+      #menu-screen h1 {
+        font-size: 2rem;
+        letter-spacing: 2px;
+      }
+      .surface-hud .left,
+      .surface-hud .right {
+        gap: 3px 8px;
+      }
+      .surface-hud .hud-item .label {
+        font-size: 8px;
+      }
+      .surface-hud .hud-item .value {
+        font-size: 10px;
+        min-width: 18px;
+      }
+      .surface-hud .hud-bar {
+        width: 26px;
+        height: 3px;
+      }
+      .terminal-screen {
+        font-size: 11px;
+        padding: 8px;
+        min-height: 150px;
+      }
+      .terminal-screen .input-line input {
+        font-size: 11px;
+      }
     }
   </style>
 </head>
 <body>
 
-<div id="game">
-  <!-- ===== TELA 1: MENU ===== -->
-  <div id="menu-screen" class="screen active">
-    <h1>ECOSFERA 2200</h1>
-    <div class="subtitle">✦ o último refúgio ✦</div>
-    <button class="menu-btn" id="btnPlay">▶ Jogar</button>
-    <div style="margin-top: 30px; font-size: 0.8rem; color: #4a6a5a; letter-spacing: 1px;">ano 2200 — superfície inabitável</div>
-  </div>
+  <div id="game">
+    <!-- ===== MENU ===== -->
+    <div id="menu-screen" class="screen active">
+      <h1>ECOSFERA 2200</h1>
+      <div class="subtitle">✦ o último refúgio ✦</div>
+      <button class="menu-btn" id="btnPlay">▶ Jogar</button>
+      <div class="version">v2.0 — imersão</div>
+    </div>
 
-  <!-- ===== TELA 2: LORE + TUTORIAL + NOME ===== -->
-  <div id="lore-screen" class="screen">
-    <div class="lore-box">
-      <h2>📖 O Colapso</h2>
-      <p>
-        <span class="highlight">Ano 2200.</span> A Terra que conhecemos não existe mais.
-        Séculos de poluição extrema transformaram a superfície num deserto tóxico.
-        O ar é irrespirável, o solo está morto, e a vegetação natural foi extinta.
-      </p>
-      <p>
-        A humanidade sobrevive em um único <span class="highlight">bunker subterrâneo</span>,
-        último reduto da civilização. Mas o bunker está entrando em colapso:
-        energia, oxigênio e recursos se esgotam a cada dia.
-      </p>
-      <p>
-        Uma <span class="highlight">máquina de fotossíntese artificial</span> foi desenvolvida
-        para purificar a atmosfera e gerar oxigênio. Para funcionar, ela precisa de
-        recursos que só podem ser encontrados na superfície.
-      </p>
-      <p>
-        <span class="highlight">Você</span> é o último explorador. Durante o dia, você sobe
-        à superfície para coletar materiais. Durante a noite, gerencia o bunker e
-        mantém a máquina operando.
-      </p>
-      <div class="footer-note">
-        ⚠️ A superfície é perigosa. Mutantes vagam entre as ruínas.
-        Mas sem recursos, o bunker não sobrevive.
+    <!-- ===== LORE ===== -->
+    <div id="lore-screen" class="screen">
+      <div class="lore-box">
+        <h2>📖 O Colapso</h2>
+        <p>
+          <span class="highlight">Ano 2200.</span> A Terra que conhecemos não existe mais.
+          Séculos de poluição transformaram a superfície num deserto tóxico.
+          O ar é irrespirável, o solo está morto, a vegetação foi extinta.
+        </p>
+        <p>
+          A humanidade sobrevive em um único <span class="highlight">bunker subterrâneo</span>,
+          último reduto da civilização. Mas o bunker está em colapso:
+          energia, oxigênio e recursos se esgotam a cada dia.
+        </p>
+        <p>
+          Uma <span class="highlight">máquina de fotossíntese artificial</span> foi criada
+          para purificar a atmosfera. Ela precisa de recursos que só existem na superfície.
+        </p>
+        <p>
+          <span class="highlight">Você</span> é o último explorador. Durante o dia, sobe
+          à superfície para coletar materiais. Durante a noite, gerencia o bunker.
+        </p>
+        <div class="footer-note">
+          ⚠️ A superfície é perigosa. Mutantes vagam entre as ruínas.
+          Sem recursos, o bunker não sobrevive.
+        </div>
+        <div class="name-area">
+          <label for="playerName">👤 Nome:</label>
+          <input type="text" id="playerName" placeholder="Digite seu nome" value="Arion">
+          <button class="btn-start" id="btnStartGame">▶ Iniciar</button>
+        </div>
       </div>
+    </div>
 
-      <div class="name-input-area">
-        <label for="playerName">👤 Nome do explorador:</label>
-        <input type="text" id="playerName" placeholder="Digite seu nome" value="Arion">
-        <button class="btn-start" id="btnStartGame">▶ Iniciar missão</button>
+    <!-- ===== BUNKER (cenário 2D) ===== -->
+    <div id="bunker-screen" class="screen">
+      <canvas id="bunker-canvas"></canvas>
+    </div>
+
+    <!-- ===== TERMINAL RETRO (overlay) ===== -->
+    <div id="terminal-overlay">
+      <div class="terminal-crt">
+        <button class="terminal-close" id="terminalClose">✕</button>
+        <div class="terminal-screen" id="terminalScreen">
+          <div class="output-line">╔═══════════════════════════════════╗</div>
+          <div class="output-line">║  SISTEMA DE CONTROLE DO BUNKER    ║</div>
+          <div class="output-line">║  v.2.1  —  FOTOSSÍNTESE ARTIFICIAL ║</div>
+          <div class="output-line">╚═══════════════════════════════════╝</div>
+          <div class="output-line" style="margin-top:8px;">&gt; Inicializando módulos...</div>
+          <div class="output-line">&gt; <span class="highlight">Bem-vindo, OPERADOR.</span></div>
+          <div class="output-line" style="margin-top:6px;">&gt; Digite um comando ou pressione ENTER para status.</div>
+          <div class="output-line">&gt; Comandos: <span class="highlight">status</span>, <span class="highlight">plantas</span>, <span class="highlight">pesquisar</span>, <span class="highlight">sair</span></div>
+          <div class="input-line">
+            <span>$</span>
+            <input type="text" id="terminalInput" autofocus placeholder="digite um comando...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SUPERFÍCIE ===== -->
+    <div id="surface-screen" class="screen">
+      <canvas id="surface-canvas"></canvas>
+      <div class="surface-hud">
+        <div class="left">
+          <div class="hud-item">
+            <span class="label">❤️</span>
+            <div class="hud-bar"><div class="fill fill-red" id="surfHpBar" style="width:100%"></div></div>
+            <span class="value" id="surfHpText">100</span>
+          </div>
+          <div class="hud-item">
+            <span class="label">💨 O₂</span>
+            <div class="hud-bar"><div class="fill fill-blue" id="surfOxyBar" style="width:100%"></div></div>
+            <span class="value" id="surfOxyText">100</span>
+          </div>
+          <div class="hud-item">
+            <span class="label">⚡</span>
+            <div class="hud-bar"><div class="fill fill-yellow" id="surfEngBar" style="width:100%"></div></div>
+            <span class="value" id="surfEngText">100</span>
+          </div>
+          <div class="hud-item">
+            <span class="label">🔩</span>
+            <span class="value" id="surfMetal">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="label">🧬</span>
+            <span class="value" id="surfBio">0</span>
+          </div>
+          <div class="hud-item">
+            <span class="label">⚙️</span>
+            <span class="value" id="surfTech">0</span>
+          </div>
+        </div>
+        <div class="right">
+          <button class="back-btn" id="btnReturnBunker">⬅ Voltar</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== TELA 3: BUNKER (HUB) ===== -->
-  <div id="bunker-screen" class="screen">
-    <div class="bunker-header">
-      <div class="title">🏛️ BUNKER CENTRAL</div>
-      <div class="player-name">👤 <span id="bunkerPlayerName">—</span></div>
-      <div class="bunker-status">
-        <div class="stat">💨 O₂ <span class="val" id="bunkerO2">60</span>%</div>
-        <div class="stat">🔋 Energia <span class="val" id="bunkerEnergy">40</span>%</div>
-        <div class="stat">🌱 Plantas <span class="val" id="bunkerPlants">2</span></div>
-      </div>
-    </div>
+  <script>
+    // ================================================================
+    //  ECOSFERA 2200 – IMERSÃO TOTAL
+    //  Bunker 2D jogável + Terminal retro + Superfície realista
+    // ================================================================
 
-    <div class="bunker-grid">
-      <!-- Saída para superfície -->
-      <div class="bunker-card">
-        <div class="icon">🚪</div>
-        <div class="label">Acesso à Superfície</div>
-        <div class="desc">Explore as ruínas e colete recursos</div>
-        <button class="action-btn" id="btnGoSurface">🌍 Ir para superfície</button>
-      </div>
+    // ---- DOM ----
+    const screens = {
+      menu: document.getElementById('menu-screen'),
+      lore: document.getElementById('lore-screen'),
+      bunker: document.getElementById('bunker-screen'),
+      surface: document.getElementById('surface-screen'),
+    };
 
-      <!-- Quarto de descanso -->
-      <div class="bunker-card">
-        <div class="icon">🛏️</div>
-        <div class="label">Quarto de Descanso</div>
-        <div class="desc">Durma para passar o tempo e restaurar energias</div>
-        <button class="action-btn" id="btnRest">💤 Descansar (ciclo)</button>
-      </div>
+    const bunkerCanvas = document.getElementById('bunker-canvas');
+    const bunkerCtx = bunkerCanvas.getContext('2d');
+    const surfaceCanvas = document.getElementById('surface-canvas');
+    const surfaceCtx = surfaceCanvas.getContext('2d');
 
-      <!-- Sala de controle (máquina) -->
-      <div class="bunker-card">
-        <div class="icon">🖥️</div>
-        <div class="label">Sala de Controle</div>
-        <div class="desc">Central da máquina de fotossíntese artificial</div>
-        <button class="action-btn" id="btnMachine">⚙️ Acessar máquina</button>
-      </div>
+    const terminalOverlay = document.getElementById('terminal-overlay');
+    const terminalScreen = document.getElementById('terminalScreen');
+    const terminalInput = document.getElementById('terminalInput');
+    const terminalClose = document.getElementById('terminalClose');
 
-      <!-- Status do sistema (placeholder) -->
-      <div class="bunker-card" style="border-color:#1a3a2a;">
-        <div class="icon">📊</div>
-        <div class="label">Status do Sistema</div>
-        <div class="desc" style="font-size:0.8rem; color:#6a8a7a;">
-          Produção O₂: <span id="prodO2">0.24</span>/s<br>
-          Consumo energia: <span id="consEng">0.08</span>/s
-        </div>
-        <div style="font-size:0.75rem; color:#4a6a5a;">🔬 Pesquisa: <span id="researchStatus">Básica</span></div>
-      </div>
-    </div>
-  </div>
+    // ---- ESTADO ----
+    const state = {
+      playerName: 'Arion',
+      bunker: {
+        oxygen: 60,
+        energy: 40,
+        plants: 2,
+        efficiency: 1.0,
+        researchLevel: 0,
+      },
+      inventory: { metal: 0, biomass: 0, tech: 0 },
+      player: {
+        x: 0,
+        y: 0,
+        hp: 100,
+        oxygen: 100,
+        energy: 100,
+        alive: true,
+        invincible: 0,
+        attackCooldown: 0,
+        speed: 120,
+        radius: 14,
+      },
+      resources: [],
+      mutants: [],
+      particles: [],
+      cycle: 0,
+      time: 0,
+      started: false,
+      // Bunker position
+      bunkerPlayer: { x: 0, y: 0 },
+      // Terminal
+      terminalHistory: [],
+      terminalCommand: '',
+    };
 
-  <!-- ===== TELA 4: SUPERFÍCIE ===== -->
-  <div id="surface-screen" class="screen">
-    <canvas id="surface-canvas"></canvas>
-    <!-- HUD da superfície -->
-    <div class="surface-hud">
-      <div class="left">
-        <div class="hud-item">
-          <span class="label">❤️</span>
-          <div class="hud-bar"><div class="fill fill-red" id="surfHpBar" style="width:100%"></div></div>
-          <span class="value" id="surfHpText">100</span>
-        </div>
-        <div class="hud-item">
-          <span class="label">💨 O₂</span>
-          <div class="hud-bar"><div class="fill fill-blue" id="surfOxyBar" style="width:100%"></div></div>
-          <span class="value" id="surfOxyText">100</span>
-        </div>
-        <div class="hud-item">
-          <span class="label">⚡</span>
-          <div class="hud-bar"><div class="fill fill-yellow" id="surfEngBar" style="width:100%"></div></div>
-          <span class="value" id="surfEngText">100</span>
-        </div>
-        <div class="hud-item">
-          <span class="label">🔩</span>
-          <span class="value" id="surfMetal">0</span>
-        </div>
-        <div class="hud-item">
-          <span class="label">🧬</span>
-          <span class="value" id="surfBio">0</span>
-        </div>
-        <div class="hud-item">
-          <span class="label">⚙️</span>
-          <span class="value" id="surfTech">0</span>
-        </div>
-      </div>
-      <div class="right">
-        <button class="back-btn" id="btnReturnBunker">⬅ Voltar ao bunker</button>
-      </div>
-    </div>
-    <div class="surface-tip">WASD mover | ESPAÇO atacar | Colete recursos</div>
-  </div>
-</div>
-
-<script>
-  // ================================================================
-  //  ECOSFERA 2200 – ESTRUTURA DE TELAS (SCREENS)
-  //  Versão modular com gerenciamento de estados.
-  // ================================================================
-
-  // ---- ELEMENTOS DOM ----
-  const screens = {
-    menu: document.getElementById('menu-screen'),
-    lore: document.getElementById('lore-screen'),
-    bunker: document.getElementById('bunker-screen'),
-    surface: document.getElementById('surface-screen'),
-  };
-
-  // ---- ESTADO GLOBAL ----
-  const state = {
-    playerName: 'Arion',
-    // Bunker
-    bunker: {
-      oxygen: 60,
-      energy: 40,
-      plants: 2,
-      efficiency: 1.0,
-      researchLevel: 0, // 0=basica, 1=avancada
-    },
-    // Inventário (recursos coletados)
-    inventory: {
-      metal: 0,
-      biomass: 0,
-      tech: 0,
-    },
-    // Jogador (superfície)
-    player: {
-      x: 400,
-      y: 300,
-      hp: 100,
-      oxygen: 100,
-      energy: 100,
-      alive: true,
-      invincible: 0,
-      attackCooldown: 0,
-      speed: 150,
-    },
-    // Mundo
-    resources: [],
-    mutants: [],
-    particles: [],
-    // Controle de ciclo (simples)
-    cycle: 0, // 0=dia, 1=noite
-    time: 0,
-    // Flag
-    started: false,
-  };
-
-  // ---- FUNÇÕES DE TELA ----
-  function showScreen(id) {
-    Object.keys(screens).forEach(key => {
-      screens[key].classList.toggle('active', key === id);
-    });
-    // Atualiza canvas se for superfície
-    if (id === 'surface') {
-      resizeSurfaceCanvas();
-      // Atualiza HUD
-      updateSurfaceHUD();
-    }
-    if (id === 'bunker') {
-      updateBunkerUI();
-    }
-  }
-
-  // ---- MENU ----
-  document.getElementById('btnPlay').addEventListener('click', () => {
-    showScreen('lore');
-  });
-
-  // ---- LORE + NOME ----
-  document.getElementById('btnStartGame').addEventListener('click', () => {
-    const nameInput = document.getElementById('playerName');
-    state.playerName = nameInput.value.trim() || 'Arion';
-    document.getElementById('bunkerPlayerName').textContent = state.playerName;
-    // Inicializa mundo e vai para bunker
-    initSurfaceWorld();
-    state.started = true;
-    showScreen('bunker');
-    updateBunkerUI();
-  });
-
-  // ---- BUNKER - AÇÕES ----
-  // Ir para superfície
-  document.getElementById('btnGoSurface').addEventListener('click', () => {
-    // Restaura um pouco do jogador ao sair
-    state.player.hp = Math.min(100, state.player.hp + 10);
-    state.player.oxygen = Math.min(100, state.player.oxygen + 15);
-    state.player.energy = Math.min(100, state.player.energy + 10);
-    state.player.alive = true;
-    state.player.invincible = 0;
-    // Posiciona perto do bunker
-    state.player.x = 400;
-    state.player.y = 300;
-    // Sincroniza inventário
-    updateSurfaceHUD();
-    showScreen('surface');
-    // Inicia loop da superfície se não estiver rodando
-    if (!surfaceLoopActive) {
-      surfaceLoopActive = true;
-      requestAnimationFrame(surfaceLoop);
-    }
-  });
-
-  // Descansar (avança ciclo)
-  document.getElementById('btnRest').addEventListener('click', () => {
-    // Avança o ciclo (dia/noite)
-    state.cycle = (state.cycle + 1) % 2;
-    // Restaura recursos do bunker levemente
-    state.bunker.oxygen = Math.min(100, state.bunker.oxygen + 8);
-    state.bunker.energy = Math.min(100, state.bunker.energy + 5);
-    // Restaura jogador
-    state.player.hp = Math.min(100, state.player.hp + 20);
-    state.player.oxygen = Math.min(100, state.player.oxygen + 25);
-    state.player.energy = Math.min(100, state.player.energy + 15);
-    // Simula produção das plantas
-    const prod = state.bunker.plants * state.bunker.efficiency * 0.08;
-    state.bunker.oxygen = Math.min(100, state.bunker.oxygen + prod * 10);
-    // Consumo de energia
-    const cons = state.bunker.plants * 0.03;
-    state.bunker.energy = Math.max(0, state.bunker.energy - cons * 8);
-    updateBunkerUI();
-    // Mensagem no console (simples)
-    const cycleName = state.cycle === 0 ? 'DIA' : 'NOITE';
-    console.log(`🌓 Ciclo avançado para ${cycleName}`);
-  });
-
-  // Máquina (placeholder)
-  document.getElementById('btnMachine').addEventListener('click', () => {
-    alert('🖥️ Máquina de fotossíntese artificial.\n\n' +
-      'Status atual:\n' +
-      `🌱 Plantas: ${state.bunker.plants}\n` +
-      `⚡ Eficiência: ${state.bunker.efficiency.toFixed(1)}×\n` +
-      `🔬 Pesquisa: ${state.bunker.researchLevel === 0 ? 'Básica' : 'Avançada'}\n\n` +
-      'Sistemas avançados em desenvolvimento.');
-  });
-
-  // ---- ATUALIZAR UI DO BUNKER ----
-  function updateBunkerUI() {
-    document.getElementById('bunkerO2').textContent = Math.round(state.bunker.oxygen);
-    document.getElementById('bunkerEnergy').textContent = Math.round(state.bunker.energy);
-    document.getElementById('bunkerPlants').textContent = state.bunker.plants;
-    // Produção e consumo
-    const prod = state.bunker.plants * state.bunker.efficiency * 0.08;
-    const cons = state.bunker.plants * 0.03 * (state.bunker.researchLevel === 1 ? 0.7 : 1.0);
-    document.getElementById('prodO2').textContent = prod.toFixed(2);
-    document.getElementById('consEng').textContent = cons.toFixed(2);
-    document.getElementById('researchStatus').textContent =
-      state.bunker.researchLevel === 0 ? 'Básica' : '🔬 Avançada';
-  }
-
-  // ---- SUPERFÍCIE - CANVAS E LOOP ----
-  const canvas = document.getElementById('surface-canvas');
-  const ctx = canvas.getContext('2d');
-  let surfaceLoopActive = false;
-
-  function resizeSurfaceCanvas() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-  }
-  window.addEventListener('resize', () => {
-    if (screens.surface.classList.contains('active')) {
-      resizeSurfaceCanvas();
-    }
-  });
-
-  // ---- INICIALIZAR MUNDO DA SUPERFÍCIE ----
-  function initSurfaceWorld() {
-    state.resources = [];
-    state.mutants = [];
-    state.particles = [];
-    // Recursos
-    for (let i = 0; i < 30; i++) {
-      const type = ['metal', 'biomass', 'tech'][Math.floor(Math.random() * 3)];
-      state.resources.push({
-        x: 60 + Math.random() * (canvas.width - 120),
-        y: 60 + Math.random() * (canvas.height - 120),
-        type: type,
-        radius: 10,
-        collected: false,
-        respawnTimer: 0,
-        value: 1 + Math.floor(Math.random() * 2),
+    // ---- FUNÇÕES DE TELA ----
+    function showScreen(id) {
+      Object.keys(screens).forEach(key => {
+        screens[key].classList.toggle('active', key === id);
       });
-    }
-    // Mutantes (poucos)
-    for (let i = 0; i < 4; i++) {
-      spawnMutant();
-    }
-  }
-
-  function spawnMutant() {
-    const w = canvas.width || 800;
-    const h = canvas.height || 600;
-    state.mutants.push({
-      x: 80 + Math.random() * (w - 160),
-      y: 80 + Math.random() * (h - 160),
-      radius: 14,
-      hp: 20,
-      maxHp: 20,
-      speed: 30 + Math.random() * 15,
-      damage: 6,
-      attackCooldown: 0,
-      state: 'patrol',
-      targetX: 80 + Math.random() * (w - 160),
-      targetY: 80 + Math.random() * (h - 160),
-    });
-  }
-
-  // ---- ATUALIZAR HUD DA SUPERFÍCIE ----
-  function updateSurfaceHUD() {
-    const p = state.player;
-    document.getElementById('surfHpBar').style.width = p.hp + '%';
-    document.getElementById('surfHpText').textContent = Math.round(p.hp);
-    document.getElementById('surfOxyBar').style.width = p.oxygen + '%';
-    document.getElementById('surfOxyText').textContent = Math.round(p.oxygen);
-    document.getElementById('surfEngBar').style.width = p.energy + '%';
-    document.getElementById('surfEngText').textContent = Math.round(p.energy);
-    document.getElementById('surfMetal').textContent = state.inventory.metal;
-    document.getElementById('surfBio').textContent = state.inventory.biomass;
-    document.getElementById('surfTech').textContent = state.inventory.tech;
-  }
-
-  // ---- INPUT DA SUPERFÍCIE ----
-  const keys = {};
-  document.addEventListener('keydown', (e) => {
-    const key = e.key.toLowerCase();
-    keys[key] = true;
-    if (key === ' ') e.preventDefault();
-    // Se na superfície e pressionar ESC ou B, volta ao bunker
-    if (screens.surface.classList.contains('active')) {
-      if (key === 'escape' || key === 'b') {
-        document.getElementById('btnReturnBunker').click();
+      if (id === 'bunker') {
+        resizeBunkerCanvas();
+        updateBunkerUI();
+        // Fecha terminal se aberto
+        terminalOverlay.classList.remove('active');
       }
-    }
-  });
-  document.addEventListener('keyup', (e) => {
-    keys[e.key.toLowerCase()] = false;
-  });
-
-  // Botão voltar
-  document.getElementById('btnReturnBunker').addEventListener('click', () => {
-    // Salva recursos coletados no bunker
-    // (já estão no state.inventory)
-    // Restaura energia e oxigênio do jogador
-    state.player.oxygen = Math.min(100, state.player.oxygen + 20);
-    state.player.energy = Math.min(100, state.player.energy + 15);
-    // Se o jogador estiver morto, revive (com penalidade)
-    if (!state.player.alive) {
-      state.player.hp = 30;
-      state.player.oxygen = 40;
-      state.player.energy = 30;
-      state.player.alive = true;
-    }
-    updateSurfaceHUD();
-    showScreen('bunker');
-    updateBunkerUI();
-    surfaceLoopActive = false;
-  });
-
-  // ---- LOOP DA SUPERFÍCIE ----
-  function surfaceLoop(time) {
-    if (!screens.surface.classList.contains('active')) {
-      surfaceLoopActive = false;
-      return;
-    }
-    const dt = 0.016; // ~60fps fixo
-    updateSurface(dt);
-    renderSurface();
-    if (surfaceLoopActive) {
-      requestAnimationFrame(surfaceLoop);
-    }
-  }
-
-  function updateSurface(dt) {
-    const p = state.player;
-    if (!p.alive) return;
-
-    // Decaimento
-    p.oxygen -= dt * 1.2;
-    p.energy -= dt * 0.4;
-    if (p.oxygen <= 0) { p.oxygen = 0;
-      p.hp -= dt * 6; }
-    if (p.energy <= 0) { p.energy = 0;
-      p.hp -= dt * 2; }
-    if (p.hp <= 0) {
-      p.hp = 0;
-      p.alive = false;
-      updateSurfaceHUD();
-      return;
-    }
-    if (p.invincible > 0) p.invincible -= dt;
-    if (p.attackCooldown > 0) p.attackCooldown -= dt;
-
-    // Movimento
-    let dx = 0,
-      dy = 0;
-    if (keys['w'] || keys['arrowup']) dy = -1;
-    if (keys['s'] || keys['arrowdown']) dy = 1;
-    if (keys['a'] || keys['arrowleft']) dx = -1;
-    if (keys['d'] || keys['arrowright']) dx = 1;
-    if (dx !== 0 && dy !== 0) { dx *= 0.707;
-      dy *= 0.707; }
-    const speed = p.speed * (p.hp < 30 ? 0.8 : 1.0);
-    p.x += dx * speed * dt;
-    p.y += dy * speed * dt;
-    // Limites
-    const w = canvas.width,
-      h = canvas.height;
-    p.x = Math.max(20, Math.min(w - 20, p.x));
-    p.y = Math.max(20, Math.min(h - 20, p.y));
-
-    // Coleta de recursos
-    for (const r of state.resources) {
-      if (r.collected) continue;
-      if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + r.radius) {
-        r.collected = true;
-        r.respawnTimer = 10 + Math.random() * 15;
-        const val = r.value || 1;
-        if (r.type === 'metal') state.inventory.metal += val;
-        else if (r.type === 'biomass') state.inventory.biomass += val;
-        else if (r.type === 'tech') state.inventory.tech += val;
-        // Partículas
-        for (let i = 0; i < 5; i++) {
-          state.particles.push({
-            x: r.x,
-            y: r.y,
-            vx: (Math.random() - 0.5) * 60,
-            vy: (Math.random() - 0.5) * 60,
-            life: 0.4 + Math.random() * 0.4,
-            maxLife: 0.8,
-            color: r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : '#c0a060',
-            size: 3 + Math.random() * 3,
-          });
-        }
+      if (id === 'surface') {
+        resizeSurfaceCanvas();
         updateSurfaceHUD();
-      }
-    }
-
-    // Ataque (espaço)
-    if (keys[' '] && p.attackCooldown <= 0 && p.alive) {
-      p.attackCooldown = 0.5;
-      for (const m of state.mutants) {
-        if (Math.hypot(p.x - m.x, p.y - m.y) < p.radius + m.radius + 25) {
-          m.hp -= 10;
-          for (let i = 0; i < 6; i++) {
-            state.particles.push({
-              x: m.x,
-              y: m.y,
-              vx: (Math.random() - 0.5) * 80,
-              vy: (Math.random() - 0.5) * 80,
-              life: 0.3 + Math.random() * 0.3,
-              maxLife: 0.6,
-              color: '#ff6040',
-              size: 2 + Math.random() * 4,
-            });
-          }
-          if (m.hp <= 0) {
-            const idx = state.mutants.indexOf(m);
-            if (idx > -1) state.mutants.splice(idx, 1);
-            // Drop
-            if (Math.random() < 0.3) {
-              state.inventory.biomass += 1;
-              updateSurfaceHUD();
-            }
-          }
+        if (!surfaceLoopActive) {
+          surfaceLoopActive = true;
+          requestAnimationFrame(surfaceLoop);
         }
       }
     }
 
-    // Mutantes
-    for (const m of state.mutants) {
-      const d = Math.hypot(p.x - m.x, p.y - m.y);
-      if (d < 250) {
-        m.state = 'chase';
-        m.targetX = p.x;
-        m.targetY = p.y;
-      } else if (m.state === 'chase') {
-        m.state = 'patrol';
-        m.targetX = 80 + Math.random() * (canvas.width - 160);
-        m.targetY = 80 + Math.random() * (canvas.height - 160);
+    // ---- MENU ----
+    document.getElementById('btnPlay').addEventListener('click', () => showScreen('lore'));
+
+    // ---- LORE ----
+    document.getElementById('btnStartGame').addEventListener('click', () => {
+      const nameInput = document.getElementById('playerName');
+      state.playerName = nameInput.value.trim() || 'Arion';
+      state.started = true;
+      initBunkerScene();
+      initSurfaceWorld();
+      showScreen('bunker');
+      updateBunkerUI();
+    });
+
+    // ---- BUNKER - CANVAS & CENA ----
+    function resizeBunkerCanvas() {
+      const rect = bunkerCanvas.parentElement.getBoundingClientRect();
+      bunkerCanvas.width = rect.width;
+      bunkerCanvas.height = rect.height;
+    }
+
+    // Layout do bunker (coordenadas mundo)
+    const BUNKER_W = 1200;
+    const BUNKER_H = 800;
+
+    // Objetos interativos
+    const bunkerObjects = {
+      // Portão de saída (parte inferior)
+      gate: { x: 540, y: 720, w: 120, h: 60, label: '🚪 SAÍDA', action: 'surface' },
+      // Cama (quarto de descanso, canto superior direito)
+      bed: { x: 900, y: 100, w: 100, h: 60, label: '🛏️ DESCANSO', action: 'rest' },
+      // Computador (sala de controle, canto superior esquerdo)
+      computer: { x: 100, y: 100, w: 100, h: 60, label: '🖥️ CONTROLE', action: 'terminal' },
+      // Planta (decoração)
+      plant: { x: 450, y: 140, w: 40, h: 40, label: '🌱', action: null },
+    };
+
+    // Paredes do bunker (retângulos para colisão)
+    const bunkerWalls = [
+      // Paredes externas
+      { x: 0, y: 0, w: BUNKER_W, h: 20 },
+      { x: 0, y: BUNKER_H - 20, w: BUNKER_W, h: 20 },
+      { x: 0, y: 0, w: 20, h: BUNKER_H },
+      { x: BUNKER_W - 20, y: 0, w: 20, h: BUNKER_H },
+      // Divisórias internas
+      { x: 0, y: 280, w: 340, h: 16 },
+      { x: 860, y: 280, w: 340, h: 16 },
+      { x: 340, y: 200, w: 16, h: 160 },
+      { x: 840, y: 200, w: 16, h: 160 },
+      // Parede da sala de controle (esquerda)
+      { x: 0, y: 20, w: 340, h: 16 },
+      { x: 0, y: 20, w: 16, h: 260 },
+      // Parede do quarto (direita)
+      { x: BUNKER_W - 340, y: 20, w: 340, h: 16 },
+      { x: BUNKER_W - 16, y: 20, w: 16, h: 260 },
+    ];
+
+    // Posição inicial do jogador no bunker
+    state.bunkerPlayer.x = 560;
+    state.bunkerPlayer.y = 420;
+    const BP = state.bunkerPlayer;
+
+    function initBunkerScene() {
+      // Já definido
+    }
+
+    // ---- RENDER BUNKER ----
+    function renderBunker() {
+      const W = bunkerCanvas.width;
+      const H = bunkerCanvas.height;
+      const ctx = bunkerCtx;
+      ctx.clearRect(0, 0, W, H);
+
+      // Escala para caber
+      const scaleX = W / BUNKER_W;
+      const scaleY = H / BUNKER_H;
+      const scale = Math.min(scaleX, scaleY) * 0.92;
+      const offX = (W - BUNKER_W * scale) / 2;
+      const offY = (H - BUNKER_H * scale) / 2;
+
+      function toScreen(wx, wy) { return [offX + wx * scale, offY + wy * scale]; }
+      function toScreenSize(size) { return size * scale; }
+
+      // Fundo
+      ctx.fillStyle = '#141c22';
+      ctx.fillRect(0, 0, W, H);
+
+      // Piso
+      const grad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.6);
+      grad.addColorStop(0, '#1a262e');
+      grad.addColorStop(1, '#0e161c');
+      ctx.fillStyle = grad;
+      ctx.fillRect(offX, offY, BUNKER_W * scale, BUNKER_H * scale);
+
+      // Grades do piso (linhas sutis)
+      ctx.strokeStyle = 'rgba(40,60,60,0.06)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < BUNKER_W; x += 60) {
+        const [sx] = toScreen(x, 0);
+        ctx.beginPath();
+        ctx.moveTo(sx, offY);
+        ctx.lineTo(sx, offY + BUNKER_H * scale);
+        ctx.stroke();
       }
-      if (m.state === 'chase') {
-        const ang = Math.atan2(p.y - m.y, p.x - m.x);
-        const spd = m.speed * (1 + state.cycle * 0.1);
-        m.x += Math.cos(ang) * spd * dt;
-        m.y += Math.sin(ang) * spd * dt;
-        if (d < m.radius + p.radius + 4) {
-          if (m.attackCooldown <= 0) {
-            m.attackCooldown = 0.8;
-            if (p.invincible <= 0) {
-              p.hp -= m.damage;
-              p.invincible = 0.4;
-              if (p.hp <= 0) {
-                p.hp = 0;
-                p.alive = false;
-              }
-              updateSurfaceHUD();
-            }
-          }
-        }
-      } else {
-        if (Math.hypot(m.x - m.targetX, m.y - m.targetY) < 20) {
-          m.targetX = 80 + Math.random() * (canvas.width - 160);
-          m.targetY = 80 + Math.random() * (canvas.height - 160);
-        }
-        const ang = Math.atan2(m.targetY - m.y, m.targetX - m.x);
-        m.x += Math.cos(ang) * m.speed * 0.4 * dt;
-        m.y += Math.sin(ang) * m.speed * 0.4 * dt;
+      for (let y = 0; y < BUNKER_H; y += 60) {
+        const [, sy] = toScreen(0, y);
+        ctx.beginPath();
+        ctx.moveTo(offX, sy);
+        ctx.lineTo(offX + BUNKER_W * scale, sy);
+        ctx.stroke();
       }
-      m.x = Math.max(10, Math.min(canvas.width - 10, m.x));
-      m.y = Math.max(10, Math.min(canvas.height - 10, m.y));
-      if (m.attackCooldown > 0) m.attackCooldown -= dt;
-    }
 
-    // Recursos respawn
-    for (const r of state.resources) {
-      if (r.collected) {
-        r.respawnTimer -= dt;
-        if (r.respawnTimer <= 0) {
-          r.collected = false;
-          r.x = 60 + Math.random() * (canvas.width - 120);
-          r.y = 60 + Math.random() * (canvas.height - 120);
-        }
-      }
-    }
-
-    // Partículas
-    for (let i = state.particles.length - 1; i >= 0; i--) {
-      const pt = state.particles[i];
-      pt.x += pt.vx * dt;
-      pt.y += pt.vy * dt;
-      pt.life -= dt;
-      if (pt.life <= 0) state.particles.splice(i, 1);
-    }
-
-    // Atualiza HUD continuamente
-    updateSurfaceHUD();
-  }
-
-  function renderSurface() {
-    const w = canvas.width,
-      h = canvas.height;
-    ctx.clearRect(0, 0, w, h);
-
-    // Fundo degradê
-    const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.7);
-    grad.addColorStop(0, '#1a2a2a');
-    grad.addColorStop(0.7, '#0e1418');
-    grad.addColorStop(1, '#060a0e');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, h);
-
-    // Ruínas (grid simples)
-    ctx.strokeStyle = 'rgba(60,80,70,0.08)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < w; x += 80) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, h);
-      ctx.stroke();
-    }
-    for (let y = 0; y < h; y += 80) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
-    }
-
-    // Recursos
-    for (const r of state.resources) {
-      if (r.collected) continue;
-      const color = r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : '#c0a060';
-      ctx.shadowColor = color;
+      // Paredes
+      ctx.fillStyle = '#1a2a32';
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
       ctx.shadowBlur = 10;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-      ctx.fill();
+      for (const wall of bunkerWalls) {
+        const [sx, sy] = toScreen(wall.x, wall.y);
+        const sw = toScreenSize(wall.w);
+        const sh = toScreenSize(wall.h);
+        ctx.fillRect(sx, sy, sw, sh);
+      }
       ctx.shadowBlur = 0;
-      ctx.fillStyle = '#00000055';
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const sym = { metal: '⬡', biomass: '✦', tech: '⚙' };
-      ctx.fillText(sym[r.type] || '•', r.x, r.y + 1);
-      ctx.fillStyle = '#ffffffcc';
-      ctx.fillText(sym[r.type] || '•', r.x, r.y);
-    }
 
-    // Mutantes
-    for (const m of state.mutants) {
-      ctx.shadowColor = '#ff4060';
-      ctx.shadowBlur = 14;
-      ctx.fillStyle = '#b04a5a';
-      ctx.beginPath();
-      ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.fillStyle = '#ff6040';
-      ctx.beginPath();
-      ctx.arc(m.x - m.radius * 0.3, m.y - m.radius * 0.2, m.radius * 0.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(m.x + m.radius * 0.3, m.y - m.radius * 0.2, m.radius * 0.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#000';
-      ctx.beginPath();
-      ctx.arc(m.x - m.radius * 0.35, m.y - m.radius * 0.2, m.radius * 0.08, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(m.x + m.radius * 0.25, m.y - m.radius * 0.2, m.radius * 0.08, 0, Math.PI * 2);
-      ctx.fill();
-      // HP bar
-      const hpPct = m.hp / m.maxHp;
-      ctx.fillStyle = '#1a1a1a';
-      ctx.fillRect(m.x - m.radius * 0.6, m.y - m.radius - 6, m.radius * 1.2, 4);
-      ctx.fillStyle = hpPct > 0.5 ? '#60c080' : '#e06040';
-      ctx.fillRect(m.x - m.radius * 0.6, m.y - m.radius - 6, m.radius * 1.2 * hpPct, 4);
-    }
+      // Detalhes das paredes (linhas)
+      ctx.strokeStyle = 'rgba(60,90,80,0.1)';
+      ctx.lineWidth = 1;
+      for (const wall of bunkerWalls) {
+        const [sx, sy] = toScreen(wall.x, wall.y);
+        const sw = toScreenSize(wall.w);
+        const sh = toScreenSize(wall.h);
+        ctx.strokeRect(sx, sy, sw, sh);
+      }
 
-    // Jogador
-    if (state.player.alive) {
-      const p = state.player;
-      ctx.shadowColor = 'rgba(60,200,200,0.25)';
+      // Objetos interativos
+      for (const key in bunkerObjects) {
+        const obj = bunkerObjects[key];
+        const [sx, sy] = toScreen(obj.x, obj.y);
+        const sw = toScreenSize(obj.w);
+        const sh = toScreenSize(obj.h);
+
+        // Fundo do objeto
+        ctx.fillStyle = 'rgba(20,40,40,0.5)';
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = 'rgba(0,30,20,0.2)';
+        ctx.beginPath();
+        ctx.roundRect(sx, sy, sw, sh, 4);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Borda
+        ctx.strokeStyle = 'rgba(60,120,100,0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(sx, sy, sw, sh, 4);
+        ctx.stroke();
+
+        // Label
+        ctx.fillStyle = '#6a9a8a';
+        ctx.font = `${Math.min(16, 14 * scale)}px "Courier New", monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(obj.label, sx + sw / 2, sy + sh / 2);
+
+        // Dica de interação (se o jogador estiver perto)
+        const distX = BP.x - (obj.x + obj.w / 2);
+        const distY = BP.y - (obj.y + obj.h / 2);
+        const d = Math.sqrt(distX * distX + distY * distY);
+        if (d < 120 && obj.action) {
+          ctx.fillStyle = 'rgba(80,200,160,0.15)';
+          ctx.beginPath();
+          ctx.arc(sx + sw / 2, sy + sh / 2, 36 * scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#80d0b0';
+          ctx.font = `${Math.min(12, 11 * scale)}px "Courier New", monospace`;
+          ctx.fillText('[E] interagir', sx + sw / 2, sy + sh / 2 + 30 * scale);
+        }
+      }
+
+      // Jogador no bunker
+      const [px, py] = toScreen(BP.x, BP.y);
+      const pr = toScreenSize(state.player.radius);
+
+      // Sombra
+      ctx.shadowColor = 'rgba(60,200,200,0.15)';
       ctx.shadowBlur = 20;
+
+      // Corpo
       ctx.fillStyle = '#2a3a3a';
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.arc(px, py, pr, 0, Math.PI * 2);
       ctx.fill();
+
+      // Capacete
       ctx.fillStyle = '#3a5a5a';
       ctx.beginPath();
-      ctx.arc(p.x, p.y - p.radius * 0.2, p.radius * 0.7, 0, Math.PI * 2);
+      ctx.arc(px, py - pr * 0.2, pr * 0.7, 0, Math.PI * 2);
       ctx.fill();
+
+      // Visor
+      ctx.shadowBlur = 8;
       ctx.fillStyle = '#60d0d0';
-      ctx.shadowBlur = 10;
       ctx.beginPath();
-      ctx.arc(p.x, p.y - p.radius * 0.25, p.radius * 0.35, 0, Math.PI * 2);
+      ctx.arc(px, py - pr * 0.25, pr * 0.35, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = '#4ab0b0';
       ctx.beginPath();
-      ctx.arc(p.x - p.radius * 0.1, p.y - p.radius * 0.3, p.radius * 0.12, 0, Math.PI * 2);
+      ctx.arc(px - pr * 0.1, py - pr * 0.3, pr * 0.12, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillStyle = '#3a9a9a';
       ctx.beginPath();
-      ctx.arc(p.x + p.radius * 0.08, p.y - p.radius * 0.3, p.radius * 0.08, 0, Math.PI * 2);
+      ctx.arc(px + pr * 0.08, py - pr * 0.3, pr * 0.08, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
+
+      // Corpo inferior
       ctx.fillStyle = '#2a3a3a';
-      ctx.fillRect(p.x - p.radius * 0.4, p.y + p.radius * 0.3, p.radius * 0.8, p.radius * 0.6);
+      ctx.fillRect(px - pr * 0.4, py + pr * 0.3, pr * 0.8, pr * 0.6);
+
+      // Pernas
       ctx.fillStyle = '#1a2a2a';
-      ctx.fillRect(p.x - p.radius * 0.35, p.y + p.radius * 0.8, p.radius * 0.2, p.radius * 0.4);
-      ctx.fillRect(p.x + p.radius * 0.15, p.y + p.radius * 0.8, p.radius * 0.2, p.radius * 0.4);
-      if (p.invincible > 0) {
-        ctx.strokeStyle = `rgba(255,200,100,${0.3 + Math.sin(p.invincible * 20) * 0.2})`;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * 1.3, 0, Math.PI * 2);
-        ctx.stroke();
+      ctx.fillRect(px - pr * 0.35, py + pr * 0.8, pr * 0.2, pr * 0.4);
+      ctx.fillRect(px + pr * 0.15, py + pr * 0.8, pr * 0.2, pr * 0.4);
+
+      // Nome do jogador
+      ctx.fillStyle = 'rgba(80,180,160,0.3)';
+      ctx.font = `${Math.min(11, 10 * scale)}px "Courier New", monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(state.playerName, px, py - pr - 6 * scale);
+
+      // UI do bunker (superior)
+      ctx.fillStyle = 'rgba(4,10,14,0.7)';
+      ctx.shadowBlur = 0;
+      const uiX = offX + 10 * scale;
+      const uiY = offY + 10 * scale;
+      ctx.fillRect(uiX, uiY, 320 * scale, 40 * scale);
+      ctx.strokeStyle = 'rgba(60,120,100,0.1)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(uiX, uiY, 320 * scale, 40 * scale);
+
+      ctx.fillStyle = '#6a9a8a';
+      ctx.font = `${Math.min(13, 12 * scale)}px "Courier New", monospace`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`💨 O₂ ${Math.round(state.bunker.oxygen)}%  🔋 ${Math.round(state.bunker.energy)}%  🌱 ${state.bunker.plants}`, uiX + 12 * scale, uiY + 20 * scale);
+
+      // Legenda inferior
+      ctx.fillStyle = 'rgba(60,90,80,0.15)';
+      ctx.font = `${Math.min(10, 9 * scale)}px "Courier New", monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('WASD mover | E interagir', W / 2, H - 10 * scale);
+    }
+
+    // ---- INTERAÇÕES DO BUNKER ----
+    function checkBunkerInteraction() {
+      const BP = state.bunkerPlayer;
+      for (const key in bunkerObjects) {
+        const obj = bunkerObjects[key];
+        if (!obj.action) continue;
+        const cx = obj.x + obj.w / 2;
+        const cy = obj.y + obj.h / 2;
+        const d = Math.sqrt((BP.x - cx) ** 2 + (BP.y - cy) ** 2);
+        if (d < 80) {
+          return obj.action;
+        }
+      }
+      return null;
+    }
+
+    function doBunkerAction(action) {
+      if (action === 'surface') {
+        // Ir para superfície
+        state.player.hp = Math.min(100, state.player.hp + 10);
+        state.player.oxygen = Math.min(100, state.player.oxygen + 15);
+        state.player.energy = Math.min(100, state.player.energy + 10);
+        state.player.alive = true;
+        state.player.x = 400;
+        state.player.y = 300;
+        updateSurfaceHUD();
+        showScreen('surface');
+        if (!surfaceLoopActive) {
+          surfaceLoopActive = true;
+          requestAnimationFrame(surfaceLoop);
+        }
+      } else if (action === 'rest') {
+        // Descansar
+        state.cycle = (state.cycle + 1) % 2;
+        state.bunker.oxygen = Math.min(100, state.bunker.oxygen + 8);
+        state.bunker.energy = Math.min(100, state.bunker.energy + 5);
+        state.player.hp = Math.min(100, state.player.hp + 25);
+        state.player.oxygen = Math.min(100, state.player.oxygen + 30);
+        state.player.energy = Math.min(100, state.player.energy + 20);
+        const prod = state.bunker.plants * state.bunker.efficiency * 0.08;
+        state.bunker.oxygen = Math.min(100, state.bunker.oxygen + prod * 8);
+        const cons = state.bunker.plants * 0.03;
+        state.bunker.energy = Math.max(0, state.bunker.energy - cons * 6);
+        updateBunkerUI();
+        // Feedback visual (partículas)
+        for (let i = 0; i < 12; i++) {
+          state.particles.push({
+            x: 900 + Math.random() * 100,
+            y: 100 + Math.random() * 60,
+            vx: (Math.random() - 0.5) * 30,
+            vy: -10 - Math.random() * 30,
+            life: 0.8 + Math.random() * 0.6,
+            maxLife: 1.4,
+            color: '#60d090',
+            size: 3 + Math.random() * 4,
+          });
+        }
+      } else if (action === 'terminal') {
+        // Abrir terminal retro
+        terminalOverlay.classList.add('active');
+        terminalInput.focus();
+        terminalInput.value = '';
+        // Limpa o histórico (mantém cabeçalho)
+        const header = terminalScreen.querySelector('.output-line');
+        terminalScreen.innerHTML = `
+          <div class="output-line">╔═══════════════════════════════════╗</div>
+          <div class="output-line">║  SISTEMA DE CONTROLE DO BUNKER    ║</div>
+          <div class="output-line">║  v.2.1  —  FOTOSSÍNTESE ARTIFICIAL ║</div>
+          <div class="output-line">╚═══════════════════════════════════╝</div>
+          <div class="output-line" style="margin-top:8px;">&gt; Inicializando módulos...</div>
+          <div class="output-line">&gt; <span class="highlight">Bem-vindo, ${state.playerName}.</span></div>
+          <div class="output-line" style="margin-top:6px;">&gt; Comandos: <span class="highlight">status</span>, <span class="highlight">plantas</span>, <span class="highlight">pesquisar</span>, <span class="highlight">sair</span></div>
+          <div class="input-line">
+            <span>$</span>
+            <input type="text" id="terminalInput" autofocus placeholder="digite um comando...">
+          </div>
+        `;
+        // Re-ligar input
+        const newInput = terminalScreen.querySelector('#terminalInput');
+        if (newInput) {
+          newInput.addEventListener('keydown', handleTerminalCommand);
+          setTimeout(() => newInput.focus(), 50);
+        }
       }
     }
 
-    // Partículas
-    for (const pt of state.particles) {
-      const alpha = pt.life / pt.maxLife;
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = pt.color || '#fff';
-      ctx.shadowBlur = 6;
-      ctx.shadowColor = pt.color || '#fff';
-      ctx.beginPath();
-      ctx.arc(pt.x, pt.y, pt.size * alpha, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
+    // ---- TERMINAL - COMANDOS ----
+    function handleTerminalCommand(e) {
+      if (e.key === 'Enter') {
+        const input = e.target;
+        const cmd = input.value.trim().toLowerCase();
+        input.value = '';
+        // Remove o input-line atual e adiciona a resposta
+        const inputLine = input.closest('.input-line');
+        const output = document.createElement('div');
+        output.className = 'output-line';
+        output.innerHTML = `&gt; <span style="color:#50d080;">${cmd || '(vazio)'}</span>`;
+        inputLine.parentNode.insertBefore(output, inputLine);
+
+        // Processa comando
+        let response = '';
+        if (cmd === 'status' || cmd === '') {
+          response = `
+            <span class="highlight">STATUS DO BUNKER</span><br>
+            Oxigênio: ${Math.round(state.bunker.oxygen)}%<br>
+            Energia: ${Math.round(state.bunker.energy)}%<br>
+            Plantas ativas: ${state.bunker.plants}<br>
+            Eficiência: ${state.bunker.efficiency.toFixed(1)}×<br>
+            Pesquisa: ${state.bunker.researchLevel === 0 ? 'Básica' : 'Avançada'}<br>
+            Ciclo: ${state.cycle === 0 ? 'DIA' : 'NOITE'}
+          `;
+        } else if (cmd === 'plantas') {
+          const prod = state.bunker.plants * state.bunker.efficiency * 0.08;
+          const cons = state.bunker.plants * 0.03 * (state.bunker.researchLevel === 1 ? 0.7 : 1.0);
+          response = `
+            <span class="highlight">🌱 SISTEMA DE PLANTAS</span><br>
+            Plantas: ${state.bunker.plants}<br>
+            Produção O₂: ${prod.toFixed(2)}/s<br>
+            Consumo energia: ${cons.toFixed(2)}/s<br>
+            Eficiência total: ${(state.bunker.efficiency * (state.bunker.researchLevel === 1 ? 1.3 : 1.0)).toFixed(1)}×
+          `;
+        } else if (cmd === 'pesquisar') {
+          if (state.bunker.researchLevel === 0 && state.inventory.tech >= 8) {
+            state.inventory.tech -= 8;
+            state.bunker.researchLevel = 1;
+            response = `
+              <span class="highlight">🔬 PESQUISA CONCLUÍDA!</span><br>
+              Nova tecnologia: Fotossíntese Avançada<br>
+              Produção +30%, consumo -30%
+            `;
+            updateBunkerUI();
+            updateSurfaceHUD();
+          } else if (state.bunker.researchLevel === 1) {
+            response = `<span class="warn">⚠️ Pesquisa já concluída.</span>`;
+          } else {
+            response = `<span class="error">❌ Recursos insuficientes. Precisa de 8 ⚙️ Tecnologia.</span>`;
+          }
+        } else if (cmd === 'sair') {
+          terminalOverlay.classList.remove('active');
+          return;
+        } else if (cmd === 'help') {
+          response = `
+            <span class="highlight">COMANDOS DISPONÍVEIS</span><br>
+            <span class="highlight">status</span>  — mostra status do bunker<br>
+            <span class="highlight">plantas</span> — detalhes do sistema de plantas<br>
+            <span class="highlight">pesquisar</span> — investe tecnologia em avanço<br>
+            <span class="highlight">sair</span>    — fecha o terminal
+          `;
+        } else {
+          response = `<span class="error">Comando desconhecido: "${cmd}". Digite 'help' para ajuda.</span>`;
+        }
+
+        const respDiv = document.createElement('div');
+        respDiv.className = 'output-line';
+        respDiv.innerHTML = response;
+        inputLine.parentNode.insertBefore(respDiv, inputLine);
+
+        // Novo input
+        const newInputLine = document.createElement('div');
+        newInputLine.className = 'input-line';
+        newInputLine.innerHTML = `<span>$</span><input type="text" class="term-input" autofocus>`;
+        inputLine.parentNode.insertBefore(newInputLine, inputLine);
+        inputLine.remove();
+
+        const newInput = newInputLine.querySelector('.term-input');
+        newInput.addEventListener('keydown', handleTerminalCommand);
+        setTimeout(() => newInput.focus(), 30);
+
+        // Scroll para o final
+        terminalScreen.scrollTop = terminalScreen.scrollHeight;
+      }
     }
-    ctx.globalAlpha = 1;
 
-    // Marcador do bunker (canto inferior)
-    ctx.fillStyle = 'rgba(60,180,140,0.15)';
-    ctx.beginPath();
-    ctx.arc(40, canvas.height - 40, 20, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(60,180,140,0.4)';
-    ctx.font = '18px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('🏛️', 40, canvas.height - 40);
-  }
+    // Fechar terminal
+    terminalClose.addEventListener('click', () => {
+      terminalOverlay.classList.remove('active');
+    });
 
-  // ---- INICIALIZAÇÃO ----
-  // O menu já está ativo por padrão.
-  // Quando o jogador clicar em "Jogar", a tela de lore aparece.
-  // Após confirmar nome, vai para o bunker.
+    // ---- ATUALIZAR UI BUNKER ----
+    function updateBunkerUI() {
+      // A UI é renderizada no canvas
+    }
 
-  // Pré-carregar o canvas quando a superfície for ativada
-  // A função showScreen já chama resize e update.
+    // ---- SUPERFÍCIE - CANVAS & MUNDO ----
+    let surfaceLoopActive = false;
 
-  console.log('🌱 Ecosfera 2200 – Estrutura de telas carregada.');
-</script>
+    function resizeSurfaceCanvas() {
+      const rect = surfaceCanvas.parentElement.getBoundingClientRect();
+      surfaceCanvas.width = rect.width;
+      surfaceCanvas.height = rect.height;
+    }
+
+    function initSurfaceWorld() {
+      state.resources = [];
+      state.mutants = [];
+      state.particles = [];
+      const W = surfaceCanvas.width || 800;
+      const H = surfaceCanvas.height || 600;
+      // Recursos
+      for (let i = 0; i < 35; i++) {
+        const type = ['metal', 'biomass', 'tech'][Math.floor(Math.random() * 3)];
+        state.resources.push({
+          x: 60 + Math.random() * (W - 120),
+          y: 60 + Math.random() * (H - 120),
+          type: type,
+          radius: 10,
+          collected: false,
+          respawnTimer: 0,
+          value: 1 + Math.floor(Math.random() * 2),
+        });
+      }
+      // Mutantes
+      for (let i = 0; i < 5; i++) {
+        spawnSurfaceMutant();
+      }
+    }
+
+    function spawnSurfaceMutant() {
+      const W = surfaceCanvas.width || 800;
+      const H = surfaceCanvas.height || 600;
+      state.mutants.push({
+        x: 80 + Math.random() * (W - 160),
+        y: 80 + Math.random() * (H - 160),
+        radius: 14 + Math.random() * 4,
+        hp: 20 + Math.random() * 10,
+        maxHp: 20 + Math.random() * 10,
+        speed: 25 + Math.random() * 20,
+        damage: 5 + Math.random() * 4,
+        attackCooldown: 0,
+        state: 'patrol',
+        targetX: 80 + Math.random() * (W - 160),
+        targetY: 80 + Math.random() * (H - 160),
+        wobble: Math.random() * 100,
+      });
+    }
+
+    // ---- UPDATE SUPERFÍCIE ----
+    function updateSurface(dt) {
+      const p = state.player;
+      if (!p.alive) return;
+
+      const W = surfaceCanvas.width || 800;
+      const H = surfaceCanvas.height || 600;
+
+      // Decaimento
+      p.oxygen -= dt * 1.0;
+      p.energy -= dt * 0.35;
+      if (p.oxygen <= 0) { p.oxygen = 0;
+        p.hp -= dt * 5; }
+      if (p.energy <= 0) { p.energy = 0;
+        p.hp -= dt * 2; }
+      if (p.hp <= 0) {
+        p.hp = 0;
+        p.alive = false;
+        updateSurfaceHUD();
+        return;
+      }
+      if (p.invincible > 0) p.invincible -= dt;
+      if (p.attackCooldown > 0) p.attackCooldown -= dt;
+
+      // Movimento
+      let dx = 0,
+        dy = 0;
+      if (keys['w'] || keys['arrowup']) dy = -1;
+      if (keys['s'] || keys['arrowdown']) dy = 1;
+      if (keys['a'] || keys['arrowleft']) dx = -1;
+      if (keys['d'] || keys['arrowright']) dx = 1;
+      if (dx !== 0 && dy !== 0) { dx *= 0.707;
+        dy *= 0.707; }
+      const speed = p.speed * (p.hp < 30 ? 0.8 : 1.0);
+      p.x += dx * speed * dt;
+      p.y += dy * speed * dt;
+      p.x = Math.max(20, Math.min(W - 20, p.x));
+      p.y = Math.max(20, Math.min(H - 20, p.y));
+
+      // Coleta
+      for (const r of state.resources) {
+        if (r.collected) continue;
+        if (Math.hypot(p.x - r.x, p.y - r.y) < p.radius + r.radius) {
+          r.collected = true;
+          r.respawnTimer = 12 + Math.random() * 18;
+          const val = r.value || 1;
+          if (r.type === 'metal') state.inventory.metal += val;
+          else if (r.type === 'biomass') state.inventory.biomass += val;
+          else if (r.type === 'tech') state.inventory.tech += val;
+          for (let i = 0; i < 6; i++) {
+            state.particles.push({
+              x: r.x,
+              y: r.y,
+              vx: (Math.random() - 0.5) * 70,
+              vy: (Math.random() - 0.5) * 70,
+              life: 0.4 + Math.random() * 0.4,
+              maxLife: 0.8,
+              color: r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : '#c0a060',
+              size: 2 + Math.random() * 4,
+            });
+          }
+          updateSurfaceHUD();
+        }
+      }
+
+      // Ataque
+      if (keys[' '] && p.attackCooldown <= 0 && p.alive) {
+        p.attackCooldown = 0.5;
+        for (const m of state.mutants) {
+          if (Math.hypot(p.x - m.x, p.y - m.y) < p.radius + m.radius + 30) {
+            m.hp -= 12;
+            for (let i = 0; i < 8; i++) {
+              state.particles.push({
+                x: m.x,
+                y: m.y,
+                vx: (Math.random() - 0.5) * 90,
+                vy: (Math.random() - 0.5) * 90,
+                life: 0.3 + Math.random() * 0.3,
+                maxLife: 0.6,
+                color: '#ff6040',
+                size: 2 + Math.random() * 5,
+              });
+            }
+            if (m.hp <= 0) {
+              const idx = state.mutants.indexOf(m);
+              if (idx > -1) state.mutants.splice(idx, 1);
+              if (Math.random() < 0.35) {
+                state.inventory.biomass += 1;
+                updateSurfaceHUD();
+              }
+            }
+          }
+        }
+      }
+
+      // Mutantes
+      for (const m of state.mutants) {
+        m.wobble += dt * 0.5;
+        const d = Math.hypot(p.x - m.x, p.y - m.y);
+        if (d < 280) {
+          m.state = 'chase';
+          m.targetX = p.x;
+          m.targetY = p.y;
+        } else if (m.state === 'chase') {
+          m.state = 'patrol';
+          m.targetX = 80 + Math.random() * (W - 160);
+          m.targetY = 80 + Math.random() * (H - 160);
+        }
+        if (m.state === 'chase') {
+          const ang = Math.atan2(p.y - m.y, p.x - m.x) + Math.sin(m.wobble) * 0.04;
+          const spd = m.speed * (1 + state.cycle * 0.08);
+          m.x += Math.cos(ang) * spd * dt;
+          m.y += Math.sin(ang) * spd * dt;
+          if (d < m.radius + p.radius + 4) {
+            if (m.attackCooldown <= 0) {
+              m.attackCooldown = 0.8;
+              if (p.invincible <= 0) {
+                p.hp -= m.damage;
+                p.invincible = 0.4;
+                if (p.hp <= 0) {
+                  p.hp = 0;
+                  p.alive = false;
+                }
+                updateSurfaceHUD();
+              }
+            }
+          }
+        } else {
+          if (Math.hypot(m.x - m.targetX, m.y - m.targetY) < 20) {
+            m.targetX = 80 + Math.random() * (W - 160);
+            m.targetY = 80 + Math.random() * (H - 160);
+          }
+          const ang = Math.atan2(m.targetY - m.y, m.targetX - m.x) + Math.sin(m.wobble * 0.7) * 0.03;
+          m.x += Math.cos(ang) * m.speed * 0.4 * dt;
+          m.y += Math.sin(ang) * m.speed * 0.4 * dt;
+        }
+        m.x = Math.max(10, Math.min(W - 10, m.x));
+        m.y = Math.max(10, Math.min(H - 10, m.y));
+        if (m.attackCooldown > 0) m.attackCooldown -= dt;
+      }
+
+      // Recursos respawn
+      for (const r of state.resources) {
+        if (r.collected) {
+          r.respawnTimer -= dt;
+          if (r.respawnTimer <= 0) {
+            r.collected = false;
+            r.x = 60 + Math.random() * (W - 120);
+            r.y = 60 + Math.random() * (H - 120);
+          }
+        }
+      }
+
+      // Partículas (névoa tóxica)
+      if (Math.random() < 0.03) {
+        state.particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 4,
+          vy: -0.5 - Math.random() * 1.5,
+          life: 4 + Math.random() * 6,
+          maxLife: 10,
+          color: `rgba(60,80,60,${0.02 + Math.random() * 0.03})`,
+          size: 20 + Math.random() * 40,
+        });
+      }
+
+      // Partículas
+      for (let i = state.particles.length - 1; i >= 0; i--) {
+        const pt = state.particles[i];
+        pt.x += pt.vx * dt;
+        pt.y += pt.vy * dt;
+        pt.life -= dt;
+        if (pt.life <= 0) state.particles.splice(i, 1);
+      }
+
+      updateSurfaceHUD();
+    }
+
+    // ---- RENDER SUPERFÍCIE ----
+    function renderSurface() {
+      const W = surfaceCanvas.width || 800;
+      const H = surfaceCanvas.height || 600;
+      const ctx = surfaceCtx;
+      ctx.clearRect(0, 0, W, H);
+
+      // Céu / fundo
+      const skyGrad = ctx.createRadialGradient(W / 2, H * 0.3, 0, W / 2, H * 0.3, W * 0.8);
+      skyGrad.addColorStop(0, '#1a2a28');
+      skyGrad.addColorStop(0.5, '#121e20');
+      skyGrad.addColorStop(1, '#080e10');
+      ctx.fillStyle = skyGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Chão
+      const groundY = H * 0.7;
+      const groundGrad = ctx.createLinearGradient(0, groundY, 0, H);
+      groundGrad.addColorStop(0, '#1a2218');
+      groundGrad.addColorStop(0.3, '#161e14');
+      groundGrad.addColorStop(1, '#0a100a');
+      ctx.fillStyle = groundGrad;
+      ctx.fillRect(0, groundY, W, H - groundY);
+
+      // Textura do chão (linhas)
+      ctx.strokeStyle = 'rgba(40,60,40,0.04)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < W; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x, groundY);
+        ctx.lineTo(x, H);
+        ctx.stroke();
+      }
+      for (let y = groundY; y < H; y += 30) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+      }
+
+      // Ruínas (prédios)
+      const buildings = [
+        { x: 50, y: groundY - 160, w: 80, h: 160, color: '#1a2620', broken: true },
+        { x: 160, y: groundY - 220, w: 60, h: 220, color: '#141e18', broken: true },
+        { x: 250, y: groundY - 120, w: 90, h: 120, color: '#1c2822', broken: false },
+        { x: 380, y: groundY - 180, w: 70, h: 180, color: '#16201a', broken: true },
+        { x: 490, y: groundY - 260, w: 100, h: 260, color: '#1a261e', broken: true },
+        { x: 620, y: groundY - 140, w: 60, h: 140, color: '#141e16', broken: false },
+        { x: 710, y: groundY - 200, w: 80, h: 200, color: '#18221c', broken: true },
+        { x: 820, y: groundY - 160, w: 70, h: 160, color: '#1a2420', broken: true },
+        { x: 920, y: groundY - 240, w: 90, h: 240, color: '#141e18', broken: true },
+        { x: 1050, y: groundY - 130, w: 60, h: 130, color: '#1c2822', broken: false },
+      ];
+
+      for (const b of buildings) {
+        // Sombra
+        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = b.color;
+        ctx.fillRect(b.x, b.y, b.w, b.h);
+        ctx.shadowBlur = 0;
+
+        // Janelas
+        ctx.fillStyle = 'rgba(40,70,50,0.15)';
+        for (let wy = b.y + 15; wy < b.y + b.h - 20; wy += 25) {
+          for (let wx = b.x + 10; wx < b.x + b.w - 10; wx += 20) {
+            if (Math.random() > 0.3 || b.broken) {
+              ctx.fillRect(wx, wy, 8, 12);
+            }
+          }
+        }
+
+        // Topo quebrado
+        if (b.broken) {
+          ctx.fillStyle = '#0a100a';
+          ctx.fillRect(b.x + 10, b.y - 4, 20, 8);
+          ctx.fillRect(b.x + b.w - 30, b.y - 6, 25, 10);
+          ctx.fillRect(b.x + b.w / 2 - 10, b.y - 8, 15, 12);
+        }
+
+        // Borda
+        ctx.strokeStyle = 'rgba(60,90,70,0.05)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(b.x, b.y, b.w, b.h);
+      }
+
+      // Estrada (simples)
+      ctx.fillStyle = 'rgba(20,30,24,0.2)';
+      ctx.fillRect(0, groundY + 20, W, 40);
+      ctx.strokeStyle = 'rgba(40,70,50,0.05)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([20, 30]);
+      ctx.beginPath();
+      ctx.moveTo(0, groundY + 40);
+      ctx.lineTo(W, groundY + 40);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Recursos
+      for (const r of state.resources) {
+        if (r.collected) continue;
+        const color = r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : '#c0a060';
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#00000055';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const sym = { metal: '⬡', biomass: '✦', tech: '⚙' };
+        ctx.fillText(sym[r.type] || '•', r.x, r.y + 1);
+        ctx.fillStyle = '#ffffffcc';
+        ctx.fillText(sym[r.type] || '•', r.x, r.y);
+      }
+
+      // Mutantes
+      for (const m of state.mutants) {
+        // Sombra
+        ctx.shadowColor = 'rgba(180,40,60,0.15)';
+        ctx.shadowBlur = 18;
+
+        // Corpo
+        const hue = 340 + m.hp / m.maxHp * 20;
+        ctx.fillStyle = `hsl(${hue},60%,35%)`;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Olhos (brilho)
+        ctx.fillStyle = '#ff6040';
+        ctx.beginPath();
+        ctx.arc(m.x - m.radius * 0.3, m.y - m.radius * 0.15, m.radius * 0.18, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(m.x + m.radius * 0.3, m.y - m.radius * 0.15, m.radius * 0.18, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(m.x - m.radius * 0.32, m.y - m.radius * 0.15, m.radius * 0.07, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(m.x + m.radius * 0.28, m.y - m.radius * 0.15, m.radius * 0.07, 0, Math.PI * 2);
+        ctx.fill();
+
+        // HP
+        const hpPct = m.hp / m.maxHp;
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(m.x - m.radius * 0.6, m.y - m.radius - 8, m.radius * 1.2, 4);
+        ctx.fillStyle = hpPct > 0.5 ? '#60c080' : '#e06040';
+        ctx.fillRect(m.x - m.radius * 0.6, m.y - m.radius - 8, m.radius * 1.2 * hpPct, 4);
+      }
+
+      // Partículas (névoa tóxica e efeitos)
+      for (const pt of state.particles) {
+        const alpha = pt.life / pt.maxLife;
+        ctx.globalAlpha = alpha * 0.3;
+        ctx.fillStyle = pt.color || 'rgba(60,80,60,0.05)';
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.size * (0.5 + 0.5 * alpha), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Jogador
+      if (state.player.alive) {
+        const p = state.player;
+        ctx.shadowColor = 'rgba(60,200,200,0.2)';
+        ctx.shadowBlur = 22;
+        ctx.fillStyle = '#2a3a3a';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#3a5a5a';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y - p.radius * 0.2, p.radius * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#60d0d0';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y - p.radius * 0.25, p.radius * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#4ab0b0';
+        ctx.beginPath();
+        ctx.arc(p.x - p.radius * 0.1, p.y - p.radius * 0.3, p.radius * 0.12, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#3a9a9a';
+        ctx.beginPath();
+        ctx.arc(p.x + p.radius * 0.08, p.y - p.radius * 0.3, p.radius * 0.08, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#2a3a3a';
+        ctx.fillRect(p.x - p.radius * 0.4, p.y + p.radius * 0.3, p.radius * 0.8, p.radius * 0.6);
+        ctx.fillStyle = '#1a2a2a';
+        ctx.fillRect(p.x - p.radius * 0.35, p.y + p.radius * 0.8, p.radius * 0.2, p.radius * 0.4);
+        ctx.fillRect(p.x + p.radius * 0.15, p.y + p.radius * 0.8, p.radius * 0.2, p.radius * 0.4);
+        if (p.invincible > 0) {
+          ctx.strokeStyle = `rgba(255,200,100,${0.3 + Math.sin(p.invincible * 20) * 0.2})`;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius * 1.3, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+
+      // Marcador do bunker (canto inferior)
+      ctx.fillStyle = 'rgba(60,180,140,0.1)';
+      ctx.beginPath();
+      ctx.arc(40, H - 40, 22, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(60,180,140,0.3)';
+      ctx.font = '20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🏛️', 40, H - 40);
+      ctx.fillStyle = 'rgba(60,120,100,0.15)';
+      ctx.font = '8px sans-serif';
+      ctx.fillText('BUNKER', 40, H - 16);
+    }
+
+    // ---- UPDATE HUD SUPERFÍCIE ----
+    function updateSurfaceHUD() {
+      const p = state.player;
+      document.getElementById('surfHpBar').style.width = p.hp + '%';
+      document.getElementById('surfHpText').textContent = Math.round(p.hp);
+      document.getElementById('surfOxyBar').style.width = p.oxygen + '%';
+      document.getElementById('surfOxyText').textContent = Math.round(p.oxygen);
+      document.getElementById('surfEngBar').style.width = p.energy + '%';
+      document.getElementById('surfEngText').textContent = Math.round(p.energy);
+      document.getElementById('surfMetal').textContent = state.inventory.metal;
+      document.getElementById('surfBio').textContent = state.inventory.biomass;
+      document.getElementById('surfTech').textContent = state.inventory.tech;
+    }
+
+    // ---- LOOP SUPERFÍCIE ----
+    function surfaceLoop(time) {
+      if (!screens.surface.classList.contains('active')) {
+        surfaceLoopActive = false;
+        return;
+      }
+      const dt = 0.016;
+      updateSurface(dt);
+      renderSurface();
+      if (surfaceLoopActive) {
+        requestAnimationFrame(surfaceLoop);
+      }
+    }
+
+    // ---- INPUT ----
+    const keys = {};
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      keys[key] = true;
+      if (key === ' ') e.preventDefault();
+
+      // No bunker: interagir com E
+      if (screens.bunker.classList.contains('active') && key === 'e') {
+        const action = checkBunkerInteraction();
+        if (action) doBunkerAction(action);
+      }
+
+      // Voltar do surface com ESC ou B
+      if (screens.surface.classList.contains('active') && (key === 'escape' || key === 'b')) {
+        document.getElementById('btnReturnBunker').click();
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      keys[e.key.toLowerCase()] = false;
+    });
+
+    // ---- BOTÕES ----
+    document.getElementById('btnReturnBunker').addEventListener('click', () => {
+      state.player.oxygen = Math.min(100, state.player.oxygen + 20);
+      state.player.energy = Math.min(100, state.player.energy + 15);
+      if (!state.player.alive) {
+        state.player.hp = 30;
+        state.player.oxygen = 40;
+        state.player.energy = 30;
+        state.player.alive = true;
+      }
+      updateSurfaceHUD();
+      showScreen('bunker');
+      updateBunkerUI();
+      surfaceLoopActive = false;
+    });
+
+    // ---- LOOP DO BUNKER ----
+    function bunkerLoop() {
+      if (screens.bunker.classList.contains('active')) {
+        renderBunker();
+      }
+      requestAnimationFrame(bunkerLoop);
+    }
+
+    // ---- INICIALIZAÇÃO ----
+    // Polyfill roundRect se necessário
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+        if (r > w / 2) r = w / 2;
+        if (r > h / 2) r = h / 2;
+        this.moveTo(x + r, y);
+        this.lineTo(x + w - r, y);
+        this.quadraticCurveTo(x + w, y, x + w, y + r);
+        this.lineTo(x + w, y + h - r);
+        this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        this.lineTo(x + r, y + h);
+        this.quadraticCurveTo(x, y + h, x, y + h - r);
+        this.lineTo(x, y + r);
+        this.quadraticCurveTo(x, y, x + r, y);
+        return this;
+      };
+    }
+
+    // Iniciar
+    initBunkerScene();
+    initSurfaceWorld();
+    // Posição inicial no bunker
+    state.bunkerPlayer.x = 560;
+    state.bunkerPlayer.y = 420;
+    state.player.x = 400;
+    state.player.y = 300;
+
+    // Mostrar menu
+    showScreen('menu');
+
+    // Iniciar loop do bunker
+    requestAnimationFrame(bunkerLoop);
+
+    // Resize
+    window.addEventListener('resize', () => {
+      if (screens.bunker.classList.contains('active')) resizeBunkerCanvas();
+      if (screens.surface.classList.contains('active')) resizeSurfaceCanvas();
+    });
+
+    console.log('🌱 Ecosfera 2200 – Imersão carregada!');
+  </script>
 </body>
 </html>
