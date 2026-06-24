@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌱 Ecosfera 2200 - Sobrevivência</title>
+    <style>
+        /* ===== RESET & GLOBAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #0a0a0f;
+            font-family: 'Courier New', monospace;
+            color: #c8d0d8;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ===== CONTAINER ===== */
+        #game-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #0d0d14;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ===== CANVAS ===== */
+        #gameCanvas {
+            display: block;
+            background: #111118;
+            border: 1px solid #1a2a2a;
+            box-shadow: 0 0 60px rgba(0, 40, 30, 0.3);
+            image-rendering: pixelated;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* ===== HUD ===== */
+        #hud {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            pointer-events: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+            z-index: 10;
+        }
+        #hud .hud-left,
+        #hud .hud-right {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            background: rgba(8, 12, 18, 0.72);
+            backdrop-filter: blur(6px);
+            padding: 6px 14px 6px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(60, 120, 100, 0.25);
+            pointer-events: auto;
+        }
+        #hud .hud-left {
+            flex: 1;
+            min-width: 200px;
+        }
+        #hud .hud-right {
+            justify-content: flex-end;
+            min-width: 180px;
+        }
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        .hud-item .label {
+            color: #7a8a8a;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        .hud-item .value {
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 30px;
+            text-align: right;
+        }
+        .hud-bar {
+            width: 80px;
+            height: 6px;
+            background: #1a2228;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid #1a2a2a;
+        }
+        .hud-bar .fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        .fill-health {
+            background: #e34a4a;
+        }
+        .fill-oxygen {
+            background: #4ac0e3;
+        }
+        .fill-energy {
+            background: #e3c84a;
+        }
+        .fill-bunker-o2 {
+            background: #4ae3a0;
+        }
+        .fill-bunker-energy {
+            background: #e3a04a;
+        }
+        .cycle-indicator {
+            font-weight: bold;
+            font-size: 14px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 200, 0.15);
+        }
+        .cycle-day {
+            color: #f0d060;
+        }
+        .cycle-night {
+            color: #6090f0;
+        }
+
+        /* ===== INVENTORY MINI ===== */
+        #inventory-mini {
+            position: absolute;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(8, 12, 18, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(60, 120, 100, 0.2);
+            border-radius: 8px;
+            padding: 8px 18px;
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            z-index: 10;
+            pointer-events: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #inventory-mini .inv-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #b0c8c0;
+        }
+        #inventory-mini .inv-item .icon {
+            font-size: 16px;
+        }
+        #inventory-mini .inv-item .count {
+            font-weight: bold;
+            color: #d0e8e0;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* ===== BUNKER PANEL (toggle) ===== */
+        #bunker-panel {
+            position: absolute;
+            top: 60px;
+            right: 12px;
+            width: 320px;
+            max-height: calc(100% - 120px);
+            background: rgba(6, 10, 16, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(60, 140, 110, 0.3);
+            border-radius: 10px;
+            padding: 16px 18px 20px;
+            color: #bcc8d0;
+            font-size: 13px;
+            z-index: 20;
+            overflow-y: auto;
+            pointer-events: auto;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            box-shadow: 0 0 50px rgba(0, 30, 20, 0.5);
+            display: none;
+        }
+        #bunker-panel.open {
+            display: block;
+        }
+        #bunker-panel h2 {
+            font-size: 16px;
+            color: #80d0b0;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #1a3a2a;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #bunker-panel h2 .close-btn {
+            cursor: pointer;
+            color: #6a8a7a;
+            font-size: 18px;
+            padding: 0 6px;
+            pointer-events: auto;
+        }
+        #bunker-panel h2 .close-btn:hover {
+            color: #e06060;
+        }
+        .bp-section {
+            margin-bottom: 14px;
+            border-bottom: 1px solid #141e1e;
+            padding-bottom: 12px;
+        }
+        .bp-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .bp-section .title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6a8a7a;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .bp-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+            gap: 8px;
+        }
+        .bp-row .label {
+            color: #8aa8a0;
+        }
+        .bp-row .val {
+            font-weight: bold;
+            color: #d0e8e0;
+            min-width: 40px;
+            text-align: right;
+        }
+        .bp-btn {
+            background: #162a22;
+            border: 1px solid #2a4a3a;
+            color: #a0d0c0;
+            padding: 4px 14px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: 0.2s;
+        }
+        .bp-btn:hover {
+            background: #1e3a2e;
+            border-color: #4a8a6a;
+            color: #d0f0e0;
+        }
+        .bp-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+        .bp-btn.small {
+            padding: 2px 10px;
+            font-size: 11px;
+        }
+        .bp-research-item {
+            background: #0e1616;
+            border: 1px solid #1a2a22;
+            border-radius: 4px;
+            padding: 6px 10px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bp-research-item .name {
+            color: #b0d0c0;
+        }
+        .bp-research-item .cost {
+            color: #8a8a6a;
+            font-size: 11px;
+        }
+        .bp-plant-item {
+            background: #0e1616;
+            border: 1px solid #1a2a22;
+            border-radius: 4px;
+            padding: 6px 10px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        .bp-plant-item .name {
+            color: #a0d0b0;
+        }
+        .bp-plant-item .stats {
+            color: #6a8a7a;
+            font-size: 11px;
+        }
+
+        /* ===== TOGGLE BUNKER BUTTON ===== */
+        #toggle-bunker {
+            position: absolute;
+            bottom: 70px;
+            right: 16px;
+            z-index: 15;
+            background: rgba(6, 16, 12, 0.85);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(60, 140, 100, 0.4);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #80d0b0;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: 0.3s;
+            letter-spacing: 1px;
+        }
+        #toggle-bunker:hover {
+            background: #0a2a1e;
+            border-color: #60b090;
+            box-shadow: 0 0 30px rgba(0, 80, 60, 0.2);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        #bunker-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+        #bunker-panel::-webkit-scrollbar-track {
+            background: #0a1212;
+        }
+        #bunker-panel::-webkit-scrollbar-thumb {
+            background: #2a4a3a;
+            border-radius: 2px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 800px) {
+            #hud {
+                font-size: 11px;
+                gap: 4px 10px;
+                top: 6px;
+                left: 6px;
+                right: 6px;
+            }
+            #hud .hud-left,
+            #hud .hud-right {
+                padding: 4px 10px;
+                gap: 4px 10px;
+            }
+            .hud-bar {
+                width: 50px;
+                height: 5px;
+            }
+            #bunker-panel {
+                width: 280px;
+                right: 6px;
+                top: 50px;
+                font-size: 12px;
+                padding: 12px 14px;
+            }
+            #inventory-mini {
+                font-size: 11px;
+                padding: 6px 12px;
+                gap: 12px;
+                bottom: 10px;
+            }
+            #toggle-bunker {
+                bottom: 60px;
+                right: 8px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+        @media (max-width: 500px) {
+            #hud .hud-left,
+            #hud .hud-right {
+                flex-wrap: wrap;
+            }
+            .hud-item .label {
+                font-size: 9px;
+            }
+            .hud-item .value {
+                font-size: 11px;
+                min-width: 20px;
+            }
+            .hud-bar {
+                width: 36px;
+                height: 4px;
+            }
+            #bunker-panel {
+                width: 220px;
+                right: 4px;
+                top: 46px;
+                font-size: 11px;
+                padding: 10px 12px;
+                max-height: calc(100% - 100px);
+            }
+            #inventory-mini {
+                font-size: 10px;
+                padding: 4px 8px;
+                gap: 8px;
+                bottom: 6px;
+            }
+            #toggle-bunker {
+                bottom: 50px;
+                right: 4px;
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* ===== NOTIFICATION ===== */
+        #notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(80, 200, 160, 0.3);
+            border-radius: 12px;
+            padding: 20px 40px;
+            color: #d0e8e0;
+            font-size: 18px;
+            text-align: center;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            box-shadow: 0 0 60px rgba(0, 40, 30, 0.6);
+            max-width: 80%;
+        }
+        #notification.show {
+            opacity: 1;
+        }
+        #notification .sub {
+            font-size: 13px;
+            color: #7a9a8a;
+            margin-top: 6px;
+        }
+
+        /* ===== GAME OVER OVERLAY ===== */
+        #game-over {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 60;
+            flex-direction: column;
+            gap: 20px;
+            color: #e8d0d0;
+        }
+        #game-over.show {
+            display: flex;
+        }
+        #game-over h1 {
+            font-size: 42px;
+            letter-spacing: 4px;
+            color: #e06060;
+            text-shadow: 0 0 40px rgba(200, 40, 40, 0.3);
+        }
+        #game-over .sub {
+            font-size: 18px;
+            color: #a0b0a0;
+        }
+        #game-over .restart-btn {
+            background: #1a2a22;
+            border: 1px solid #3a6a4a;
+            color: #a0d0b0;
+            padding: 12px 36px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            pointer-events: auto;
+        }
+        #game-over .restart-btn:hover {
+            background: #2a4a32;
+            border-color: #60b080;
+        }
+
+        /* ===== WIN OVERLAY ===== */
+        #win-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 10, 8, 0.9);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 60;
+            flex-direction: column;
+            gap: 16px;
+            color: #d0f0e0;
+        }
+        #win-overlay.show {
+            display: flex;
+        }
+        #win-overlay h1 {
+            font-size: 44px;
+            letter-spacing: 4px;
+            color: #80e0b0;
+            text-shadow: 0 0 50px rgba(40, 200, 120, 0.3);
+        }
+        #win-overlay .sub {
+            font-size: 18px;
+            color: #80b0a0;
+            max-width: 500px;
+            text-align: center;
+        }
+        #win-overlay .restart-btn {
+            background: #1a2a22;
+            border: 1px solid #3a8a5a;
+            color: #a0e0c0;
+            padding: 12px 36px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            pointer-events: auto;
+            margin-top: 10px;
+        }
+        #win-overlay .restart-btn:hover {
+            background: #2a4a32;
+            border-color: #60d090;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== GAME WRAPPER ===== -->
+    <div id="game-wrapper">
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- HUD -->
+        <div id="hud">
+            <div class="hud-left">
+                <div class="hud-item">
+                    <span class="label">❤️</span>
+                    <div class="hud-bar"><div class="fill fill-health" id="healthBar" style="width:100%"></div></div>
+                    <span class="value" id="healthText">100</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">💨</span>
+                    <div class="hud-bar"><div class="fill fill-oxygen" id="oxygenBar" style="width:100%"></div></div>
+                    <span class="value" id="oxygenText">100</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">⚡</span>
+                    <div class="hud-bar"><div class="fill fill-energy" id="energyBar" style="width:100%"></div></div>
+                    <span class="value" id="energyText">100</span>
+                </div>
+                <div class="hud-item" style="margin-left:8px;">
+                    <span class="label">🏚️ O₂</span>
+                    <div class="hud-bar"><div class="fill fill-bunker-o2" id="bunkerO2Bar" style="width:60%"></div></div>
+                    <span class="value" id="bunkerO2Text">60</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">🔋</span>
+                    <div class="hud-bar"><div class="fill fill-bunker-energy" id="bunkerEnergyBar" style="width:40%"></div></div>
+                    <span class="value" id="bunkerEnergyText">40</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="hud-item">
+                    <span class="cycle-indicator cycle-day" id="cycleLabel">☀️ DIA</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">⏱️</span>
+                    <span class="value" id="cycleTimer">0:00</span>
+                </div>
+                <div class="hud-item">
+                    <span class="label">🌱</span>
+                    <span class="value" id="plantCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Mini -->
+        <div id="inventory-mini">
+            <div class="inv-item"><span class="icon">🔩</span><span class="count" id="invMetals">0</span></div>
+            <div class="inv-item"><span class="icon">🧬</span><span class="count" id="invBiomass">0</span></div>
+            <div class="inv-item"><span class="icon">⚙️</span><span class="count" id="invTech">0</span></div>
+            <div class="inv-item"><span class="icon">🧪</span><span class="count" id="invSamples">0</span></div>
+            <div class="inv-item" style="color:#6a8a7a;font-size:11px;">⬆️ coleta automática</div>
+        </div>
+
+        <!-- Toggle Bunker -->
+        <button id="toggle-bunker">🏛️ GERENCIAR BUNKER</button>
+
+        <!-- Bunker Panel -->
+        <div id="bunker-panel">
+            <h2>🏛️ BUNKER CENTRAL <span class="close-btn" id="closeBunker">✕</span></h2>
+
+            <div class="bp-section">
+                <div class="title">📊 Recursos do Bunker</div>
+                <div class="bp-row"><span class="label">Oxigênio</span><span class="val" id="bpO2">60%</span></div>
+                <div class="bp-row"><span class="label">Energia</span><span class="val" id="bpEnergy">40%</span></div>
+                <div class="bp-row"><span class="label">Plantas Ativas</span><span class="val" id="bpPlants">0</span></div>
+                <div class="bp-row"><span class="label">Produção O₂/s</span><span class="val" id="bpProdO2">0.0</span></div>
+                <div class="bp-row"><span class="label">Consumo Energia/s</span><span class="val" id="bpConsEnergy">0.0</span></div>
+            </div>
+
+            <div class="bp-section">
+                <div class="title">🧬 Engenharia Genética</div>
+                <div class="bp-row"><span class="label">Eficiência base</span><span class="val" id="bpBaseEff">1.0×</span></div>
+                <div class="bp-row" style="gap:4px;flex-wrap:wrap;">
+                    <button class="bp-btn small" id="upgradeEff">⬆ Eficiência (🧬20)</button>
+                    <button class="bp-btn small" id="upgradeResist">⬆ Resistência (🔩15)</button>
+                    <button class="bp-btn small" id="upgradeYield">⬆ Produção (⚙️12)</button>
+                </div>
+                <div class="bp-row" style="margin-top:6px;">
+                    <span class="label" style="font-size:11px;color:#6a8a7a;">Criar nova variante:</span>
+                    <button class="bp-btn small" id="createPlant">🌱 Criar (🧬10 + 🔩5)</button>
+                </div>
+            </div>
+
+            <div class="bp-section">
+                <div class="title">🔬 Pesquisa</div>
+                <div id="researchList">
+                    <div class="bp-research-item"><span class="name">🔭 Scanner de Recursos</span><span class="cost">⚙️8</span><button class="bp-btn small" data-research="scanner">Pesquisar</button></div>
+                    <div class="bp-research-item"><span class="name">🛡️ Armadura Leve</span><span class="cost">🔩10</span><button class="bp-btn small" data-research="armor">Pesquisar</button></div>
+                    <div class="bp-research-item"><span class="name">🌿 Fotossíntese Avançada</span><span class="cost">🧬15 + ⚙️10</span><button class="bp-btn small" data-research="photosynthesis">Pesquisar</button></div>
+                    <div class="bp-research-item"><span class="name">⚡ Reator de Plasma</span><span class="cost">🔩20 + ⚙️15</span><button class="bp-btn small" data-research="plasma">Pesquisar</button></div>
+                </div>
+            </div>
+
+            <div class="bp-section">
+                <div class="title">🌱 Variantes de Plantas</div>
+                <div id="plantList">
+                    <div style="color:#6a8a7a;font-size:11px;padding:4px 0;">Nenhuma planta criada ainda.</div>
+                </div>
+            </div>
+
+            <div class="bp-section" style="border-bottom:none;padding-bottom:0;">
+                <div class="bp-row">
+                    <button class="bp-btn" id="saveGameBtn" style="background:#1a2a1a;">💾 Salvar</button>
+                    <button class="bp-btn" id="loadGameBtn" style="background:#1a1a2a;">📂 Carregar</button>
+                    <button class="bp-btn" id="resetGameBtn" style="background:#2a1a1a;border-color:#4a2a2a;">🔄 Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification -->
+        <div id="notification"><div id="notifText">Bem-vindo à Ecosfera 2200</div><div class="sub" id="notifSub">Explore, colete, sobreviva.</div></div>
+
+        <!-- Game Over -->
+        <div id="game-over">
+            <h1>💀 COLAPSO</h1>
+            <div class="sub">O bunker entrou em colapso. A humanidade se foi.</div>
+            <button class="restart-btn" id="restartBtn">🔄 Reiniciar Jornada</button>
+        </div>
+
+        <!-- Win -->
+        <div id="win-overlay">
+            <h1>🌱 PLANETA RESTAURADO</h1>
+            <div class="sub">A fotossíntese artificial reverteu o colapso. A Terra respira novamente.</div>
+            <button class="restart-btn" id="winRestartBtn">🔄 Recomeçar</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  ECOSFERA 2200  –  JOGO COMPLETO
+        //  Modo: Dia (humano na superfície) / Noite (gestão do bunker)
+        // ============================================================
+
+        // ===== CONSTANTES =====
+        const WORLD_W = 2800;
+        const WORLD_H = 2200;
+        const PLAYER_RADIUS = 14;
+        const MUTANT_RADIUS = 16;
+        const RESOURCE_RADIUS = 10;
+        const DAY_DURATION = 60; // segundos
+        const NIGHT_DURATION = 40; // segundos
+        const MAX_HEALTH = 100;
+        const MAX_OXYGEN = 100;
+        const MAX_ENERGY = 100;
+        const MAX_BUNKER_O2 = 100;
+        const MAX_BUNKER_ENERGY = 100;
+
+        // ===== DOM REFS =====
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const healthBar = document.getElementById('healthBar');
+        const healthText = document.getElementById('healthText');
+        const oxygenBar = document.getElementById('oxygenBar');
+        const oxygenText = document.getElementById('oxygenText');
+        const energyBar = document.getElementById('energyBar');
+        const energyText = document.getElementById('energyText');
+        const bunkerO2Bar = document.getElementById('bunkerO2Bar');
+        const bunkerO2Text = document.getElementById('bunkerO2Text');
+        const bunkerEnergyBar = document.getElementById('bunkerEnergyBar');
+        const bunkerEnergyText = document.getElementById('bunkerEnergyText');
+        const cycleLabel = document.getElementById('cycleLabel');
+        const cycleTimer = document.getElementById('cycleTimer');
+        const plantCount = document.getElementById('plantCount');
+        const invMetals = document.getElementById('invMetals');
+        const invBiomass = document.getElementById('invBiomass');
+        const invTech = document.getElementById('invTech');
+        const invSamples = document.getElementById('invSamples');
+        const notifDiv = document.getElementById('notification');
+        const notifText = document.getElementById('notifText');
+        const notifSub = document.getElementById('notifSub');
+        const gameOverDiv = document.getElementById('game-over');
+        const winDiv = document.getElementById('win-overlay');
+        const bunkerPanel = document.getElementById('bunker-panel');
+        const toggleBunkerBtn = document.getElementById('toggle-bunker');
+        const closeBunkerBtn = document.getElementById('closeBunker');
+
+        // ===== CANVAS RESIZE =====
+        function resizeCanvas() {
+            const wrapper = document.getElementById('game-wrapper');
+            const w = wrapper.clientWidth;
+            const h = wrapper.clientHeight;
+            canvas.width = w;
+            canvas.height = h;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // ============================================================
+        //  ESTADO DO JOGO
+        // ============================================================
+        const game = {
+            // Ciclo
+            isDay: true,
+            cycleTime: 0, // segundos no ciclo atual
+            cycleCount: 0,
+
+            // Jogador (superfície)
+            player: {
+                x: WORLD_W / 2,
+                y: WORLD_H - 180,
+                radius: PLAYER_RADIUS,
+                health: MAX_HEALTH,
+                oxygen: MAX_OXYGEN,
+                energy: MAX_ENERGY,
+                speed: 140,
+                attackCooldown: 0,
+                invincible: 0,
+                alive: true,
+            },
+
+            // Bunker
+            bunker: {
+                oxygen: 60,
+                energy: 40,
+                plants: [], // { id, efficiency, resistance, yield, name }
+                baseEfficiency: 1.0,
+                baseResistance: 1.0,
+                baseYield: 1.0,
+                plantCounter: 0,
+                oxygenProd: 0, // por segundo
+                energyCons: 0, // por segundo
+            },
+
+            // Recursos coletados
+            inventory: {
+                metals: 0,
+                biomass: 0,
+                tech: 0,
+                samples: 0,
+            },
+
+            // Pesquisas desbloqueadas
+            research: {
+                scanner: false,
+                armor: false,
+                photosynthesis: false,
+                plasma: false,
+            },
+
+            // Mundo
+            resources: [],
+            mutants: [],
+            particles: [],
+            notifications: [],
+
+            // Tempo
+            deltaTime: 0,
+            timeAccumulator: 0,
+            lastTimestamp: 0,
+
+            // Estado
+            gameOver: false,
+            gameWin: false,
+            paused: false,
+        };
+
+        // ============================================================
+        //  FUNÇÕES AUXILIARES
+        // ============================================================
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+
+        function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+        function lerp(a, b, t) { return a + (b - a) * t; }
+
+        function showNotification(text, sub = '', duration = 2500) {
+            notifText.textContent = text;
+            notifSub.textContent = sub;
+            notifDiv.classList.add('show');
+            clearTimeout(notifDiv._timeout);
+            notifDiv._timeout = setTimeout(() => notifDiv.classList.remove('show'), duration);
+        }
+
+        // ============================================================
+        //  INICIALIZAÇÃO DO MUNDO
+        // ============================================================
+        function initWorld() {
+            game.resources = [];
+            game.mutants = [];
+            game.particles = [];
+
+            // Recursos espalhados
+            for (let i = 0; i < 60; i++) {
+                const type = ['metal', 'biomass', 'tech', 'sample'][randInt(0, 3)];
+                const x = rand(60, WORLD_W - 60);
+                const y = rand(60, WORLD_H - 60);
+                // Evitar spawn perto do bunker
+                if (dist({ x, y }, { x: WORLD_W / 2, y: WORLD_H - 180 }) < 120) continue;
+                game.resources.push({
+                    x,
+                    y,
+                    type,
+                    radius: RESOURCE_RADIUS,
+                    collected: false,
+                    respawnTimer: 0,
+                    value: randInt(1, 3),
+                });
+            }
+
+            // Mutantes iniciais
+            for (let i = 0; i < 8; i++) {
+                spawnMutant();
+            }
+        }
+
+        function spawnMutant() {
+            const x = rand(80, WORLD_W - 80);
+            const y = rand(80, WORLD_H - 200);
+            if (dist({ x, y }, { x: WORLD_W / 2, y: WORLD_H - 180 }) < 150) return;
+            const types = ['crawler', 'spitter', 'tank'];
+            const type = types[randInt(0, 2)];
+            const speed = type === 'crawler' ? 50 : type === 'spitter' ? 35 : 25;
+            const hp = type === 'crawler' ? 20 : type === 'spitter' ? 15 : 40;
+            const damage = type === 'crawler' ? 6 : type === 'spitter' ? 10 : 12;
+            const radius = type === 'crawler' ? 14 : type === 'spitter' ? 16 : 22;
+            game.mutants.push({
+                x,
+                y,
+                radius,
+                type,
+                hp,
+                maxHp: hp,
+                speed: speed + rand(-5, 5),
+                damage,
+                state: 'patrol',
+                targetX: rand(80, WORLD_W - 80),
+                targetY: rand(80, WORLD_H - 200),
+                timer: 0,
+                attackCooldown: 0,
+                mutationLevel: 1 + Math.floor(game.cycleCount / 3),
+            });
+        }
+
+        // ============================================================
+        //  SISTEMA DE PLANTAS
+        // ============================================================
+        function createPlantVariant(eff, resist, yieldVal) {
+            const names = ['Verdant', 'Aether', 'Nova', 'Terra', 'Lumina', 'Vita', 'Solara', 'Umbra'];
+            const name = names[game.bunker.plantCounter % names.length] + '#' + (game.bunker.plantCounter + 1);
+            game.bunker.plantCounter++;
+            const plant = {
+                id: game.bunker.plantCounter,
+                name: name,
+                efficiency: eff || game.bunker.baseEfficiency,
+                resistance: resist || game.bunker.baseResistance,
+                yield: yieldVal || game.bunker.baseYield,
+                active: true,
+            };
+            game.bunker.plants.push(plant);
+            updateBunkerStats();
+            showNotification('🌱 Nova planta criada: ' + name, 'Eficiência ' + plant.efficiency.toFixed(1) + '×');
+            return plant;
+        }
+
+        function updateBunkerStats() {
+            const plants = game.bunker.plants.filter(p => p.active);
+            let prod = 0,
+                cons = 0;
+            for (const p of plants) {
+                prod += p.efficiency * p.yield * 0.12;
+                cons += p.resistance * 0.04;
+            }
+            // Pesquisas aumentam produção
+            if (game.research.photosynthesis) prod *= 1.4;
+            if (game.research.plasma) cons *= 0.7;
+            game.bunker.oxygenProd = prod;
+            game.bunker.energyCons = cons;
+            // Atualizar UI
+            document.getElementById('bpProdO2').textContent = prod.toFixed(2);
+            document.getElementById('bpConsEnergy').textContent = cons.toFixed(2);
+            document.getElementById('bpPlants').textContent = plants.length;
+            document.getElementById('bpBaseEff').textContent = (game.bunker.baseEfficiency * (game.research.photosynthesis ? 1.3 :
+                1.0)).toFixed(1) + '×';
+            plantCount.textContent = plants.length;
+        }
+
+        // ============================================================
+        //  SISTEMA DE MUTAÇÕES (mundo dinâmico)
+        // ============================================================
+        function applyMutations() {
+            // A cada ciclo, alguns mutantes evoluem
+            if (game.cycleCount % 2 === 0) return;
+            for (const m of game.mutants) {
+                if (Math.random() < 0.15) {
+                    m.mutationLevel += 0.5 + Math.random() * 0.5;
+                    m.speed *= 1.05;
+                    m.damage *= 1.04;
+                    m.maxHp *= 1.06;
+                    m.hp = m.maxHp;
+                    // Efeito visual: partículas
+                    for (let i = 0; i < 8; i++) {
+                        game.particles.push({
+                            x: m.x,
+                            y: m.y,
+                            vx: rand(-40, 40),
+                            vy: rand(-40, 40),
+                            life: 0.8 + Math.random() * 0.6,
+                            maxLife: 1.4,
+                            color: `hsl(${randInt(240,300)},70%,50%)`,
+                            size: rand(3, 7),
+                        });
+                    }
+                }
+            }
+            // Novos mutantes podem surgir
+            if (game.mutants.length < 12 + game.cycleCount) {
+                if (Math.random() < 0.2) spawnMutant();
+            }
+            // Recursos respawn
+            for (const r of game.resources) {
+                if (r.collected) {
+                    r.respawnTimer -= 1;
+                    if (r.respawnTimer <= 0) {
+                        r.collected = false;
+                        r.respawnTimer = 0;
+                        r.x = rand(60, WORLD_W - 60);
+                        r.y = rand(60, WORLD_H - 60);
+                    }
+                }
+            }
+        }
+
+        // ============================================================
+        //  LOOP PRINCIPAL
+        // ============================================================
+        function update(dt) {
+            if (game.gameOver || game.gameWin || game.paused) return;
+
+            const p = game.player;
+            const isDay = game.isDay;
+
+            // ===== ATUALIZAR CICLO =====
+            game.cycleTime += dt;
+            if (game.cycleTime >= (isDay ? DAY_DURATION : NIGHT_DURATION)) {
+                game.cycleTime = 0;
+                game.isDay = !isDay;
+                game.cycleCount++;
+                if (!game.isDay) {
+                    // Transição para noite: jogador volta ao bunker
+                    showNotification('🌑 NOITE — Modo Bunker', 'Gerencie recursos e evolua as plantas.', 3000);
+                    // Restaurar oxigênio do jogador
+                    p.oxygen = MAX_OXYGEN;
+                    p.health = clamp(p.health + 10, 0, MAX_HEALTH);
+                    // Aplicar mutações
+                    applyMutations();
+                    // Atualizar bunker
+                    updateBunkerStats();
+                    // Abrir painel automaticamente?
+                    // Não, deixamos o usuário abrir.
+                } else {
+                    showNotification('☀️ DIA — Exploração', 'Colete recursos na superfície.', 2500);
+                    // Restaurar energia do jogador
+                    p.energy = MAX_ENERGY;
+                    // Gerar novos recursos se necessário
+                    if (game.resources.filter(r => !r.collected).length < 30) {
+                        for (let i = 0; i < 8; i++) {
+                            const type = ['metal', 'biomass', 'tech', 'sample'][randInt(0, 3)];
+                            const x = rand(60, WORLD_W - 60);
+                            const y = rand(60, WORLD_H - 60);
+                            if (dist({ x, y }, { x: WORLD_W / 2, y: WORLD_H - 180 }) < 120) continue;
+                            game.resources.push({ x, y, type, radius: RESOURCE_RADIUS, collected: false, respawnTimer: 0,
+                                value: randInt(1, 3) });
+                        }
+                    }
+                }
+                updateCycleUI();
+            }
+
+            // ===== TIMER UI =====
+            const total = game.isDay ? DAY_DURATION : NIGHT_DURATION;
+            const remaining = Math.max(0, total - game.cycleTime);
+            const mins = Math.floor(remaining / 60);
+            const secs = Math.floor(remaining % 60);
+            cycleTimer.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+            cycleLabel.textContent = game.isDay ? '☀️ DIA' : '🌙 NOITE';
+            cycleLabel.className = 'cycle-indicator ' + (game.isDay ? 'cycle-day' : 'cycle-night');
+
+            // ===== JOGADOR (apenas no dia) =====
+            if (game.isDay && p.alive) {
+                // Oxigênio diminui na superfície
+                p.oxygen -= dt * 1.8;
+                // Energia diminui lentamente
+                p.energy -= dt * 0.5;
+                if (p.oxygen <= 0) { p.oxygen = 0;
+                    p.health -= dt * 12; }
+                if (p.energy <= 0) { p.energy = 0;
+                    p.health -= dt * 4; }
+                if (p.health <= 0) {
+                    p.health = 0;
+                    p.alive = false;
+                    triggerGameOver('O jogador sucumbiu na superfície.');
+                    return;
+                }
+
+                // Invulnerabilidade
+                if (p.invincible > 0) p.invincible -= dt;
+
+                // Ataque cooldown
+                if (p.attackCooldown > 0) p.attackCooldown -= dt;
+
+                // Movimento (WASD/Setas)
+                let dx = 0,
+                    dy = 0;
+                if (keys['w'] || keys['arrowup']) dy = -1;
+                if (keys['s'] || keys['arrowdown']) dy = 1;
+                if (keys['a'] || keys['arrowleft']) dx = -1;
+                if (keys['d'] || keys['arrowright']) dx = 1;
+                if (dx !== 0 && dy !== 0) { dx *= 0.707;
+                    dy *= 0.707; }
+                const speed = p.speed * (game.research.armor ? 1.1 : 1.0);
+                p.x += dx * speed * dt;
+                p.y += dy * speed * dt;
+                p.x = clamp(p.x, p.radius, WORLD_W - p.radius);
+                p.y = clamp(p.y, p.radius, WORLD_H - p.radius);
+
+                // Coleta de recursos
+                for (const r of game.resources) {
+                    if (r.collected) continue;
+                    if (dist(p, r) < p.radius + r.radius) {
+                        r.collected = true;
+                        r.respawnTimer = 15 + rand(0, 20);
+                        const val = r.value || 1;
+                        const inv = game.inventory;
+                        if (r.type === 'metal') inv.metals += val;
+                        else if (r.type === 'biomass') inv.biomass += val;
+                        else if (r.type === 'tech') inv.tech += val;
+                        else if (r.type === 'sample') inv.samples += val;
+                        updateInventoryUI();
+                        // Partícula
+                        for (let i = 0; i < 6; i++) {
+                            game.particles.push({
+                                x: r.x,
+                                y: r.y,
+                                vx: rand(-50, 50),
+                                vy: rand(-50, 50),
+                                life: 0.5 + Math.random() * 0.5,
+                                maxLife: 1.0,
+                                color: r.type === 'metal' ? '#b0b8c0' : r.type === 'biomass' ? '#60c080' : r.type ===
+                                    'tech' ? '#c0a060' : '#60a0d0',
+                                size: rand(3, 6),
+                            });
+                        }
+                    }
+                }
+
+                // Ataque (espaço)
+                if (keys[' '] && p.attackCooldown <= 0) {
+                    p.attackCooldown = 0.5;
+                    // Atacar mutantes próximos
+                    for (const m of game.mutants) {
+                        if (dist(p, m) < p.radius + m.radius + 30) {
+                            const dmg = 8 + (game.research.armor ? 4 : 0);
+                            m.hp -= dmg;
+                            // Partículas de impacto
+                            for (let i = 0; i < 10; i++) {
+                                game.particles.push({
+                                    x: m.x,
+                                    y: m.y,
+                                    vx: rand(-80, 80),
+                                    vy: rand(-80, 80),
+                                    life: 0.4 + Math.random() * 0.4,
+                                    maxLife: 0.8,
+                                    color: '#ff6040',
+                                    size: rand(2, 5),
+                                });
+                            }
+                            if (m.hp <= 0) {
+                                // Mutante morto
+                                const idx = game.mutants.indexOf(m);
+                                if (idx > -1) game.mutants.splice(idx, 1);
+                                // Drop de recursos
+                                const drop = randInt(1, 2);
+                                if (Math.random() < 0.4) game.inventory.biomass += drop;
+                                if (Math.random() < 0.3) game.inventory.samples += drop;
+                                updateInventoryUI();
+                                showNotification('💀 Mutante eliminado!', 'Recursos recuperados.', 1200);
+                            }
+                        }
+                    }
+                }
+
+                // Mutantes perseguem
+                for (const m of game.mutants) {
+                    const d = dist(p, m);
+                    if (d < 300) {
+                        m.state = 'chase';
+                        m.targetX = p.x;
+                        m.targetY = p.y;
+                    } else if (m.state === 'chase') {
+                        m.state = 'patrol';
+                        m.targetX = rand(80, WORLD_W - 80);
+                        m.targetY = rand(80, WORLD_H - 200);
+                    }
+                    // Movimento
+                    if (m.state === 'chase') {
+                        const angle = Math.atan2(p.y - m.y, p.x - m.x);
+                        const spd = m.speed * (1 + m.mutationLevel * 0.04);
+                        m.x += Math.cos(angle) * spd * dt;
+                        m.y += Math.sin(angle) * spd * dt;
+                        // Ataque
+                        if (d < m.radius + p.radius + 6) {
+                            if (m.attackCooldown <= 0) {
+                                m.attackCooldown = 0.8;
+                                if (p.invincible <= 0) {
+                                    p.health -= m.damage * (1 + m.mutationLevel * 0.03);
+                                    p.invincible = 0.5;
+                                    if (p.health <= 0) {
+                                        p.health = 0;
+                                        p.alive = false;
+                                        triggerGameOver('Você foi morto por um mutante.');
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        // Patrol
+                        if (dist(m, { x: m.targetX, y: m.targetY }) < 20) {
+                            m.targetX = rand(80, WORLD_W - 80);
+                            m.targetY = rand(80, WORLD_H - 200);
+                        }
+                        const angle = Math.atan2(m.targetY - m.y, m.targetX - m.x);
+                        m.x += Math.cos(angle) * m.speed * 0.5 * dt;
+                        m.y += Math.sin(angle) * m.speed * 0.5 * dt;
+                    }
+                    m.x = clamp(m.x, m.radius, WORLD_W - m.radius);
+                    m.y = clamp(m.y, m.radius, WORLD_H - m.radius);
+                    if (m.attackCooldown > 0) m.attackCooldown -= dt;
+                }
+
+                // Atualizar UI do jogador
+                healthBar.style.width = (p.health / MAX_HEALTH * 100) + '%';
+                healthText.textContent = Math.floor(p.health);
+                oxygenBar.style.width = (p.oxygen / MAX_OXYGEN * 100) + '%';
+                oxygenText.textContent = Math.floor(p.oxygen);
+                energyBar.style.width = (p.energy / MAX_ENERGY * 100) + '%';
+                energyText.textContent = Math.floor(p.energy);
+            }
+
+            // ===== BUNKER (sempre, mas mais ativo na noite) =====
+            // Produção de O₂
+            const prod = game.bunker.oxygenProd;
+            const cons = game.bunker.energyCons;
+            if (game.bunker.oxygen < MAX_BUNKER_O2) {
+                game.bunker.oxygen = clamp(game.bunker.oxygen + prod * dt, 0, MAX_BUNKER_O2);
+            }
+            if (game.bunker.energy > 0) {
+                game.bunker.energy = clamp(game.bunker.energy - cons * dt, 0, MAX_BUNKER_ENERGY);
+            } else {
+                // Sem energia, produção cai
+                game.bunker.oxygen = clamp(game.bunker.oxygen - dt * 0.5, 0, MAX_BUNKER_O2);
+            }
+            // Se O₂ do bunker zerar → game over
+            if (game.bunker.oxygen <= 0) {
+                triggerGameOver('O bunker ficou sem oxigênio. A humanidade se foi.');
+                return;
+            }
+            // Vitória: restaurar planeta (O₂ > 95 e ciclo > 10)
+            if (game.bunker.oxygen > 95 && game.cycleCount > 10 && game.research.photosynthesis) {
+                triggerWin();
+                return;
+            }
+
+            // Atualizar UI do bunker
+            bunkerO2Bar.style.width = (game.bunker.oxygen / MAX_BUNKER_O2 * 100) + '%';
+            bunkerO2Text.textContent = Math.floor(game.bunker.oxygen);
+            bunkerEnergyBar.style.width = (game.bunker.energy / MAX_BUNKER_ENERGY * 100) + '%';
+            bunkerEnergyText.textContent = Math.floor(game.bunker.energy);
+
+            // Atualizar painel se aberto
+            if (bunkerPanel.classList.contains('open')) {
+                document.getElementById('bpO2').textContent = Math.floor(game.bunker.oxygen) + '%';
+                document.getElementById('bpEnergy').textContent = Math.floor(game.bunker.energy) + '%';
+                document.getElementById('bpPlants').textContent = game.bunker.plants.filter(p => p.active).length;
+                document.getElementById('bpProdO2').textContent = game.bunker.oxygenProd.toFixed(2);
+                document.getElementById('bpConsEnergy').textContent = game.bunker.energyCons.toFixed(2);
+                document.getElementById('bpBaseEff').textContent = (game.bunker.baseEfficiency * (game.research
+                    .photosynthesis ? 1.3 : 1.0)).toFixed(1) + '×';
+                // Plantas list
+                const pl = document.getElementById('plantList');
+                const active = game.bunker.plants.filter(p => p.active);
+                if (active.length === 0) {
+                    pl.innerHTML = '<div style="color:#6a8a7a;font-size:11px;padding:4px 0;">Nenhuma planta ativa.</div>';
+                } else {
+                    pl.innerHTML = active.map(p =>
+                        `<div class="bp-plant-item"><span class="name">🌱 ${p.name}</span><span class="stats">E${p.efficiency.toFixed(1)} R${p.resistance.toFixed(1)} Y${p.yield.toFixed(1)}</span></div>`
+                    ).join('');
+                }
+            }
+
+            // ===== PARTÍCULAS =====
+            for (let i = game.particles.length - 1; i >= 0; i--) {
+                const pt = game.particles[i];
+                pt.x += pt.vx * dt;
+                pt.y += pt.vy * dt;
+                pt.life -= dt;
+                if (pt.life <= 0) game.particles.splice(i, 1);
+            }
+        }
+
+        // ============================================================
+        //  RENDERIZAÇÃO
+        // ============================================================
+        function render() {
+            const W = canvas.width;
+            const H = canvas.height;
+            ctx.clearRect(0, 0, W, H);
+
+            // Escala para o mundo caber na tela
+            const scaleX = W / WORLD_W;
+            const scaleY = H / WORLD_H;
+            const scale = Math.min(scaleX, scaleY) * 0.92;
+            const offsetX = (W - WORLD_W * scale) / 2;
+            const offsetY = (H - WORLD_H * scale) / 2;
+
+            function toScreen(wx, wy) {
+                return [offsetX + wx * scale, offsetY + wy * scale];
+            }
+
+            // ===== FUNDO =====
+            // Gradiente baseado no ciclo
+            const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.7);
+            if (game.isDay) {
+                bgGrad.addColorStop(0, '#1a2a2a');
+                bgGrad.addColorStop(0.6, '#0e1a18');
+                bgGrad.addColorStop(1, '#060a0a');
+            } else {
+                bgGrad.addColorStop(0, '#0a0e1a');
+                bgGrad.addColorStop(0.6, '#060810');
+                bgGrad.addColorStop(1, '#020408');
+            }
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, W, H);
+
+            // ===== GRID / ZONAS =====
+            ctx.save();
+            ctx.globalAlpha = 0.08;
+            ctx.strokeStyle = '#2a4a3a';
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= WORLD_W; x += 200) {
+                const [sx] = toScreen(x, 0);
+                ctx.beginPath();
+                ctx.moveTo(sx, offsetY);
+                ctx.lineTo(sx, offsetY + WORLD_H * scale);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= WORLD_H; y += 200) {
+                const [, sy] = toScreen(0, y);
+                ctx.beginPath();
+                ctx.moveTo(offsetX, sy);
+                ctx.lineTo(offsetX + WORLD_W * scale, sy);
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // ===== ZONAS DE PERIGO (manchas) =====
+            for (let i = 0; i < 12; i++) {
+                const cx = (i * 137 + 50) % WORLD_W;
+                const cy = (i * 251 + 30) % WORLD_H;
+                const r = 80 + (i * 23) % 120;
+                const grad = ctx.createRadialGradient(
+                    ...toScreen(cx, cy), 0,
+                    ...toScreen(cx, cy), r * scale
+                );
+                const alpha = 0.04 + (Math.sin(game.cycleTime * 0.3 + i) * 0.02 + 0.02);
+                grad.addColorStop(0, `rgba(180,60,40,${alpha})`);
+                grad.addColorStop(1, `rgba(180,60,40,0)`);
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(...toScreen(cx, cy), r * scale, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // ===== RECURSOS =====
+            for (const r of game.resources) {
+                if (r.collected) continue;
+                const [sx, sy] = toScreen(r.x, r.y);
+                const sr = r.radius * scale;
+                const colors = { metal: '#b0b8c0', biomass: '#60c080', tech: '#c0a060', sample: '#60a0d0' };
+                const glow = { metal: 'rgba(180,190,200,0.2)', biomass: 'rgba(80,200,120,0.2)',
+                    tech: 'rgba(200,170,80,0.2)', sample: 'rgba(80,160,210,0.2)' };
+                // Brilho
+                ctx.shadowColor = colors[r.type] || '#ffffff';
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = colors[r.type] || '#888';
+                ctx.beginPath();
+                ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // Símbolo
+                ctx.fillStyle = '#00000044';
+                ctx.font = `${sr * 0.9}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const sym = { metal: '⬡', biomass: '✦', tech: '⚙', sample: '◈' };
+                ctx.fillText(sym[r.type] || '•', sx, sy + 1);
+                ctx.fillStyle = '#ffffffcc';
+                ctx.fillText(sym[r.type] || '•', sx, sy);
+            }
+
+            // ===== MUTANTES =====
+            for (const m of game.mutants) {
+                const [sx, sy] = toScreen(m.x, m.y);
+                const sr = m.radius * scale;
+                const hue = 340 + m.mutationLevel * 6;
+                const color = `hsl(${hue},70%,${45 - m.mutationLevel * 1.5}%)`;
+                // Sombra
+                ctx.shadowColor = `hsla(${hue},80%,40%,0.4)`;
+                ctx.shadowBlur = 20;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // Olhos
+                ctx.fillStyle = '#ff6040';
+                ctx.beginPath();
+                ctx.arc(sx - sr * 0.3, sy - sr * 0.2, sr * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(sx + sr * 0.3, sy - sr * 0.2, sr * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(sx - sr * 0.35, sy - sr * 0.2, sr * 0.08, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(sx + sr * 0.25, sy - sr * 0.2, sr * 0.08, 0, Math.PI * 2);
+                ctx.fill();
+                // Barrinha de vida
+                const hpPct = m.hp / m.maxHp;
+                const barW = sr * 1.2;
+                const barH = 4 * scale;
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fillRect(sx - barW / 2, sy - sr - 8 * scale, barW, barH);
+                ctx.fillStyle = hpPct > 0.5 ? '#60c080' : '#e06040';
+                ctx.fillRect(sx - barW / 2, sy - sr - 8 * scale, barW * hpPct, barH);
+            }
+
+            // ===== JOGADOR =====
+            if (game.player.alive && game.isDay) {
+                const p = game.player;
+                const [sx, sy] = toScreen(p.x, p.y);
+                const sr = p.radius * scale;
+                // Brilho
+                ctx.shadowColor = 'rgba(60,200,200,0.3)';
+                ctx.shadowBlur = 25;
+                // Capacete
+                ctx.fillStyle = '#2a3a3a';
+                ctx.beginPath();
+                ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#3a5a5a';
+                ctx.beginPath();
+                ctx.arc(sx, sy - sr * 0.2, sr * 0.7, 0, Math.PI * 2);
+                ctx.fill();
+                // Visor
+                ctx.fillStyle = '#60d0d0';
+                ctx.shadowBlur = 10;
+                ctx.beginPath();
+                ctx.arc(sx, sy - sr * 0.25, sr * 0.35, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#4ab0b0';
+                ctx.beginPath();
+                ctx.arc(sx - sr * 0.1, sy - sr * 0.3, sr * 0.12, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#3a9a9a';
+                ctx.beginPath();
+                ctx.arc(sx + sr * 0.08, sy - sr * 0.3, sr * 0.08, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                // Corpo
+                ctx.fillStyle = '#2a3a3a';
+                ctx.fillRect(sx - sr * 0.4, sy + sr * 0.3, sr * 0.8, sr * 0.6);
+                // Pernas
+                ctx.fillStyle = '#1a2a2a';
+                ctx.fillRect(sx - sr * 0.35, sy + sr * 0.8, sr * 0.2, sr * 0.4);
+                ctx.fillRect(sx + sr * 0.15, sy + sr * 0.8, sr * 0.2, sr * 0.4);
+                // Mochila
+                ctx.fillStyle = '#1a2a2a';
+                ctx.fillRect(sx + sr * 0.5, sy - sr * 0.2, sr * 0.3, sr * 0.5);
+                // Linha de oxigênio
+                ctx.strokeStyle = '#60c0c0';
+                ctx.lineWidth = 2 * scale;
+                ctx.beginPath();
+                ctx.moveTo(sx + sr * 0.7, sy - sr * 0.1);
+                ctx.lineTo(sx + sr * 0.9, sy - sr * 0.4);
+                ctx.stroke();
+
+                // Se invencível, brilho
+                if (p.invincible > 0) {
+                    ctx.strokeStyle = `rgba(255,200,100,${0.3 + Math.sin(p.invincible * 20) * 0.2})`;
+                    ctx.lineWidth = 3 * scale;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, sr * 1.3, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+                ctx.shadowBlur = 0;
+            }
+
+            // ===== PARTÍCULAS =====
+            for (const pt of game.particles) {
+                const [sx, sy] = toScreen(pt.x, pt.y);
+                const alpha = pt.life / pt.maxLife;
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = pt.color || '#ffffff';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = pt.color || '#ffffff';
+                ctx.beginPath();
+                ctx.arc(sx, sy, pt.size * scale * alpha, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+            ctx.globalAlpha = 1;
+
+            // ===== BUNKER (marcador) =====
+            const [bx, by] = toScreen(WORLD_W / 2, WORLD_H - 180);
+            ctx.fillStyle = 'rgba(60,120,100,0.15)';
+            ctx.beginPath();
+            ctx.arc(bx, by, 40 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(60,180,140,0.3)';
+            ctx.font = `${20 * scale}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🏛️', bx, by);
+            ctx.fillStyle = '#4a8a7a';
+            ctx.font = `${10 * scale}px sans-serif`;
+            ctx.fillText('BUNKER', bx, by + 28 * scale);
+
+            // ===== DICA (DIA) =====
+            if (game.isDay && game.player.alive) {
+                ctx.fillStyle = 'rgba(200,220,200,0.15)';
+                ctx.font = `${12 * scale}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('WASD mover | ESPAÇO atacar | Colete recursos', W / 2, H - 8);
+            }
+        }
+
+        // ============================================================
+        //  CICLO DE RENDERIZAÇÃO
+        // ============================================================
+        function gameLoop(timestamp) {
+            const dt = Math.min((timestamp - (game.lastTimestamp || timestamp)) / 1000, 0.05);
+            game.lastTimestamp = timestamp;
+
+            // Acumular tempo para update fixo (opcional, mas usamos dt diretamente)
+            update(dt);
+            render();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ============================================================
+        //  ENTRADA TECLADO
+        // ============================================================
+        const keys = {};
+        document.addEventListener('keydown', e => {
+            keys[e.key.toLowerCase()] = true;
+            if (e.key === ' ') e.preventDefault();
+            if (e.key === 'Escape' && bunkerPanel.classList.contains('open')) {
+                toggleBunkerPanel();
+            }
+            if (e.key === 'b' || e.key === 'B') {
+                toggleBunkerPanel();
+            }
+        });
+        document.addEventListener('keyup', e => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // ============================================================
+        //  BUNKER PANEL
+        // ============================================================
+        function toggleBunkerPanel() {
+            const isOpen = bunkerPanel.classList.contains('open');
+            if (isOpen) {
+                bunkerPanel.classList.remove('open');
+            } else {
+                bunkerPanel.classList.add('open');
+                updateBunkerStats();
+                // Atualizar UI do painel
+                document.getElementById('bpO2').textContent = Math.floor(game.bunker.oxygen) + '%';
+                document.getElementById('bpEnergy').textContent = Math.floor(game.bunker.energy) + '%';
+                document.getElementById('bpPlants').textContent = game.bunker.plants.filter(p => p.active).length;
+                document.getElementById('bpProdO2').textContent = game.bunker.oxygenProd.toFixed(2);
+                document.getElementById('bpConsEnergy').textContent = game.bunker.energyCons.toFixed(2);
+                document.getElementById('bpBaseEff').textContent = (game.bunker.baseEfficiency * (game.research
+                    .photosynthesis ? 1.3 : 1.0)).toFixed(1) + '×';
+                // Plantas
+                const pl = document.getElementById('plantList');
+                const active = game.bunker.plants.filter(p => p.active);
+                if (active.length === 0) {
+                    pl.innerHTML = '<div style="color:#6a8a7a;font-size:11px;padding:4px 0;">Nenhuma planta ativa.</div>';
+                } else {
+                    pl.innerHTML = active.map(p =>
+                        `<div class="bp-plant-item"><span class="name">🌱 ${p.name}</span><span class="stats">E${p.efficiency.toFixed(1)} R${p.resistance.toFixed(1)} Y${p.yield.toFixed(1)}</span></div>`
+                    ).join('');
+                }
+                // Pesquisas
+                document.querySelectorAll('[data-research]').forEach(btn => {
+                    const key = btn.dataset.research;
+                    if (game.research[key]) {
+                        btn.disabled = true;
+                        btn.textContent = '✓';
+                    } else {
+                        btn.disabled = false;
+                        btn.textContent = 'Pesquisar';
+                    }
+                });
+            }
+        }
+
+        toggleBunkerBtn.addEventListener('click', toggleBunkerPanel);
+        closeBunkerBtn.addEventListener('click', toggleBunkerPanel);
+
+        // ===== BUNKER ACTIONS =====
+        // Upgrade Eficiência
+        document.getElementById('upgradeEff').addEventListener('click', () => {
+            if (game.inventory.biomass >= 20) {
+                game.inventory.biomass -= 20;
+                game.bunker.baseEfficiency += 0.2;
+                updateBunkerStats();
+                updateInventoryUI();
+                showNotification('⬆ Eficiência aumentada!', `Agora ${game.bunker.baseEfficiency.toFixed(1)}×`, 1500);
+            } else {
+                showNotification('🧬 Biomassa insuficiente!', 'Precisa de 20.', 1200);
+            }
+        });
+        // Upgrade Resistência
+        document.getElementById('upgradeResist').addEventListener('click', () => {
+            if (game.inventory.metals >= 15) {
+                game.inventory.metals -= 15;
+                game.bunker.baseResistance += 0.15;
+                updateBunkerStats();
+                updateInventoryUI();
+                showNotification('⬆ Resistência aumentada!', `Agora ${game.bunker.baseResistance.toFixed(1)}×`, 1500);
+            } else {
+                showNotification('🔩 Metais insuficientes!', 'Precisa de 15.', 1200);
+            }
+        });
+        // Upgrade Produção
+        document.getElementById('upgradeYield').addEventListener('click', () => {
+            if (game.inventory.tech >= 12) {
+                game.inventory.tech -= 12;
+                game.bunker.baseYield += 0.15;
+                updateBunkerStats();
+                updateInventoryUI();
+                showNotification('⬆ Produção aumentada!', `Agora ${game.bunker.baseYield.toFixed(1)}×`, 1500);
+            } else {
+                showNotification('⚙️ Tecnologia insuficiente!', 'Precisa de 12.', 1200);
+            }
+        });
+        // Criar planta
+        document.getElementById('createPlant').addEventListener('click', () => {
+            if (game.inventory.biomass >= 10 && game.inventory.metals >= 5) {
+                game.inventory.biomass -= 10;
+                game.inventory.metals -= 5;
+                const eff = game.bunker.baseEfficiency + rand(-0.1, 0.25);
+                const resist = game.bunker.baseResistance + rand(-0.1, 0.2);
+                const yieldVal = game.bunker.baseYield + rand(-0.1, 0.2);
+                createPlantVariant(
+                    Math.max(0.3, eff),
+                    Math.max(0.3, resist),
+                    Math.max(0.3, yieldVal)
+                );
+                updateInventoryUI();
+                updateBunkerStats();
+            } else {
+                showNotification('🧬🔩 Recursos insuficientes!', 'Precisa de 10 Biomassa + 5 Metais.', 1500);
+            }
+        });
+
+        // ===== PESQUISAS =====
+        document.querySelectorAll('[data-research]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const key = btn.dataset.research;
+                if (game.research[key]) return;
+                const costs = {
+                    scanner: { tech: 8 },
+                    armor: { metals: 10 },
+                    photosynthesis: { biomass: 15, tech: 10 },
+                    plasma: { metals: 20, tech: 15 },
+                };
+                const cost = costs[key];
+                let has = true;
+                for (const [k, v] of Object.entries(cost)) {
+                    if (game.inventory[k] < v) has = false;
+                }
+                if (!has) {
+                    showNotification('🔬 Recursos insuficientes!', 'Verifique os custos.', 1200);
+                    return;
+                }
+                for (const [k, v] of Object.entries(cost)) {
+                    game.inventory[k] -= v;
+                }
+                game.research[key] = true;
+                updateInventoryUI();
+                showNotification('🔬 Pesquisa concluída!', key.toUpperCase(), 1800);
+                btn.disabled = true;
+                btn.textContent = '✓';
+                updateBunkerStats();
+                // Efeito especial
+                if (key === 'photosynthesis') {
+                    showNotification('🌿 Fotossíntese Avançada ativada!', 'Produção de O₂ +40%', 2000);
+                }
+                if (key === 'plasma') {
+                    showNotification('⚡ Reator de Plasma ativo!', 'Consumo de energia -30%', 2000);
+                }
+                if (key === 'armor') {
+                    showNotification('🛡️ Armadura Leve equipada!', 'Velocidade +10%, ataque +4', 1500);
+                }
+                if (key === 'scanner') {
+                    showNotification('🔭 Scanner ativado!', 'Recursos mais fáceis de ver', 1500);
+                }
+            });
+        });
+
+        // ===== SALVAR / CARREGAR =====
+        document.getElementById('saveGameBtn').addEventListener('click', () => {
+            try {
+                const data = {
+                    cycleCount: game.cycleCount,
+                    cycleTime: game.cycleTime,
+                    isDay: game.isDay,
+                    player: { x: game.player.x, y: game.player.y, health: game.player.health, oxygen: game.player
+                            .oxygen, energy: game.player.energy, alive: game.player.alive },
+                    bunker: { oxygen: game.bunker.oxygen, energy: game.bunker.energy, baseEfficiency: game.bunker
+                            .baseEfficiency, baseResistance: game.bunker.baseResistance, baseYield: game.bunker
+                            .baseYield, plantCounter: game.bunker.plantCounter, plants: game.bunker.plants },
+                    inventory: game.inventory,
+                    research: game.research,
+                    mutants: game.mutants.map(m => ({ x: m.x, y: m.y, type: m.type, hp: m.hp, maxHp: m.maxHp,
+                            speed: m.speed, damage: m.damage, mutationLevel: m.mutationLevel, state: m.state,
+                            targetX: m.targetX, targetY: m.targetY })),
+                    resources: game.resources.map(r => ({ x: r.x, y: r.y, type: r.type, collected: r.collected,
+                            respawnTimer: r.respawnTimer, value: r.value })),
+                };
+                localStorage.setItem('ecosfera2200_save', JSON.stringify(data));
+                showNotification('💾 Jogo salvo!', 'Dados armazenados localmente.', 1500);
+            } catch (e) {
+                showNotification('❌ Erro ao salvar!', e.message, 1500);
+            }
+        });
+
+        document.getElementById('loadGameBtn').addEventListener('click', () => {
+            try {
+                const raw = localStorage.getItem('ecosfera2200_save');
+                if (!raw) { showNotification('📂 Nenhum save encontrado.', '', 1200); return; }
+                const data = JSON.parse(raw);
+                // Restaurar
+                game.cycleCount = data.cycleCount || 0;
+                game.cycleTime = data.cycleTime || 0;
+                game.isDay = data.isDay !== undefined ? data.isDay : true;
+                game.player.x = data.player.x || WORLD_W / 2;
+                game.player.y = data.player.y || WORLD_H - 180;
+                game.player.health = data.player.health || MAX_HEALTH;
+                game.player.oxygen = data.player.oxygen || MAX_OXYGEN;
+                game.player.energy = data.player.energy || MAX_ENERGY;
+                game.player.alive = data.player.alive !== undefined ? data.player.alive : true;
+                game.bunker.oxygen = data.bunker.oxygen || 60;
+                game.bunker.energy = data.bunker.energy || 40;
+                game.bunker.baseEfficiency = data.bunker.baseEfficiency || 1.0;
+                game.bunker.baseResistance = data.bunker.baseResistance || 1.0;
+                game.bunker.baseYield = data.bunker.baseYield || 1.0;
+                game.bunker.plantCounter = data.bunker.plantCounter || 0;
+                game.bunker.plants = data.bunker.plants || [];
+                game.inventory = data.inventory || { metals: 0, biomass: 0, tech: 0, samples: 0 };
+                game.research = data.research || { scanner: false, armor: false, photosynthesis: false, plasma: false };
+                game.mutants = data.mutants || [];
+                game.resources = data.resources || [];
+                // Reconstruir mutantes
+                for (const m of game.mutants) {
+                    m.radius = m.type === 'crawler' ? 14 : m.type === 'spitter' ? 16 : 22;
+                    m.attackCooldown = 0;
+                }
+                // Reconstruir recursos
+                for (const r of game.resources) {
+                    r.radius = RESOURCE_RADIUS;
+                }
+                // Atualizar
+                game.gameOver = false;
+                game.gameWin = false;
+                gameOverDiv.classList.remove('show');
+                winDiv.classList.remove('show');
+                updateInventoryUI();
+                updateBunkerStats();
+                updateCycleUI();
+                showNotification('📂 Save carregado!', 'Bem-vindo de volta.', 1500);
+            } catch (e) {
+                showNotification('❌ Erro ao carregar!', e.message, 1500);
+            }
+        });
+
+        document.getElementById('resetGameBtn').addEventListener('click', () => {
+            if (confirm('🔄 Tem certeza que deseja resetar o progresso?')) {
+                resetGame();
+                showNotification('🔄 Jogo resetado.', 'Nova jornada começa.', 1500);
+            }
+        });
+
+        // ============================================================
+        //  RESET / GAME OVER / WIN
+        // ============================================================
+        function resetGame() {
+            game.cycleCount = 0;
+            game.cycleTime = 0;
+            game.isDay = true;
+            game.player.x = WORLD_W / 2;
+            game.player.y = WORLD_H - 180;
+            game.player.health = MAX_HEALTH;
+            game.player.oxygen = MAX_OXYGEN;
+            game.player.energy = MAX_ENERGY;
+            game.player.alive = true;
+            game.player.invincible = 0;
+            game.bunker.oxygen = 60;
+            game.bunker.energy = 40;
+            game.bunker.baseEfficiency = 1.0;
+            game.bunker.baseResistance = 1.0;
+            game.bunker.baseYield = 1.0;
+            game.bunker.plantCounter = 0;
+            game.bunker.plants = [];
+            game.bunker.oxygenProd = 0;
+            game.bunker.energyCons = 0;
+            game.inventory = { metals: 0, biomass: 0, tech: 0, samples: 0 };
+            game.research = { scanner: false, armor: false, photosynthesis: false, plasma: false };
+            game.mutants = [];
+            game.resources = [];
+            game.particles = [];
+            game.gameOver = false;
+            game.gameWin = false;
+            gameOverDiv.classList.remove('show');
+            winDiv.classList.remove('show');
+            bunkerPanel.classList.remove('open');
+            initWorld();
+            updateInventoryUI();
+            updateBunkerStats();
+            updateCycleUI();
+            showNotification('🌱 Nova jornada iniciada.', 'O futuro da humanidade está em suas mãos.', 2500);
+        }
+
+        function triggerGameOver(reason) {
+            if (game.gameOver) return;
+            game.gameOver = true;
+            game.player.alive = false;
+            gameOverDiv.classList.add('show');
+            showNotification('💀 GAME OVER', reason, 4000);
+        }
+
+        function triggerWin() {
+            if (game.gameWin) return;
+            game.gameWin = true;
+            winDiv.classList.add('show');
+            showNotification('🌱 VITÓRIA!', 'A Terra foi restaurada.', 4000);
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', resetGame);
+        document.getElementById('winRestartBtn').addEventListener('click', resetGame);
+
+        // ============================================================
+        //  UI UPDATES
+        // ============================================================
+        function updateInventoryUI() {
+            invMetals.textContent = game.inventory.metals;
+            invBiomass.textContent = game.inventory.biomass;
+            invTech.textContent = game.inventory.tech;
+            invSamples.textContent = game.inventory.samples;
+        }
+
+        function updateCycleUI() {
+            cycleLabel.textContent = game.isDay ? '☀️ DIA' : '🌙 NOITE';
+            cycleLabel.className = 'cycle-indicator ' + (game.isDay ? 'cycle-day' : 'cycle-night');
+            const total = game.isDay ? DAY_DURATION : NIGHT_DURATION;
+            const remaining = Math.max(0, total - game.cycleTime);
+            const mins = Math.floor(remaining / 60);
+            const secs = Math.floor(remaining % 60);
+            cycleTimer.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+        }
+
+        // ============================================================
+        //  INICIALIZAÇÃO
+        // ============================================================
+        function init() {
+            initWorld();
+            // Criar algumas plantas iniciais
+            createPlantVariant(0.8, 0.9, 0.8);
+            createPlantVariant(1.0, 0.7, 1.1);
+            updateInventoryUI();
+            updateBunkerStats();
+            updateCycleUI();
+            showNotification('🌱 ECOSFERA 2200', 'Explore a superfície de dia, gerencie o bunker à noite.', 3500);
+            // Iniciar loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        init();
+
+        // ===== PREVENT CONTEXT MENU =====
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+        // ===== AJUSTE DE TELA =====
+        window.addEventListener('resize', resizeCanvas);
+
+        // ===== EXPORTA PARA DEBUG =====
+        window.__game = game;
+        console.log('🌱 Ecosfera 2200 carregada! Use __game para debug.');
+    </script>
+</body>
+</html>
