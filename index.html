@@ -1,3 +1,1062 @@
-<!-- Arquivo limpo -->
-<!-- Pronto para novo conteúdo -->
-<!-- Escosfera 2200 -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 ECOSFERA 2200 – RPG de Sobrevivência</title>
+    <style>
+        /* ===== RESET E BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0e12;
+            font-family: 'Segoe UI', 'Courier New', monospace;
+            color: #d0dcdc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ===== CONTAINER PRINCIPAL ===== */
+        #game-container {
+            max-width: 820px;
+            width: 100%;
+            background: #0f161c;
+            border: 1px solid #1a2a2a;
+            border-radius: 20px;
+            padding: 28px 32px 32px;
+            box-shadow: 0 0 60px rgba(0, 20, 10, 0.3);
+            position: relative;
+            min-height: 580px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== CABEÇALHO ===== */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1a2a2a;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+        }
+        #header .title {
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: #80d0b0;
+        }
+        #header .title span {
+            color: #4a8a7a;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        #header .status-badge {
+            display: flex;
+            gap: 14px;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 16px;
+            border-radius: 20px;
+            border: 1px solid #1a2a22;
+        }
+        #header .status-badge .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        #header .status-badge .stat .val {
+            font-weight: 600;
+            color: #c0d8d0;
+            min-width: 24px;
+        }
+        .stat-oxygen .val {
+            color: #5aa8e0;
+        }
+        .stat-energy .val {
+            color: #e0c04a;
+        }
+        .stat-moral .val {
+            color: #d0a0d0;
+        }
+
+        /* ===== ÁREA DA NARRATIVA ===== */
+        #story-area {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            padding: 20px 24px;
+            min-height: 320px;
+            border: 1px solid #1a2622;
+            margin-bottom: 18px;
+            overflow-y: auto;
+            max-height: 460px;
+            position: relative;
+        }
+        #story-area::-webkit-scrollbar {
+            width: 4px;
+        }
+        #story-area::-webkit-scrollbar-track {
+            background: #0a1212;
+        }
+        #story-area::-webkit-scrollbar-thumb {
+            background: #2a4a3a;
+            border-radius: 4px;
+        }
+
+        #story-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #c8d4d0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #story-text .highlight {
+            color: #80d0b0;
+            font-weight: 500;
+        }
+        #story-text .danger {
+            color: #e06060;
+        }
+        #story-text .warn {
+            color: #e0c060;
+        }
+        #story-text .info {
+            color: #60b0d0;
+        }
+        #story-text .moral {
+            color: #d0a0d0;
+        }
+        #story-text .choice-marker {
+            display: block;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px dashed #1a2a22;
+            color: #6a8a7a;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* ===== DIÁRIO / HISTÓRICO ===== */
+        #journal {
+            margin-top: 6px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
+            color: #4a6a5a;
+            border-top: 1px solid #141e1e;
+            padding-top: 10px;
+            max-height: 70px;
+            overflow-y: auto;
+        }
+        #journal::-webkit-scrollbar {
+            width: 3px;
+        }
+        #journal::-webkit-scrollbar-track {
+            background: #0a1212;
+        }
+        #journal::-webkit-scrollbar-thumb {
+            background: #1a3a2a;
+            border-radius: 3px;
+        }
+        #journal .entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #0e1616;
+            color: #5a7a6a;
+        }
+        #journal .entry .day {
+            color: #4a6a5a;
+            font-weight: 600;
+        }
+
+        /* ===== ÁREA DE ESCOLHAS ===== */
+        #choices-area {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+        }
+        .choice-btn {
+            background: #14201e;
+            border: 1px solid #1a3a2a;
+            color: #b0d0c0;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: inherit;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.4;
+        }
+        .choice-btn:hover:not(:disabled) {
+            background: #1e322a;
+            border-color: #3a7a5a;
+            transform: translateX(6px);
+            box-shadow: 0 0 30px rgba(60, 200, 160, 0.05);
+        }
+        .choice-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .choice-btn .letter {
+            color: #4a8a6a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 24px;
+        }
+        .choice-btn .cost {
+            font-size: 0.75rem;
+            color: #6a8a7a;
+            margin-left: auto;
+            padding-left: 12px;
+            white-space: nowrap;
+        }
+        .choice-btn .cost .icon {
+            margin-right: 2px;
+        }
+
+        /* ===== BOTÃO DE REINÍCIO ===== */
+        #reset-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #141e1e;
+        }
+        #reset-btn {
+            background: transparent;
+            border: 1px solid #2a3a32;
+            color: #5a7a6a;
+            padding: 6px 22px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            letter-spacing: 1px;
+        }
+        #reset-btn:hover {
+            border-color: #4a6a5a;
+            color: #8ab0a0;
+            background: #0e1616;
+        }
+
+        /* ===== ANIMAÇÃO DE DIGITAÇÃO ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 650px) {
+            #game-container {
+                padding: 18px 16px 20px;
+            }
+            #header .title {
+                font-size: 1.2rem;
+            }
+            #header .status-badge {
+                font-size: 0.7rem;
+                padding: 2px 10px;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            #story-area {
+                padding: 14px 16px;
+                min-height: 240px;
+                max-height: 340px;
+            }
+            #story-text {
+                font-size: 0.95rem;
+                line-height: 1.7;
+            }
+            .choice-btn {
+                font-size: 0.9rem;
+                padding: 10px 14px;
+            }
+            .choice-btn .cost {
+                font-size: 0.7rem;
+            }
+        }
+        @media (max-width: 420px) {
+            #header .title {
+                font-size: 1rem;
+            }
+            #header .status-badge .stat {
+                gap: 2px;
+            }
+            #story-text {
+                font-size: 0.85rem;
+            }
+            .choice-btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+                gap: 8px;
+            }
+            .choice-btn .letter {
+                min-width: 18px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- ===== CABEÇALHO ===== -->
+        <div id="header">
+            <div class="title">
+                🌱 ECOSFERA <span>2200</span>
+            </div>
+            <div class="status-badge">
+                <div class="stat stat-oxygen">💨 <span class="val" id="oxyDisplay">60</span>%</div>
+                <div class="stat stat-energy">⚡ <span class="val" id="engDisplay">40</span>%</div>
+                <div class="stat stat-moral">❤️ <span class="val" id="morDisplay">50</span></div>
+                <div class="stat">🌱 <span class="val" id="plantDisplay">2</span></div>
+                <div class="stat">📅 <span class="val" id="dayDisplay">1</span></div>
+            </div>
+        </div>
+
+        <!-- ===== NARRATIVA ===== -->
+        <div id="story-area">
+            <div id="story-text"></div>
+        </div>
+
+        <!-- ===== DIÁRIO ===== -->
+        <div id="journal"></div>
+
+        <!-- ===== ESCOLHAS ===== -->
+        <div id="choices-area"></div>
+
+        <!-- ===== REINÍCIO ===== -->
+        <div id="reset-area">
+            <button id="reset-btn">🔄 Recomeçar jornada</button>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  ECOSFERA 2200 – RPG DE ESCOLHAS E CONSEQUÊNCIAS
+        //  Estrutura narrativa ramificada com sistemas de gestão
+        // ================================================================
+
+        // ---- ESTADO GLOBAL ----
+        const state = {
+            // Recursos do bunker
+            oxygen: 60, // 0-100
+            energy: 40, // 0-100
+            moral: 50, // 0-100 (ânimo da tripulação)
+            plants: 2, // número de plantas ativas
+            efficiency: 1.0, // multiplicador de produção
+            research: false, // pesquisa avançada concluída?
+
+            // Inventário (recursos coletados)
+            metal: 0,
+            biomass: 0,
+            tech: 0,
+
+            // Progresso
+            day: 1,
+            cycle: 0, // 0 = dia, 1 = noite
+
+            // Flags narrativas
+            flags: {
+                exploredRuins: false,
+                foundWater: false,
+                fixedGenerator: false,
+                metWanderer: false,
+                upgradedPlants: false,
+                securedBunker: false,
+            },
+
+            // Histórico de escolhas (para o diário)
+            history: [],
+
+            // Controle de fluxo
+            currentNode: 'intro',
+            gameOver: false,
+            gameWin: false,
+            waitingChoice: false,
+        };
+
+        // ---- REFERÊNCIAS DOM ----
+        const storyEl = document.getElementById('story-text');
+        const choicesEl = document.getElementById('choices-area');
+        const journalEl = document.getElementById('journal');
+        const resetBtn = document.getElementById('reset-btn');
+
+        const oxyDisplay = document.getElementById('oxyDisplay');
+        const engDisplay = document.getElementById('engDisplay');
+        const morDisplay = document.getElementById('morDisplay');
+        const plantDisplay = document.getElementById('plantDisplay');
+        const dayDisplay = document.getElementById('dayDisplay');
+
+        // ---- FUNÇÕES AUXILIARES ----
+        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+        function updateUI() {
+            oxyDisplay.textContent = Math.round(state.oxygen);
+            engDisplay.textContent = Math.round(state.energy);
+            morDisplay.textContent = Math.round(state.moral);
+            plantDisplay.textContent = state.plants;
+            dayDisplay.textContent = state.day;
+        }
+
+        function addJournal(entry) {
+            const dayStr = `Dia ${state.day}`;
+            state.history.push({ day: state.day, text: entry });
+            const entryEl = document.createElement('div');
+            entryEl.className = 'entry';
+            entryEl.innerHTML = `<span class="day">[${dayStr}]</span> ${entry}`;
+            journalEl.appendChild(entryEl);
+            journalEl.scrollTop = journalEl.scrollHeight;
+            // Limita o histórico para não sobrecarregar
+            if (journalEl.children.length > 30) {
+                journalEl.removeChild(journalEl.firstChild);
+            }
+        }
+
+        // ---- SISTEMA DE CONSEQUÊNCIAS ----
+        function applyConsequences(consequences) {
+            if (!consequences) return;
+            let msg = '';
+            for (const [key, value] of Object.entries(consequences)) {
+                switch (key) {
+                    case 'oxygen':
+                        state.oxygen = clamp(state.oxygen + value, 0, 100);
+                        msg += `💨 Oxigênio ${value > 0 ? '+' : ''}${value}% `;
+                        break;
+                    case 'energy':
+                        state.energy = clamp(state.energy + value, 0, 100);
+                        msg += `⚡ Energia ${value > 0 ? '+' : ''}${value}% `;
+                        break;
+                    case 'moral':
+                        state.moral = clamp(state.moral + value, 0, 100);
+                        msg += `❤️ Moral ${value > 0 ? '+' : ''}${value} `;
+                        break;
+                    case 'plants':
+                        state.plants = Math.max(0, state.plants + value);
+                        msg += `🌱 Plantas ${value > 0 ? '+' : ''}${value} `;
+                        break;
+                    case 'metal':
+                        state.metal += value;
+                        msg += `🔩 +${value} Metal `;
+                        break;
+                    case 'biomass':
+                        state.biomass += value;
+                        msg += `🧬 +${value} Biomassa `;
+                        break;
+                    case 'tech':
+                        state.tech += value;
+                        msg += `⚙️ +${value} Tecnologia `;
+                        break;
+                    case 'efficiency':
+                        state.efficiency += value;
+                        msg += `⬆ Eficiência +${value}× `;
+                        break;
+                    case 'research':
+                        state.research = true;
+                        msg += `🔬 Pesquisa concluída! `;
+                        break;
+                    case 'day':
+                        state.day += value;
+                        msg += `📅 Avançou ${value} dia(s) `;
+                        break;
+                    case 'cycle':
+                        state.cycle = (state.cycle + value) % 2;
+                        msg += `🌓 Ciclo alterado `;
+                        break;
+                    case 'flag':
+                        if (value) {
+                            state.flags[consequences.flagName] = true;
+                            msg += `🏴 Flag: ${consequences.flagName} `;
+                        }
+                        break;
+                }
+            }
+            if (msg) {
+                addJournal('⚡ Consequências: ' + msg.trim());
+            }
+            updateUI();
+        }
+
+        // ---- VERIFICAÇÃO DE GAME OVER / WIN ----
+        function checkGameOver() {
+            if (state.oxygen <= 0) {
+                state.gameOver = true;
+                return '💀 O BUNKER FICOU SEM OXIGÊNIO. A humanidade se foi.';
+            }
+            if (state.energy <= 0 && state.oxygen < 20) {
+                state.gameOver = true;
+                return '⚡ SEM ENERGIA, o sistema de suporte de vida colapsou.';
+            }
+            if (state.moral <= 0) {
+                state.gameOver = true;
+                return '😔 A TRIPULAÇÃO PERDEU A ESPERANÇA. O bunker entrou em caos.';
+            }
+            return null;
+        }
+
+        function checkWin() {
+            if (state.oxygen >= 90 && state.research && state.plants >= 6 && state.day >= 20) {
+                state.gameWin = true;
+                return '🌱 PLANETA RESTAURADO! A fotossíntese artificial reverteu o colapso. A Terra respira novamente.';
+            }
+            return null;
+        }
+
+        // ---- NARRATIVA - NÓS E ESCOLHAS ----
+        const nodes = {
+
+            // ===== INTRODUÇÃO =====
+            intro: {
+                text: `O ano é <span class="highlight">2200</span>. A Terra está morta.
+
+        A poluição extrema transformou a superfície num deserto tóxico. A humanidade sobrevive em um único <span class="highlight">bunker subterrâneo</span>, mas os recursos estão se esgotando.
+
+        Você é o <span class="highlight">último explorador</span>. O destino da civilização está em suas mãos.
+
+        <span class="choice-marker">⚡ O que você faz primeiro?</span>`,
+                choices: [
+                    { text: '🔍 Explorar a superfície em busca de recursos', action: 'explore_surface' },
+                    { text: '🛠️ Verificar os sistemas do bunker', action: 'check_bunker' },
+                    { text: '📖 Estudar os registros da máquina de fotossíntese', action: 'study_machine' },
+                ]
+            },
+
+            // ===== EXPLORAR SUPERFÍCIE =====
+            explore_surface: {
+                text: `Você sobe à superfície. O ar é pesado, o céu está encoberto por uma névoa tóxica.
+
+        À sua frente, as ruínas de uma antiga cidade se estendem por quilômetros. Você avista alguns destroços que podem conter recursos úteis.
+
+        <span class="choice-marker">🧭 Para onde você vai?</span>`,
+                choices: [
+                    { text: '🏚️ Explorar os prédios em ruínas', action: 'explore_ruins', cost: '⏳ 1 dia' },
+                    { text: '🔧 Procurar por tecnologia em veículos abandonados', action: 'explore_vehicles', cost: '⏳ 1 dia' },
+                    { text: '🌿 Coletar biomassa na vegetação morta', action: 'collect_biomass', cost: '⏳ 1 dia' },
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ]
+            },
+
+            explore_ruins: {
+                text: `Você entra em um prédio parcialmente destruído. O chão está coberto de detritos, e o silêncio é absoluto.
+
+        No andar superior, você encontra um <span class="highlight">painel de controle antigo</span> que parece ainda funcionar. Também avista alguns <span class="info">metais</span> e <span class="warn">tecnologia</span> espalhados.
+
+        <span class="choice-marker">⚙️ O que você faz?</span>`,
+                choices: [
+                    { text: '🔌 Tentar ativar o painel de controle', action: 'activate_panel', cost: '⚙️ Tecnologia' },
+                    { text: '📦 Coletar os recursos e voltar', action: 'collect_resources', cost: '⏳ 1 dia' },
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    state.flags.exploredRuins = true;
+                    addJournal('🏚️ Explorei as ruínas da cidade.');
+                }
+            },
+
+            activate_panel: {
+                text: `Você consegue ativar o painel. Ele mostra dados sobre a <span class="highlight">rede de energia da cidade</span> antes do colapso.
+
+        Com as informações, você pode <span class="highlight">otimizar o consumo de energia</span> do bunker.
+
+        <span class="choice-marker">✅ Efeito: +20% de Energia. -5 de Moral (pelo esforço).</span>`,
+                choices: [
+                    { text: '✅ Aplicar as otimizações', action: 'apply_optimization' },
+                    { text: '📝 Registrar os dados para depois', action: 'record_data' },
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    // Consequências aplicadas nas ações
+                }
+            },
+
+            apply_optimization: {
+                text: `Você implementa as otimizações. A eficiência energética do bunker melhora significativamente.
+
+        <span class="highlight">⚡ Energia +20%.</span>
+        <span class="warn">😔 Moral -5 (pelo esforço extra).</span>
+
+        <span class="choice-marker">✅ Missão concluída.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ energy: 20, moral: -5 });
+                    addJournal('🔧 Otimizei o consumo de energia do bunker.');
+                }
+            },
+
+            record_data: {
+                text: `Você registra os dados. Eles podem ser úteis no futuro, mas por enquanto não trazem benefícios imediatos.
+
+        <span class="info">📊 Tecnologia +3.</span>
+
+        <span class="choice-marker">✅ Dados registrados.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ tech: 3 });
+                    addJournal('📊 Registrei dados da rede elétrica da cidade.');
+                }
+            },
+
+            collect_resources: {
+                text: `Você coleta os recursos disponíveis. Não é muito, mas ajuda.
+
+        <span class="highlight">🔩 Metal +2</span>
+        <span class="highlight">⚙️ Tecnologia +2</span>
+
+        <span class="choice-marker">✅ Recursos coletados.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ metal: 2, tech: 2 });
+                    addJournal('📦 Coletei recursos nas ruínas.');
+                }
+            },
+
+            explore_vehicles: {
+                text: `Você examina os veículos abandonados. A maioria está destruída, mas em um caminhão você encontra um <span class="highlight">gerador portátil</span> em boas condições.
+
+        <span class="choice-marker">🔧 O que você faz?</span>`,
+                choices: [
+                    { text: '🔌 Levar o gerador para o bunker', action: 'take_generator', cost: '⏳ 1 dia' },
+                    { text: '🔩 Desmontar o gerador por peças', action: 'scrap_generator', cost: '⏳ 1 dia' },
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    addJournal('🚗 Encontrei um gerador portátil em um caminhão.');
+                }
+            },
+
+            take_generator: {
+                text: `Você leva o gerador para o bunker. Ele pode fornecer energia extra em emergências.
+
+        <span class="highlight">⚡ Energia +15.</span>
+        <span class="highlight">🔧 Flag: Gerador recuperado.</span>
+
+        <span class="choice-marker">✅ Gerador instalado.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ energy: 15, flag: true, flagName: 'fixedGenerator' });
+                    addJournal('🔌 Instalei o gerador portátil no bunker.');
+                }
+            },
+
+            scrap_generator: {
+                text: `Você desmonta o gerador e separa as peças úteis.
+
+        <span class="highlight">🔩 Metal +5</span>
+        <span class="highlight">⚙️ Tecnologia +3</span>
+
+        <span class="choice-marker">✅ Peças recuperadas.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ metal: 5, tech: 3 });
+                    addJournal('🔩 Desmontei o gerador por peças.');
+                }
+            },
+
+            collect_biomass: {
+                text: `A vegetação morta ainda contém matéria orgânica útil. Você coleta o máximo que pode.
+
+        <span class="highlight">🧬 Biomassa +6</span>
+
+        <span class="choice-marker">✅ Biomassa coletada.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ biomass: 6 });
+                    addJournal('🌿 Coletei biomassa da vegetação morta.');
+                }
+            },
+
+            // ===== VERIFICAR BUNKER =====
+            check_bunker: {
+                text: `Você faz uma inspeção completa do bunker.
+
+        Os sistemas estão funcionando, mas há sinais de desgaste. A <span class="warn">rede de oxigênio</span> precisa de manutenção, e a <span class="warn">reserva de energia</span> está abaixo do ideal.
+
+        <span class="choice-marker">🔧 O que você prioriza?</span>`,
+                choices: [
+                    { text: '💨 Reparar a rede de oxigênio', action: 'fix_oxygen', cost: '🔩 3 Metal' },
+                    { text: '⚡ Otimizar a reserva de energia', action: 'optimize_energy', cost: '⚙️ 2 Tecnologia' },
+                    { text: '😌 Elevar o moral da tripulação', action: 'boost_moral', cost: '⏳ 1 dia' },
+                    { text: '⬅️ Voltar à superfície', action: 'explore_surface' },
+                ],
+                onEnter: () => {
+                    addJournal('🔍 Inspecionei os sistemas do bunker.');
+                }
+            },
+
+            fix_oxygen: {
+                text: `Você repara a rede de oxigênio. O fluxo de ar melhora, e a tripulação respira melhor.
+
+        <span class="highlight">💨 Oxigênio +15.</span>
+        <span class="highlight">❤️ Moral +5.</span>
+
+        <span class="choice-marker">✅ Reparo concluído.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    if (state.metal >= 3) {
+                        applyConsequences({ metal: -3, oxygen: 15, moral: 5 });
+                        addJournal('💨 Reparei a rede de oxigênio do bunker.');
+                    } else {
+                        // Fallback: tenta com biomassa
+                        if (state.biomass >= 5) {
+                            applyConsequences({ biomass: -5, oxygen: 10 });
+                            addJournal('💨 Reparo improvisado com biomassa (+10% O₂).');
+                        } else {
+                            addJournal('❌ Não havia recursos suficientes para reparar o oxigênio.');
+                            return;
+                        }
+                    }
+                }
+            },
+
+            optimize_energy: {
+                text: `Você recalibra os sistemas de energia. O consumo diminui e a eficiência aumenta.
+
+        <span class="highlight">⚡ Energia +10.</span>
+        <span class="highlight">⬆ Eficiência +0.2×</span>
+
+        <span class="choice-marker">✅ Otimização concluída.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    if (state.tech >= 2) {
+                        applyConsequences({ tech: -2, energy: 10, efficiency: 0.2 });
+                        addJournal('⚡ Otimizei os sistemas de energia do bunker.');
+                    } else {
+                        addJournal('❌ Tecnologia insuficiente para otimizar a energia.');
+                    }
+                }
+            },
+
+            boost_moral: {
+                text: `Você organiza uma reunião com a tripulação. Palavras de encorajamento e planos para o futuro.
+
+        <span class="highlight">❤️ Moral +15.</span>
+
+        <span class="choice-marker">✅ Moral elevado.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ moral: 15 });
+                    addJournal('😊 Elevei o moral da tripulação com uma reunião.');
+                }
+            },
+
+            // ===== ESTUDAR MÁQUINA =====
+            study_machine: {
+                text: `Você passa horas estudando os diagramas da <span class="highlight">máquina de fotossíntese artificial</span>.
+
+        O sistema é complexo, mas você começa a entender como otimizar a produção de oxigênio.
+
+        <span class="choice-marker">🔬 O que você pesquisa?</span>`,
+                choices: [
+                    { text: '🌱 Melhorar a eficiência das plantas', action: 'upgrade_plants', cost: '🧬 10 Biomassa' },
+                    { text: '⚡ Reduzir o consumo de energia das plantas', action: 'reduce_energy_consumption',
+                    cost: '⚙️ 8 Tecnologia' },
+                    { text: '🧬 Desenvolver uma nova cepa de planta', action: 'new_plant_strain', cost: '🧬 15 Biomassa + 🔩 5 Metal' },
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    addJournal('📖 Estudei os diagramas da máquina de fotossíntese.');
+                }
+            },
+
+            upgrade_plants: {
+                text: `Você implementa as melhorias nas plantas. Elas agora produzem mais oxigênio com menos recursos.
+
+        <span class="highlight">🌱 Produção +30%.</span>
+        <span class="highlight">⬆ Eficiência +0.3×</span>
+
+        <span class="choice-marker">✅ Plantas melhoradas.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    if (state.biomass >= 10) {
+                        applyConsequences({ biomass: -10, efficiency: 0.3, flag: true, flagName: 'upgradedPlants' });
+                        addJournal('🌱 Melhorei a eficiência das plantas.');
+                    } else {
+                        addJournal('❌ Biomassa insuficiente para melhorar as plantas.');
+                    }
+                }
+            },
+
+            reduce_energy_consumption: {
+                text: `Você recalibra os sistemas para reduzir o consumo de energia das plantas.
+
+        <span class="highlight">⚡ Consumo de energia -20%.</span>
+
+        <span class="choice-marker">✅ Consumo reduzido.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    if (state.tech >= 8) {
+                        applyConsequences({ tech: -8, efficiency: 0.2 });
+                        addJournal('⚡ Reduzi o consumo de energia das plantas.');
+                    } else {
+                        addJournal('❌ Tecnologia insuficiente para reduzir o consumo.');
+                    }
+                }
+            },
+
+            new_plant_strain: {
+                text: `Você desenvolve uma nova cepa de planta, mais resistente e produtiva.
+
+        <span class="highlight">🌱 Plantas +2.</span>
+        <span class="highlight">⬆ Eficiência +0.4×</span>
+
+        <span class="choice-marker">✅ Nova cepa criada.</span>`,
+                choices: [
+                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
+                ],
+                onEnter: () => {
+                    if (state.biomass >= 15 && state.metal >= 5) {
+                        applyConsequences({ biomass: -15, metal: -5, plants: 2, efficiency: 0.4 });
+                        addJournal('🧬 Criei uma nova cepa de planta resistente.');
+                    } else {
+                        addJournal('❌ Recursos insuficientes para criar nova cepa.');
+                    }
+                }
+            },
+
+            // ===== RETORNAR AO BUNKER =====
+            return_bunker: {
+                text: `Você retorna ao bunker. O ar é mais respirável aqui, e a tripulação aguarda suas próximas decisões.
+
+        <span class="choice-marker">📋 O que você faz agora?</span>`,
+                choices: [
+                    { text: '🔍 Explorar a superfície', action: 'explore_surface' },
+                    { text: '🛠️ Verificar os sistemas do bunker', action: 'check_bunker' },
+                    { text: '📖 Estudar a máquina de fotossíntese', action: 'study_machine' },
+                    { text: '😴 Descansar e passar o dia', action: 'rest_day' },
+                ],
+                onEnter: () => {
+                    // Passa um dia parcial
+                    state.day += 0.5;
+                    updateUI();
+                    addJournal('⬅️ Retornei ao bunker.');
+                    // Pequena recuperação
+                    state.oxygen = clamp(state.oxygen + 2, 0, 100);
+                    state.energy = clamp(state.energy + 2, 0, 100);
+                    updateUI();
+                }
+            },
+
+            // ===== DESCANSAR =====
+            rest_day: {
+                text: `Você descansa. A tripulação aproveita para relaxar e se recuperar.
+
+        <span class="highlight">❤️ Moral +5</span>
+        <span class="highlight">💨 Oxigênio +3</span>
+        <span class="highlight">⚡ Energia +3</span>
+
+        <span class="choice-marker">🌅 Um novo dia começa.</span>`,
+                choices: [
+                    { text: '🔍 Explorar a superfície', action: 'explore_surface' },
+                    { text: '🛠️ Verificar os sistemas do bunker', action: 'check_bunker' },
+                    { text: '📖 Estudar a máquina de fotossíntese', action: 'study_machine' },
+                ],
+                onEnter: () => {
+                    applyConsequences({ moral: 5, oxygen: 3, energy: 3, day: 1 });
+                    addJournal('😴 Descansei e recuperei as energias.');
+                }
+            },
+
+            // ===== FIM DE JOGO (Game Over) =====
+            game_over: {
+                text: `💀 <span class="danger">GAME OVER</span>
+
+        A humanidade não resistiu. O bunker entrou em colapso, e a última esperança da Terra se foi.
+
+        Mas as cinzas sempre podem dar origem a novas brasas.
+
+        <span class="choice-marker">🔄 Recomece e tente novamente.</span>`,
+                choices: [
+                    { text: '🔄 Recomeçar jornada', action: 'reset_game' },
+                ],
+                onEnter: () => {
+                    state.gameOver = true;
+                    addJournal('💀 GAME OVER — O bunker colapsou.');
+                }
+            },
+
+            // ===== VITÓRIA =====
+            victory: {
+                text: `🌱 <span class="highlight">VITÓRIA!</span>
+
+        A Terra respira novamente. A fotossíntese artificial reverteu o colapso ambiental.
+
+        A humanidade tem uma segunda chance. Obrigado por não desistir.
+
+        <span class="choice-marker">🏆 Você salvou a humanidade.</span>`,
+                choices: [
+                    { text: '🔄 Recomeçar jornada', action: 'reset_game' },
+                ],
+                onEnter: () => {
+                    state.gameWin = true;
+                    addJournal('🌱 VITÓRIA — O planeta foi restaurado!');
+                }
+            },
+        };
+
+        // ---- FUNÇÃO PRINCIPAL DE NAVEGAÇÃO ----
+        function goToNode(nodeId) {
+            // Verifica game over / win antes de prosseguir
+            const overMsg = checkGameOver();
+            if (overMsg) {
+                state.gameOver = true;
+                const node = nodes['game_over'];
+                state.currentNode = 'game_over';
+                renderNode(node);
+                return;
+            }
+            const winMsg = checkWin();
+            if (winMsg) {
+                state.gameWin = true;
+                const node = nodes['victory'];
+                state.currentNode = 'victory';
+                renderNode(node);
+                return;
+            }
+
+            const node = nodes[nodeId];
+            if (!node) {
+                console.error('Nó não encontrado:', nodeId);
+                return;
+            }
+
+            state.currentNode = nodeId;
+
+            // Executa onEnter se existir
+            if (node.onEnter) {
+                node.onEnter();
+            }
+
+            renderNode(node);
+        }
+
+        function renderNode(node) {
+            // Texto
+            storyEl.innerHTML = node.text;
+            storyEl.className = 'fade-in';
+
+            // Escolhas
+            choicesEl.innerHTML = '';
+            if (node.choices && node.choices.length > 0) {
+                const letters = ['A', 'B', 'C', 'D', 'E'];
+                node.choices.forEach((choice, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    const letter = letters[index] || '•';
+                    btn.innerHTML = `
+                        <span class="letter">${letter}</span>
+                        <span>${choice.text}</span>
+                        ${choice.cost ? `<span class="cost">${choice.cost}</span>` : ''}
+                    `;
+                    btn.addEventListener('click', () => {
+                        // Verifica se há custo (apenas visual por enquanto)
+                        // As consequências são aplicadas no nó de destino
+                        goToNode(choice.action);
+                    });
+                    choicesEl.appendChild(btn);
+                });
+            } else {
+                // Caso não haja escolhas (nó terminal), mostra botão de reinício
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerHTML = '<span class="letter">⟳</span> <span>Recomeçar</span>';
+                btn.addEventListener('click', () => resetGame());
+                choicesEl.appendChild(btn);
+            }
+
+            // Atualiza UI
+            updateUI();
+        }
+
+        // ---- RESET ----
+        function resetGame() {
+            // Reset do estado
+            state.oxygen = 60;
+            state.energy = 40;
+            state.moral = 50;
+            state.plants = 2;
+            state.efficiency = 1.0;
+            state.research = false;
+            state.metal = 0;
+            state.biomass = 0;
+            state.tech = 0;
+            state.day = 1;
+            state.cycle = 0;
+            state.flags = {
+                exploredRuins: false,
+                foundWater: false,
+                fixedGenerator: false,
+                metWanderer: false,
+                upgradedPlants: false,
+                securedBunker: false,
+            };
+            state.history = [];
+            state.gameOver = false;
+            state.gameWin = false;
+            state.currentNode = 'intro';
+
+            // Limpa diário
+            journalEl.innerHTML = '';
+
+            updateUI();
+            goToNode('intro');
+            addJournal('📜 Nova jornada iniciada. O futuro da humanidade está em suas mãos.');
+        }
+
+        // ---- EVENTOS ----
+        resetBtn.addEventListener('click', resetGame);
+
+        // ---- INICIALIZAÇÃO ----
+        resetGame();
+
+        console.log('🌱 ECOSFERA 2200 – RPG de Escolhas carregado!');
+        console.log('📖 Use as escolhas para guiar o destino da humanidade.');
+    </script>
+
+</body>
+</html>
