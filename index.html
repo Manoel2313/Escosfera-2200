@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌱 ECOSFERA 2200 – RPG de Sobrevivência</title>
+    <title>🌱 ECOSFERA 2200 – Jogo Completo</title>
     <style>
         /* ===== RESET E BASE ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
+
         body {
             background: #0a0e12;
             font-family: 'Segoe UI', 'Courier New', monospace;
@@ -22,63 +24,273 @@
             padding: 20px;
         }
 
-        /* ===== CONTAINER PRINCIPAL ===== */
         #game-container {
-            max-width: 820px;
+            max-width: 960px;
             width: 100%;
             background: #0f161c;
             border: 1px solid #1a2a2a;
-            border-radius: 20px;
-            padding: 28px 32px 32px;
+            border-radius: 24px;
+            padding: 24px 28px 28px;
             box-shadow: 0 0 60px rgba(0, 20, 10, 0.3);
+            min-height: 520px;
             position: relative;
-            min-height: 580px;
-            display: flex;
-            flex-direction: column;
+            transition: all 0.3s;
         }
 
-        /* ===== CABEÇALHO ===== */
-        #header {
+        /* ===== TELAS ===== */
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== TELA 1: MENU ===== */
+        #menu-screen .logo {
+            font-size: 4.2rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #80d0b0;
+            text-shadow: 0 0 60px rgba(60, 200, 160, 0.15);
+            margin-bottom: 0.2rem;
+            text-align: center;
+        }
+        #menu-screen .logo span {
+            color: #4a8a7a;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            display: block;
+            margin-top: -6px;
+        }
+        #menu-screen .subtitle {
+            color: #6a8a7a;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            border-top: 1px solid #1a3a2a;
+            padding-top: 12px;
+            margin-top: -4px;
+        }
+
+        .btn-primary {
+            background: transparent;
+            border: 1px solid #2a5a3a;
+            color: #b0d8c0;
+            padding: 14px 52px;
+            font-size: 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            letter-spacing: 3px;
+            margin-top: 8px;
+        }
+        .btn-primary:hover {
+            background: #1a3a2a;
+            border-color: #4a8a6a;
+            box-shadow: 0 0 50px rgba(60, 200, 160, 0.08);
+            transform: scale(1.02);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #2a3a32;
+            color: #7a9a8a;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+        .btn-secondary:hover {
+            border-color: #4a6a5a;
+            color: #a0c0b0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===== TELA 2: LORE ===== */
+        #lore-screen {
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        #lore-screen::-webkit-scrollbar {
+            width: 4px;
+        }
+        #lore-screen::-webkit-scrollbar-track {
+            background: #0a1212;
+        }
+        #lore-screen::-webkit-scrollbar-thumb {
+            background: #2a4a3a;
+            border-radius: 4px;
+        }
+
+        .lore-box {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid #1a2a22;
+            border-radius: 16px;
+            padding: 24px 28px;
+            width: 100%;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+        .lore-box::-webkit-scrollbar {
+            width: 3px;
+        }
+        .lore-box::-webkit-scrollbar-track {
+            background: #0a1212;
+        }
+        .lore-box::-webkit-scrollbar-thumb {
+            background: #1a3a2a;
+            border-radius: 3px;
+        }
+
+        .lore-box h2 {
+            color: #80d0b0;
+            font-weight: 300;
+            letter-spacing: 3px;
+            font-size: 1.5rem;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #1a3a2a;
+            padding-bottom: 10px;
+        }
+        .lore-box p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #bcc8c0;
+            margin-bottom: 12px;
+        }
+        .lore-box .highlight {
+            color: #80d0b0;
+            font-weight: 500;
+        }
+        .lore-box .footer-note {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #6a8a7a;
+            border-top: 1px solid #1a2a22;
+            padding-top: 12px;
+            font-style: italic;
+        }
+
+        .name-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .name-area label {
+            color: #8aa8a0;
+            font-size: 1rem;
+        }
+        .name-area input {
+            background: #0e1a1a;
+            border: 1px solid #2a4a3a;
+            color: #d0e8e0;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            width: 220px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        .name-area input:focus {
+            border-color: #4a9a7a;
+            box-shadow: 0 0 24px rgba(60, 200, 160, 0.06);
+        }
+        .name-area .btn-start {
+            background: #1a3a2a;
+            border: 1px solid #3a7a5a;
+            color: #b0e0c0;
+            padding: 10px 32px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .name-area .btn-start:hover {
+            background: #2a5a3a;
+            border-color: #5a9a7a;
+        }
+
+        /* ===== TELA 3: BUNKER ===== */
+        #bunker-screen {
+            gap: 12px;
+            padding: 4px 0;
+        }
+
+        .bunker-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #1a2a2a;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            width: 100%;
             flex-wrap: wrap;
             gap: 8px 16px;
-        }
-        #header .title {
-            font-size: 1.6rem;
-            font-weight: 300;
-            letter-spacing: 3px;
-            color: #80d0b0;
-        }
-        #header .title span {
-            color: #4a8a7a;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-        #header .status-badge {
-            display: flex;
-            gap: 14px;
-            font-size: 0.85rem;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 4px 16px;
-            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.25);
             border: 1px solid #1a2a22;
+            border-radius: 14px;
+            padding: 10px 18px;
         }
-        #header .status-badge .stat {
+        .bunker-header .title {
+            font-size: 1.2rem;
+            color: #80d0b0;
+            letter-spacing: 2px;
+        }
+        .bunker-header .title span {
+            color: #4a8a7a;
+            font-size: 0.7rem;
+        }
+        .bunker-header .player-name {
+            color: #7a9a8a;
+            font-size: 0.9rem;
+        }
+        .bunker-header .player-name strong {
+            color: #c0d8d0;
+            font-weight: 600;
+        }
+        .bunker-header .status-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            font-size: 0.8rem;
+        }
+        .bunker-header .status-group .stat {
             display: flex;
             align-items: center;
             gap: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 12px;
+            border-radius: 12px;
+            border: 1px solid #1a2622;
         }
-        #header .status-badge .stat .val {
-            font-weight: 600;
-            color: #c0d8d0;
-            min-width: 24px;
+        .bunker-header .status-group .stat .val {
+            font-weight: 700;
+            min-width: 22px;
+            text-align: right;
         }
-        .stat-oxygen .val {
+        .stat-oxy .val {
             color: #5aa8e0;
         }
         .stat-energy .val {
@@ -87,236 +299,322 @@
         .stat-moral .val {
             color: #d0a0d0;
         }
-
-        /* ===== ÁREA DA NARRATIVA ===== */
-        #story-area {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 12px;
-            padding: 20px 24px;
-            min-height: 320px;
-            border: 1px solid #1a2622;
-            margin-bottom: 18px;
-            overflow-y: auto;
-            max-height: 460px;
-            position: relative;
+        .stat-plant .val {
+            color: #60d090;
         }
-        #story-area::-webkit-scrollbar {
-            width: 4px;
+        .stat-day .val {
+            color: #80c0b0;
         }
-        #story-area::-webkit-scrollbar-track {
-            background: #0a1212;
+        .stat-machine .val {
+            color: #f0a060;
         }
-        #story-area::-webkit-scrollbar-thumb {
-            background: #2a4a3a;
-            border-radius: 4px;
+        .stat-sucata .val {
+            color: #c0b0a0;
+        }
+        .stat-tasks .val {
+            color: #90d0c0;
         }
 
-        #story-text {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: #c8d4d0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        #story-text .highlight {
-            color: #80d0b0;
-            font-weight: 500;
-        }
-        #story-text .danger {
-            color: #e06060;
-        }
-        #story-text .warn {
-            color: #e0c060;
-        }
-        #story-text .info {
-            color: #60b0d0;
-        }
-        #story-text .moral {
-            color: #d0a0d0;
-        }
-        #story-text .choice-marker {
-            display: block;
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px dashed #1a2a22;
-            color: #6a8a7a;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        /* ===== DIÁRIO / HISTÓRICO ===== */
-        #journal {
-            margin-top: 6px;
-            margin-bottom: 12px;
-            font-size: 0.8rem;
-            color: #4a6a5a;
-            border-top: 1px solid #141e1e;
-            padding-top: 10px;
-            max-height: 70px;
-            overflow-y: auto;
-        }
-        #journal::-webkit-scrollbar {
-            width: 3px;
-        }
-        #journal::-webkit-scrollbar-track {
-            background: #0a1212;
-        }
-        #journal::-webkit-scrollbar-thumb {
-            background: #1a3a2a;
-            border-radius: 3px;
-        }
-        #journal .entry {
-            padding: 2px 0;
-            border-bottom: 1px solid #0e1616;
-            color: #5a7a6a;
-        }
-        #journal .entry .day {
-            color: #4a6a5a;
-            font-weight: 600;
-        }
-
-        /* ===== ÁREA DE ESCOLHAS ===== */
-        #choices-area {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* ===== GRADE DE OPÇÕES DO BUNKER ===== */
+        .bunker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+            width: 100%;
             margin-top: 4px;
         }
-        .choice-btn {
-            background: #14201e;
-            border: 1px solid #1a3a2a;
-            color: #b0d0c0;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 1rem;
+
+        .bunker-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid #1a2a22;
+            border-radius: 16px;
+            padding: 18px 12px 16px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.25s;
-            font-family: inherit;
-            text-align: left;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
-            line-height: 1.4;
+            gap: 6px;
+            min-height: 110px;
+            justify-content: center;
         }
-        .choice-btn:hover:not(:disabled) {
-            background: #1e322a;
+        .bunker-card:hover {
             border-color: #3a7a5a;
-            transform: translateX(6px);
-            box-shadow: 0 0 30px rgba(60, 200, 160, 0.05);
+            background: rgba(16, 32, 32, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 20, 10, 0.2);
         }
-        .choice-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
+        .bunker-card .icon {
+            font-size: 2.4rem;
+            line-height: 1;
         }
-        .choice-btn .letter {
-            color: #4a8a6a;
-            font-weight: 700;
-            font-size: 1.1rem;
-            min-width: 24px;
+        .bunker-card .label {
+            font-size: 1rem;
+            color: #b0c8c0;
+            font-weight: 500;
         }
-        .choice-btn .cost {
-            font-size: 0.75rem;
-            color: #6a8a7a;
-            margin-left: auto;
-            padding-left: 12px;
-            white-space: nowrap;
+        .bunker-card .desc {
+            font-size: 0.7rem;
+            color: #5a7a6a;
+            line-height: 1.3;
         }
-        .choice-btn .cost .icon {
-            margin-right: 2px;
+        .bunker-card .badge {
+            background: #1a3a2a;
+            color: #80c0a0;
+            font-size: 0.6rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid #2a5a3a;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+        .bunker-card .badge.done {
+            background: #2a4a3a;
+            color: #60d090;
+            border-color: #3a7a5a;
         }
 
-        /* ===== BOTÃO DE REINÍCIO ===== */
-        #reset-area {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid #141e1e;
+        /* ===== SUBTELAS DO BUNKER ===== */
+        .sub-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            animation: fadeIn 0.3s ease-out;
         }
-        #reset-btn {
+        .sub-screen.active {
+            display: flex;
+        }
+
+        .sub-screen .sub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            border-bottom: 1px solid #1a2a22;
+            padding-bottom: 10px;
+            margin-bottom: 4px;
+        }
+        .sub-screen .sub-header h3 {
+            color: #80d0b0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            font-size: 1.3rem;
+        }
+        .sub-screen .sub-header .back-btn {
             background: transparent;
-            border: 1px solid #2a3a32;
+            border: none;
             color: #5a7a6a;
-            padding: 6px 22px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: 0.2s;
             font-family: inherit;
-            letter-spacing: 1px;
+            padding: 4px 8px;
         }
-        #reset-btn:hover {
-            border-color: #4a6a5a;
+        .sub-screen .sub-header .back-btn:hover {
             color: #8ab0a0;
-            background: #0e1616;
         }
 
-        /* ===== ANIMAÇÃO DE DIGITAÇÃO ===== */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .sub-content {
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid #1a2622;
+            border-radius: 12px;
+            padding: 20px 24px;
+            width: 100%;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        .fade-in {
-            animation: fadeIn 0.4s ease-out;
+        .sub-content p {
+            color: #bcc8c0;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        .sub-content .highlight {
+            color: #80d0b0;
+            font-weight: 500;
+        }
+        .sub-content .danger {
+            color: #e06060;
+        }
+        .sub-content .warn {
+            color: #e0c060;
+        }
+        .sub-content .info {
+            color: #60b0d0;
+        }
+        .sub-content .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #0e1616;
+            font-size: 0.9rem;
+        }
+        .sub-content .stat-row .label {
+            color: #6a8a7a;
+        }
+        .sub-content .stat-row .value {
+            color: #c0d8d0;
+            font-weight: 600;
+        }
+        .sub-content .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+            border-bottom: 1px solid #0e1616;
+            font-size: 0.9rem;
+        }
+        .sub-content .task-item .status {
+            font-size: 1.1rem;
+            min-width: 24px;
+        }
+        .sub-content .task-item .status.done {
+            color: #60d090;
+        }
+        .sub-content .task-item .status.pending {
+            color: #e0c060;
+        }
+        .sub-content .task-item .task-text {
+            color: #bcc8c0;
+        }
+        .sub-content .task-item .task-text.done {
+            text-decoration: line-through;
+            color: #5a7a6a;
+        }
+
+        .sub-content .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .sub-content .action-row .btn-action {
+            background: #14201e;
+            border: 1px solid #2a4a3a;
+            color: #b0d0c0;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .sub-content .action-row .btn-action:hover:not(:disabled) {
+            background: #1e322a;
+            border-color: #4a7a5a;
+        }
+        .sub-content .action-row .btn-action:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .sub-content .action-row .btn-action.primary {
+            background: #1a3a2a;
+            border-color: #3a7a5a;
+            color: #b0e0c0;
+        }
+        .sub-content .action-row .btn-action.primary:hover:not(:disabled) {
+            background: #2a5a3a;
+            border-color: #5a9a7a;
+        }
+
+        .sub-content .machine-timer {
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: #f0a060;
+            text-align: center;
+            padding: 6px 0;
+            letter-spacing: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+        .sub-content .machine-timer.warning {
+            color: #e06060;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
         }
 
         /* ===== RESPONSIVO ===== */
-        @media (max-width: 650px) {
+        @media (max-width: 700px) {
             #game-container {
-                padding: 18px 16px 20px;
+                padding: 16px 12px 18px;
             }
-            #header .title {
-                font-size: 1.2rem;
+            .bunker-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 10px;
             }
-            #header .status-badge {
+            .bunker-card {
+                min-height: 90px;
+                padding: 12px 8px;
+            }
+            .bunker-card .icon {
+                font-size: 1.8rem;
+            }
+            .bunker-card .label {
+                font-size: 0.85rem;
+            }
+            .bunker-header .status-group {
                 font-size: 0.7rem;
-                padding: 2px 10px;
-                gap: 8px;
-                flex-wrap: wrap;
+                gap: 4px 8px;
             }
-            #story-area {
+            .bunker-header .status-group .stat {
+                padding: 1px 8px;
+            }
+            .sub-content {
                 padding: 14px 16px;
-                min-height: 240px;
-                max-height: 340px;
+                min-height: 140px;
             }
-            #story-text {
-                font-size: 0.95rem;
-                line-height: 1.7;
+            .sub-content p {
+                font-size: 0.85rem;
             }
-            .choice-btn {
-                font-size: 0.9rem;
-                padding: 10px 14px;
+            .sub-content .stat-row {
+                font-size: 0.8rem;
             }
-            .choice-btn .cost {
-                font-size: 0.7rem;
+            .sub-content .task-item {
+                font-size: 0.8rem;
             }
         }
         @media (max-width: 420px) {
-            #header .title {
-                font-size: 1rem;
+            .bunker-grid {
+                grid-template-columns: 1fr 1fr;
             }
-            #header .status-badge .stat {
-                gap: 2px;
+            .bunker-card {
+                min-height: 80px;
+                padding: 10px 6px;
             }
-            #story-text {
-                font-size: 0.85rem;
+            .bunker-card .icon {
+                font-size: 1.5rem;
             }
-            .choice-btn {
+            .bunker-card .label {
+                font-size: 0.75rem;
+            }
+            .bunker-card .desc {
+                font-size: 0.6rem;
+            }
+            .bunker-header .status-group .stat {
+                font-size: 0.6rem;
+                padding: 1px 4px;
+            }
+            .sub-content p {
                 font-size: 0.8rem;
-                padding: 8px 12px;
-                gap: 8px;
             }
-            .choice-btn .letter {
-                min-width: 18px;
-                font-size: 0.9rem;
+            .sub-content .task-item {
+                font-size: 0.75rem;
+            }
+            .sub-content .action-row .btn-action {
+                font-size: 0.75rem;
+                padding: 6px 14px;
             }
         }
     </style>
@@ -324,738 +622,689 @@
 <body>
 
     <div id="game-container">
-        <!-- ===== CABEÇALHO ===== -->
-        <div id="header">
-            <div class="title">
-                🌱 ECOSFERA <span>2200</span>
+
+        <!-- ===== TELA 1: MENU ===== -->
+        <div id="menu-screen" class="screen active">
+            <div class="logo">
+                ECOSFERA
+                <span>ano 2200</span>
             </div>
-            <div class="status-badge">
-                <div class="stat stat-oxygen">💨 <span class="val" id="oxyDisplay">60</span>%</div>
-                <div class="stat stat-energy">⚡ <span class="val" id="engDisplay">40</span>%</div>
-                <div class="stat stat-moral">❤️ <span class="val" id="morDisplay">50</span></div>
-                <div class="stat">🌱 <span class="val" id="plantDisplay">2</span></div>
-                <div class="stat">📅 <span class="val" id="dayDisplay">1</span></div>
+            <div class="subtitle">✦ o último refúgio ✦</div>
+            <button class="btn-primary" id="btnStartLore">▶ Começar</button>
+        </div>
+
+        <!-- ===== TELA 2: LORE + NOME ===== -->
+        <div id="lore-screen" class="screen">
+            <div class="lore-box">
+                <h2>📖 O Colapso</h2>
+                <p>
+                    <span class="highlight">Ano 2200.</span> A Terra que conhecemos não existe mais.
+                    Séculos de poluição transformaram a superfície num deserto tóxico.
+                    O ar é irrespirável, o solo está morto, a vegetação foi extinta.
+                </p>
+                <p>
+                    A humanidade sobrevive em um único <span class="highlight">bunker subterrâneo</span>,
+                    último reduto da civilização. Mas o bunker está em colapso:
+                    energia, oxigênio e recursos se esgotam a cada dia.
+                </p>
+                <p>
+                    Uma <span class="highlight">máquina de fotossíntese artificial</span> foi criada
+                    para purificar a atmosfera. Ela precisa de recursos que só existem na superfície.
+                </p>
+                <p>
+                    <span class="highlight">Você</span> é o último explorador. Durante o dia, sobe
+                    à superfície para coletar materiais. Durante a noite, gerencia o bunker.
+                </p>
+                <div class="footer-note">
+                    ⚠️ A superfície é perigosa. Mutantes vagam entre as ruínas.
+                    Sem recursos, o bunker não sobrevive.
+                </div>
+            </div>
+
+            <div class="name-area">
+                <label for="playerName">👤 Nome do explorador:</label>
+                <input type="text" id="playerName" placeholder="Digite seu nome" value="Arion">
+                <button class="btn-start" id="btnStartGame">▶ Jogar</button>
             </div>
         </div>
 
-        <!-- ===== NARRATIVA ===== -->
-        <div id="story-area">
-            <div id="story-text"></div>
+        <!-- ===== TELA 3: BUNKER ===== -->
+        <div id="bunker-screen" class="screen">
+            <!-- Cabeçalho do bunker -->
+            <div class="bunker-header">
+                <div class="title">🏛️ BUNKER <span>central</span></div>
+                <div class="player-name">👤 <strong id="bunkerPlayerName">—</strong></div>
+                <div class="status-group">
+                    <div class="stat stat-oxy">💨 <span class="val" id="oxyVal">60</span>%</div>
+                    <div class="stat stat-energy">⚡ <span class="val" id="engVal">40</span>%</div>
+                    <div class="stat stat-moral">❤️ <span class="val" id="morVal">50</span></div>
+                    <div class="stat stat-plant">🌱 <span class="val" id="plantVal">2</span></div>
+                    <div class="stat stat-day">📅 <span class="val" id="dayVal">1</span></div>
+                    <div class="stat stat-machine">⏳ <span class="val" id="machineVal">8:00</span></div>
+                    <div class="stat stat-sucata">🔧 <span class="val" id="sucataVal">0</span></div>
+                    <div class="stat stat-tasks">📋 <span class="val" id="tasksVal">0/0</span></div>
+                </div>
+            </div>
+
+            <!-- Grade de opções -->
+            <div class="bunker-grid" id="bunkerGrid">
+                <div class="bunker-card" data-action="surface">
+                    <div class="icon">☣️</div>
+                    <div class="label">Superfície</div>
+                    <div class="desc">Explorar, coletar sucata</div>
+                    <div class="badge" id="surfaceBadge">pendente</div>
+                </div>
+                <div class="bunker-card" data-action="computer">
+                    <div class="icon">🖥️</div>
+                    <div class="label">Computador</div>
+                    <div class="desc">Painel geral + tarefas</div>
+                    <div class="badge">status</div>
+                </div>
+                <div class="bunker-card" data-action="machine">
+                    <div class="icon">⚙️</div>
+                    <div class="label">Máquina</div>
+                    <div class="desc">Fotossíntese artificial</div>
+                    <div class="badge" id="machineBadge">pendente</div>
+                </div>
+                <div class="bunker-card" data-action="room">
+                    <div class="icon">🛏️</div>
+                    <div class="label">Quarto</div>
+                    <div class="desc">Dormir e avançar o dia</div>
+                    <div class="badge" id="roomBadge">🔒</div>
+                </div>
+                <div class="bunker-card" data-action="shop">
+                    <div class="icon">🏪</div>
+                    <div class="label">Loja</div>
+                    <div class="desc">Trocar recursos</div>
+                    <div class="badge" id="shopBadge">pendente</div>
+                </div>
+            </div>
+
+            <!-- ===== SUBTELAS (dinâmicas) ===== -->
+            <div id="subScreenContainer" style="width:100%; display:none;"></div>
+
+            <!-- Botão voltar ao menu -->
+            <button class="btn-secondary" id="btnBackToMenu" style="margin-top:8px;">⬅ Voltar ao menu</button>
         </div>
 
-        <!-- ===== DIÁRIO ===== -->
-        <div id="journal"></div>
-
-        <!-- ===== ESCOLHAS ===== -->
-        <div id="choices-area"></div>
-
-        <!-- ===== REINÍCIO ===== -->
-        <div id="reset-area">
-            <button id="reset-btn">🔄 Recomeçar jornada</button>
-        </div>
     </div>
 
     <script>
         // ================================================================
-        //  ECOSFERA 2200 – RPG DE ESCOLHAS E CONSEQUÊNCIAS
-        //  Estrutura narrativa ramificada com sistemas de gestão
+        //  ECOSFERA 2200 – JOGO COMPLETO
+        //  Menu → Lore → Bunker com todas as funcionalidades
         // ================================================================
 
         // ---- ESTADO GLOBAL ----
         const state = {
-            // Recursos do bunker
-            oxygen: 60, // 0-100
-            energy: 40, // 0-100
-            moral: 50, // 0-100 (ânimo da tripulação)
-            plants: 2, // número de plantas ativas
-            efficiency: 1.0, // multiplicador de produção
-            research: false, // pesquisa avançada concluída?
-
-            // Inventário (recursos coletados)
+            playerName: 'Arion',
+            oxygen: 60,
+            energy: 40,
+            moral: 50,
+            plants: 2,
+            day: 1,
+            cycle: 0,
+            // Recursos
             metal: 0,
             biomass: 0,
             tech: 0,
-
-            // Progresso
-            day: 1,
-            cycle: 0, // 0 = dia, 1 = noite
-
-            // Flags narrativas
-            flags: {
-                exploredRuins: false,
-                foundWater: false,
-                fixedGenerator: false,
-                metWanderer: false,
-                upgradedPlants: false,
-                securedBunker: false,
+            sucata: 0,
+            // Máquina
+            machineTime: 480, // segundos (8 minutos)
+            maxMachineTime: 480,
+            machineActive: true,
+            // Tarefas
+            tasks: {
+                explored: false,
+                machineFed: false,
+                shopVisited: false,
             },
-
-            // Histórico de escolhas (para o diário)
-            history: [],
-
-            // Controle de fluxo
-            currentNode: 'intro',
+            // Estatísticas
+            totalExplorations: 0,
+            totalResourcesCollected: 0,
+            totalEnemiesDefeated: 0,
+            // Controle
             gameOver: false,
-            gameWin: false,
-            waitingChoice: false,
         };
 
-        // ---- REFERÊNCIAS DOM ----
-        const storyEl = document.getElementById('story-text');
-        const choicesEl = document.getElementById('choices-area');
-        const journalEl = document.getElementById('journal');
-        const resetBtn = document.getElementById('reset-btn');
+        // ---- DOM ----
+        const menuScreen = document.getElementById('menu-screen');
+        const loreScreen = document.getElementById('lore-screen');
+        const bunkerScreen = document.getElementById('bunker-screen');
 
-        const oxyDisplay = document.getElementById('oxyDisplay');
-        const engDisplay = document.getElementById('engDisplay');
-        const morDisplay = document.getElementById('morDisplay');
-        const plantDisplay = document.getElementById('plantDisplay');
-        const dayDisplay = document.getElementById('dayDisplay');
+        const btnStartLore = document.getElementById('btnStartLore');
+        const btnStartGame = document.getElementById('btnStartGame');
+        const btnBackToMenu = document.getElementById('btnBackToMenu');
+        const playerNameInput = document.getElementById('playerName');
+        const bunkerPlayerName = document.getElementById('bunkerPlayerName');
 
-        // ---- FUNÇÕES AUXILIARES ----
-        function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+        const oxyVal = document.getElementById('oxyVal');
+        const engVal = document.getElementById('engVal');
+        const morVal = document.getElementById('morVal');
+        const plantVal = document.getElementById('plantVal');
+        const dayVal = document.getElementById('dayVal');
+        const machineVal = document.getElementById('machineVal');
+        const sucataVal = document.getElementById('sucataVal');
+        const tasksVal = document.getElementById('tasksVal');
 
-        function updateUI() {
-            oxyDisplay.textContent = Math.round(state.oxygen);
-            engDisplay.textContent = Math.round(state.energy);
-            morDisplay.textContent = Math.round(state.moral);
-            plantDisplay.textContent = state.plants;
-            dayDisplay.textContent = state.day;
-        }
+        const bunkerGrid = document.getElementById('bunkerGrid');
+        const subContainer = document.getElementById('subScreenContainer');
 
-        function addJournal(entry) {
-            const dayStr = `Dia ${state.day}`;
-            state.history.push({ day: state.day, text: entry });
-            const entryEl = document.createElement('div');
-            entryEl.className = 'entry';
-            entryEl.innerHTML = `<span class="day">[${dayStr}]</span> ${entry}`;
-            journalEl.appendChild(entryEl);
-            journalEl.scrollTop = journalEl.scrollHeight;
-            // Limita o histórico para não sobrecarregar
-            if (journalEl.children.length > 30) {
-                journalEl.removeChild(journalEl.firstChild);
-            }
-        }
+        const surfaceBadge = document.getElementById('surfaceBadge');
+        const machineBadge = document.getElementById('machineBadge');
+        const roomBadge = document.getElementById('roomBadge');
+        const shopBadge = document.getElementById('shopBadge');
 
-        // ---- SISTEMA DE CONSEQUÊNCIAS ----
-        function applyConsequences(consequences) {
-            if (!consequences) return;
-            let msg = '';
-            for (const [key, value] of Object.entries(consequences)) {
-                switch (key) {
-                    case 'oxygen':
-                        state.oxygen = clamp(state.oxygen + value, 0, 100);
-                        msg += `💨 Oxigênio ${value > 0 ? '+' : ''}${value}% `;
-                        break;
-                    case 'energy':
-                        state.energy = clamp(state.energy + value, 0, 100);
-                        msg += `⚡ Energia ${value > 0 ? '+' : ''}${value}% `;
-                        break;
-                    case 'moral':
-                        state.moral = clamp(state.moral + value, 0, 100);
-                        msg += `❤️ Moral ${value > 0 ? '+' : ''}${value} `;
-                        break;
-                    case 'plants':
-                        state.plants = Math.max(0, state.plants + value);
-                        msg += `🌱 Plantas ${value > 0 ? '+' : ''}${value} `;
-                        break;
-                    case 'metal':
-                        state.metal += value;
-                        msg += `🔩 +${value} Metal `;
-                        break;
-                    case 'biomass':
-                        state.biomass += value;
-                        msg += `🧬 +${value} Biomassa `;
-                        break;
-                    case 'tech':
-                        state.tech += value;
-                        msg += `⚙️ +${value} Tecnologia `;
-                        break;
-                    case 'efficiency':
-                        state.efficiency += value;
-                        msg += `⬆ Eficiência +${value}× `;
-                        break;
-                    case 'research':
-                        state.research = true;
-                        msg += `🔬 Pesquisa concluída! `;
-                        break;
-                    case 'day':
-                        state.day += value;
-                        msg += `📅 Avançou ${value} dia(s) `;
-                        break;
-                    case 'cycle':
-                        state.cycle = (state.cycle + value) % 2;
-                        msg += `🌓 Ciclo alterado `;
-                        break;
-                    case 'flag':
-                        if (value) {
-                            state.flags[consequences.flagName] = true;
-                            msg += `🏴 Flag: ${consequences.flagName} `;
-                        }
-                        break;
-                }
-            }
-            if (msg) {
-                addJournal('⚡ Consequências: ' + msg.trim());
-            }
-            updateUI();
-        }
+        // ---- TIMER DA MÁQUINA ----
+        let machineInterval = null;
 
-        // ---- VERIFICAÇÃO DE GAME OVER / WIN ----
-        function checkGameOver() {
-            if (state.oxygen <= 0) {
-                state.gameOver = true;
-                return '💀 O BUNKER FICOU SEM OXIGÊNIO. A humanidade se foi.';
-            }
-            if (state.energy <= 0 && state.oxygen < 20) {
-                state.gameOver = true;
-                return '⚡ SEM ENERGIA, o sistema de suporte de vida colapsou.';
-            }
-            if (state.moral <= 0) {
-                state.gameOver = true;
-                return '😔 A TRIPULAÇÃO PERDEU A ESPERANÇA. O bunker entrou em caos.';
-            }
-            return null;
-        }
-
-        function checkWin() {
-            if (state.oxygen >= 90 && state.research && state.plants >= 6 && state.day >= 20) {
-                state.gameWin = true;
-                return '🌱 PLANETA RESTAURADO! A fotossíntese artificial reverteu o colapso. A Terra respira novamente.';
-            }
-            return null;
-        }
-
-        // ---- NARRATIVA - NÓS E ESCOLHAS ----
-        const nodes = {
-
-            // ===== INTRODUÇÃO =====
-            intro: {
-                text: `O ano é <span class="highlight">2200</span>. A Terra está morta.
-
-        A poluição extrema transformou a superfície num deserto tóxico. A humanidade sobrevive em um único <span class="highlight">bunker subterrâneo</span>, mas os recursos estão se esgotando.
-
-        Você é o <span class="highlight">último explorador</span>. O destino da civilização está em suas mãos.
-
-        <span class="choice-marker">⚡ O que você faz primeiro?</span>`,
-                choices: [
-                    { text: '🔍 Explorar a superfície em busca de recursos', action: 'explore_surface' },
-                    { text: '🛠️ Verificar os sistemas do bunker', action: 'check_bunker' },
-                    { text: '📖 Estudar os registros da máquina de fotossíntese', action: 'study_machine' },
-                ]
-            },
-
-            // ===== EXPLORAR SUPERFÍCIE =====
-            explore_surface: {
-                text: `Você sobe à superfície. O ar é pesado, o céu está encoberto por uma névoa tóxica.
-
-        À sua frente, as ruínas de uma antiga cidade se estendem por quilômetros. Você avista alguns destroços que podem conter recursos úteis.
-
-        <span class="choice-marker">🧭 Para onde você vai?</span>`,
-                choices: [
-                    { text: '🏚️ Explorar os prédios em ruínas', action: 'explore_ruins', cost: '⏳ 1 dia' },
-                    { text: '🔧 Procurar por tecnologia em veículos abandonados', action: 'explore_vehicles', cost: '⏳ 1 dia' },
-                    { text: '🌿 Coletar biomassa na vegetação morta', action: 'collect_biomass', cost: '⏳ 1 dia' },
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ]
-            },
-
-            explore_ruins: {
-                text: `Você entra em um prédio parcialmente destruído. O chão está coberto de detritos, e o silêncio é absoluto.
-
-        No andar superior, você encontra um <span class="highlight">painel de controle antigo</span> que parece ainda funcionar. Também avista alguns <span class="info">metais</span> e <span class="warn">tecnologia</span> espalhados.
-
-        <span class="choice-marker">⚙️ O que você faz?</span>`,
-                choices: [
-                    { text: '🔌 Tentar ativar o painel de controle', action: 'activate_panel', cost: '⚙️ Tecnologia' },
-                    { text: '📦 Coletar os recursos e voltar', action: 'collect_resources', cost: '⏳ 1 dia' },
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    state.flags.exploredRuins = true;
-                    addJournal('🏚️ Explorei as ruínas da cidade.');
-                }
-            },
-
-            activate_panel: {
-                text: `Você consegue ativar o painel. Ele mostra dados sobre a <span class="highlight">rede de energia da cidade</span> antes do colapso.
-
-        Com as informações, você pode <span class="highlight">otimizar o consumo de energia</span> do bunker.
-
-        <span class="choice-marker">✅ Efeito: +20% de Energia. -5 de Moral (pelo esforço).</span>`,
-                choices: [
-                    { text: '✅ Aplicar as otimizações', action: 'apply_optimization' },
-                    { text: '📝 Registrar os dados para depois', action: 'record_data' },
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    // Consequências aplicadas nas ações
-                }
-            },
-
-            apply_optimization: {
-                text: `Você implementa as otimizações. A eficiência energética do bunker melhora significativamente.
-
-        <span class="highlight">⚡ Energia +20%.</span>
-        <span class="warn">😔 Moral -5 (pelo esforço extra).</span>
-
-        <span class="choice-marker">✅ Missão concluída.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ energy: 20, moral: -5 });
-                    addJournal('🔧 Otimizei o consumo de energia do bunker.');
-                }
-            },
-
-            record_data: {
-                text: `Você registra os dados. Eles podem ser úteis no futuro, mas por enquanto não trazem benefícios imediatos.
-
-        <span class="info">📊 Tecnologia +3.</span>
-
-        <span class="choice-marker">✅ Dados registrados.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ tech: 3 });
-                    addJournal('📊 Registrei dados da rede elétrica da cidade.');
-                }
-            },
-
-            collect_resources: {
-                text: `Você coleta os recursos disponíveis. Não é muito, mas ajuda.
-
-        <span class="highlight">🔩 Metal +2</span>
-        <span class="highlight">⚙️ Tecnologia +2</span>
-
-        <span class="choice-marker">✅ Recursos coletados.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ metal: 2, tech: 2 });
-                    addJournal('📦 Coletei recursos nas ruínas.');
-                }
-            },
-
-            explore_vehicles: {
-                text: `Você examina os veículos abandonados. A maioria está destruída, mas em um caminhão você encontra um <span class="highlight">gerador portátil</span> em boas condições.
-
-        <span class="choice-marker">🔧 O que você faz?</span>`,
-                choices: [
-                    { text: '🔌 Levar o gerador para o bunker', action: 'take_generator', cost: '⏳ 1 dia' },
-                    { text: '🔩 Desmontar o gerador por peças', action: 'scrap_generator', cost: '⏳ 1 dia' },
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    addJournal('🚗 Encontrei um gerador portátil em um caminhão.');
-                }
-            },
-
-            take_generator: {
-                text: `Você leva o gerador para o bunker. Ele pode fornecer energia extra em emergências.
-
-        <span class="highlight">⚡ Energia +15.</span>
-        <span class="highlight">🔧 Flag: Gerador recuperado.</span>
-
-        <span class="choice-marker">✅ Gerador instalado.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ energy: 15, flag: true, flagName: 'fixedGenerator' });
-                    addJournal('🔌 Instalei o gerador portátil no bunker.');
-                }
-            },
-
-            scrap_generator: {
-                text: `Você desmonta o gerador e separa as peças úteis.
-
-        <span class="highlight">🔩 Metal +5</span>
-        <span class="highlight">⚙️ Tecnologia +3</span>
-
-        <span class="choice-marker">✅ Peças recuperadas.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ metal: 5, tech: 3 });
-                    addJournal('🔩 Desmontei o gerador por peças.');
-                }
-            },
-
-            collect_biomass: {
-                text: `A vegetação morta ainda contém matéria orgânica útil. Você coleta o máximo que pode.
-
-        <span class="highlight">🧬 Biomassa +6</span>
-
-        <span class="choice-marker">✅ Biomassa coletada.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ biomass: 6 });
-                    addJournal('🌿 Coletei biomassa da vegetação morta.');
-                }
-            },
-
-            // ===== VERIFICAR BUNKER =====
-            check_bunker: {
-                text: `Você faz uma inspeção completa do bunker.
-
-        Os sistemas estão funcionando, mas há sinais de desgaste. A <span class="warn">rede de oxigênio</span> precisa de manutenção, e a <span class="warn">reserva de energia</span> está abaixo do ideal.
-
-        <span class="choice-marker">🔧 O que você prioriza?</span>`,
-                choices: [
-                    { text: '💨 Reparar a rede de oxigênio', action: 'fix_oxygen', cost: '🔩 3 Metal' },
-                    { text: '⚡ Otimizar a reserva de energia', action: 'optimize_energy', cost: '⚙️ 2 Tecnologia' },
-                    { text: '😌 Elevar o moral da tripulação', action: 'boost_moral', cost: '⏳ 1 dia' },
-                    { text: '⬅️ Voltar à superfície', action: 'explore_surface' },
-                ],
-                onEnter: () => {
-                    addJournal('🔍 Inspecionei os sistemas do bunker.');
-                }
-            },
-
-            fix_oxygen: {
-                text: `Você repara a rede de oxigênio. O fluxo de ar melhora, e a tripulação respira melhor.
-
-        <span class="highlight">💨 Oxigênio +15.</span>
-        <span class="highlight">❤️ Moral +5.</span>
-
-        <span class="choice-marker">✅ Reparo concluído.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    if (state.metal >= 3) {
-                        applyConsequences({ metal: -3, oxygen: 15, moral: 5 });
-                        addJournal('💨 Reparei a rede de oxigênio do bunker.');
-                    } else {
-                        // Fallback: tenta com biomassa
-                        if (state.biomass >= 5) {
-                            applyConsequences({ biomass: -5, oxygen: 10 });
-                            addJournal('💨 Reparo improvisado com biomassa (+10% O₂).');
-                        } else {
-                            addJournal('❌ Não havia recursos suficientes para reparar o oxigênio.');
-                            return;
-                        }
+        function startMachineTimer() {
+            if (machineInterval) clearInterval(machineInterval);
+            machineInterval = setInterval(() => {
+                if (state.machineTime > 0 && state.machineActive) {
+                    state.machineTime -= 1;
+                    if (state.machineTime <= 0) {
+                        state.machineTime = 0;
+                        state.machineActive = false;
+                        console.log('⛔ MÁQUINA PAROU! Oxigênio está caindo!');
                     }
                 }
-            },
-
-            optimize_energy: {
-                text: `Você recalibra os sistemas de energia. O consumo diminui e a eficiência aumenta.
-
-        <span class="highlight">⚡ Energia +10.</span>
-        <span class="highlight">⬆ Eficiência +0.2×</span>
-
-        <span class="choice-marker">✅ Otimização concluída.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    if (state.tech >= 2) {
-                        applyConsequences({ tech: -2, energy: 10, efficiency: 0.2 });
-                        addJournal('⚡ Otimizei os sistemas de energia do bunker.');
+                updateMachineDisplay();
+                // Atualiza subtela da máquina se aberta
+                const machineTimerEl = document.getElementById('machineTimerDisplay');
+                if (machineTimerEl) {
+                    machineTimerEl.textContent = formatTime(state.machineTime);
+                    if (state.machineTime < 60) {
+                        machineTimerEl.className = 'machine-timer warning';
                     } else {
-                        addJournal('❌ Tecnologia insuficiente para otimizar a energia.');
+                        machineTimerEl.className = 'machine-timer';
                     }
                 }
-            },
-
-            boost_moral: {
-                text: `Você organiza uma reunião com a tripulação. Palavras de encorajamento e planos para o futuro.
-
-        <span class="highlight">❤️ Moral +15.</span>
-
-        <span class="choice-marker">✅ Moral elevado.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ moral: 15 });
-                    addJournal('😊 Elevei o moral da tripulação com uma reunião.');
-                }
-            },
-
-            // ===== ESTUDAR MÁQUINA =====
-            study_machine: {
-                text: `Você passa horas estudando os diagramas da <span class="highlight">máquina de fotossíntese artificial</span>.
-
-        O sistema é complexo, mas você começa a entender como otimizar a produção de oxigênio.
-
-        <span class="choice-marker">🔬 O que você pesquisa?</span>`,
-                choices: [
-                    { text: '🌱 Melhorar a eficiência das plantas', action: 'upgrade_plants', cost: '🧬 10 Biomassa' },
-                    { text: '⚡ Reduzir o consumo de energia das plantas', action: 'reduce_energy_consumption',
-                    cost: '⚙️ 8 Tecnologia' },
-                    { text: '🧬 Desenvolver uma nova cepa de planta', action: 'new_plant_strain', cost: '🧬 15 Biomassa + 🔩 5 Metal' },
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    addJournal('📖 Estudei os diagramas da máquina de fotossíntese.');
-                }
-            },
-
-            upgrade_plants: {
-                text: `Você implementa as melhorias nas plantas. Elas agora produzem mais oxigênio com menos recursos.
-
-        <span class="highlight">🌱 Produção +30%.</span>
-        <span class="highlight">⬆ Eficiência +0.3×</span>
-
-        <span class="choice-marker">✅ Plantas melhoradas.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    if (state.biomass >= 10) {
-                        applyConsequences({ biomass: -10, efficiency: 0.3, flag: true, flagName: 'upgradedPlants' });
-                        addJournal('🌱 Melhorei a eficiência das plantas.');
-                    } else {
-                        addJournal('❌ Biomassa insuficiente para melhorar as plantas.');
-                    }
-                }
-            },
-
-            reduce_energy_consumption: {
-                text: `Você recalibra os sistemas para reduzir o consumo de energia das plantas.
-
-        <span class="highlight">⚡ Consumo de energia -20%.</span>
-
-        <span class="choice-marker">✅ Consumo reduzido.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    if (state.tech >= 8) {
-                        applyConsequences({ tech: -8, efficiency: 0.2 });
-                        addJournal('⚡ Reduzi o consumo de energia das plantas.');
-                    } else {
-                        addJournal('❌ Tecnologia insuficiente para reduzir o consumo.');
-                    }
-                }
-            },
-
-            new_plant_strain: {
-                text: `Você desenvolve uma nova cepa de planta, mais resistente e produtiva.
-
-        <span class="highlight">🌱 Plantas +2.</span>
-        <span class="highlight">⬆ Eficiência +0.4×</span>
-
-        <span class="choice-marker">✅ Nova cepa criada.</span>`,
-                choices: [
-                    { text: '⬅️ Voltar ao bunker', action: 'return_bunker' },
-                ],
-                onEnter: () => {
-                    if (state.biomass >= 15 && state.metal >= 5) {
-                        applyConsequences({ biomass: -15, metal: -5, plants: 2, efficiency: 0.4 });
-                        addJournal('🧬 Criei uma nova cepa de planta resistente.');
-                    } else {
-                        addJournal('❌ Recursos insuficientes para criar nova cepa.');
-                    }
-                }
-            },
-
-            // ===== RETORNAR AO BUNKER =====
-            return_bunker: {
-                text: `Você retorna ao bunker. O ar é mais respirável aqui, e a tripulação aguarda suas próximas decisões.
-
-        <span class="choice-marker">📋 O que você faz agora?</span>`,
-                choices: [
-                    { text: '🔍 Explorar a superfície', action: 'explore_surface' },
-                    { text: '🛠️ Verificar os sistemas do bunker', action: 'check_bunker' },
-                    { text: '📖 Estudar a máquina de fotossíntese', action: 'study_machine' },
-                    { text: '😴 Descansar e passar o dia', action: 'rest_day' },
-                ],
-                onEnter: () => {
-                    // Passa um dia parcial
-                    state.day += 0.5;
-                    updateUI();
-                    addJournal('⬅️ Retornei ao bunker.');
-                    // Pequena recuperação
-                    state.oxygen = clamp(state.oxygen + 2, 0, 100);
-                    state.energy = clamp(state.energy + 2, 0, 100);
-                    updateUI();
-                }
-            },
-
-            // ===== DESCANSAR =====
-            rest_day: {
-                text: `Você descansa. A tripulação aproveita para relaxar e se recuperar.
-
-        <span class="highlight">❤️ Moral +5</span>
-        <span class="highlight">💨 Oxigênio +3</span>
-        <span class="highlight">⚡ Energia +3</span>
-
-        <span class="choice-marker">🌅 Um novo dia começa.</span>`,
-                choices: [
-                    { text: '🔍 Explorar a superfície', action: 'explore_surface' },
-                    { text: '🛠️ Verificar os sistemas do bunker', action: 'check_bunker' },
-                    { text: '📖 Estudar a máquina de fotossíntese', action: 'study_machine' },
-                ],
-                onEnter: () => {
-                    applyConsequences({ moral: 5, oxygen: 3, energy: 3, day: 1 });
-                    addJournal('😴 Descansei e recuperei as energias.');
-                }
-            },
-
-            // ===== FIM DE JOGO (Game Over) =====
-            game_over: {
-                text: `💀 <span class="danger">GAME OVER</span>
-
-        A humanidade não resistiu. O bunker entrou em colapso, e a última esperança da Terra se foi.
-
-        Mas as cinzas sempre podem dar origem a novas brasas.
-
-        <span class="choice-marker">🔄 Recomece e tente novamente.</span>`,
-                choices: [
-                    { text: '🔄 Recomeçar jornada', action: 'reset_game' },
-                ],
-                onEnter: () => {
+                // Verifica game over
+                if (state.oxygen <= 0 && !state.gameOver) {
                     state.gameOver = true;
-                    addJournal('💀 GAME OVER — O bunker colapsou.');
+                    clearInterval(machineInterval);
+                    machineInterval = null;
+                    alert('💀 O BUNKER FICOU SEM OXIGÊNIO! A humanidade se foi.');
+                    document.querySelectorAll('.bunker-card, .btn-action').forEach(el => el.style.pointerEvents = 'none');
                 }
-            },
-
-            // ===== VITÓRIA =====
-            victory: {
-                text: `🌱 <span class="highlight">VITÓRIA!</span>
-
-        A Terra respira novamente. A fotossíntese artificial reverteu o colapso ambiental.
-
-        A humanidade tem uma segunda chance. Obrigado por não desistir.
-
-        <span class="choice-marker">🏆 Você salvou a humanidade.</span>`,
-                choices: [
-                    { text: '🔄 Recomeçar jornada', action: 'reset_game' },
-                ],
-                onEnter: () => {
-                    state.gameWin = true;
-                    addJournal('🌱 VITÓRIA — O planeta foi restaurado!');
-                }
-            },
-        };
-
-        // ---- FUNÇÃO PRINCIPAL DE NAVEGAÇÃO ----
-        function goToNode(nodeId) {
-            // Verifica game over / win antes de prosseguir
-            const overMsg = checkGameOver();
-            if (overMsg) {
-                state.gameOver = true;
-                const node = nodes['game_over'];
-                state.currentNode = 'game_over';
-                renderNode(node);
-                return;
-            }
-            const winMsg = checkWin();
-            if (winMsg) {
-                state.gameWin = true;
-                const node = nodes['victory'];
-                state.currentNode = 'victory';
-                renderNode(node);
-                return;
-            }
-
-            const node = nodes[nodeId];
-            if (!node) {
-                console.error('Nó não encontrado:', nodeId);
-                return;
-            }
-
-            state.currentNode = nodeId;
-
-            // Executa onEnter se existir
-            if (node.onEnter) {
-                node.onEnter();
-            }
-
-            renderNode(node);
+            }, 1000);
         }
 
-        function renderNode(node) {
-            // Texto
-            storyEl.innerHTML = node.text;
-            storyEl.className = 'fade-in';
-
-            // Escolhas
-            choicesEl.innerHTML = '';
-            if (node.choices && node.choices.length > 0) {
-                const letters = ['A', 'B', 'C', 'D', 'E'];
-                node.choices.forEach((choice, index) => {
-                    const btn = document.createElement('button');
-                    btn.className = 'choice-btn';
-                    const letter = letters[index] || '•';
-                    btn.innerHTML = `
-                        <span class="letter">${letter}</span>
-                        <span>${choice.text}</span>
-                        ${choice.cost ? `<span class="cost">${choice.cost}</span>` : ''}
-                    `;
-                    btn.addEventListener('click', () => {
-                        // Verifica se há custo (apenas visual por enquanto)
-                        // As consequências são aplicadas no nó de destino
-                        goToNode(choice.action);
-                    });
-                    choicesEl.appendChild(btn);
-                });
-            } else {
-                // Caso não haja escolhas (nó terminal), mostra botão de reinício
-                const btn = document.createElement('button');
-                btn.className = 'choice-btn';
-                btn.innerHTML = '<span class="letter">⟳</span> <span>Recomeçar</span>';
-                btn.addEventListener('click', () => resetGame());
-                choicesEl.appendChild(btn);
-            }
-
-            // Atualiza UI
-            updateUI();
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // ---- RESET ----
-        function resetGame() {
-            // Reset do estado
-            state.oxygen = 60;
-            state.energy = 40;
-            state.moral = 50;
-            state.plants = 2;
-            state.efficiency = 1.0;
-            state.research = false;
-            state.metal = 0;
-            state.biomass = 0;
-            state.tech = 0;
-            state.day = 1;
-            state.cycle = 0;
-            state.flags = {
-                exploredRuins: false,
-                foundWater: false,
-                fixedGenerator: false,
-                metWanderer: false,
-                upgradedPlants: false,
-                securedBunker: false,
+        function updateMachineDisplay() {
+            machineVal.textContent = formatTime(state.machineTime);
+            machineVal.style.color = state.machineTime < 60 ? '#e06060' : '#f0a060';
+            sucataVal.textContent = state.sucata;
+        }
+
+        // ---- SISTEMA DE TAREFAS ----
+        function resetTasks() {
+            state.tasks = {
+                explored: false,
+                machineFed: false,
+                shopVisited: false,
             };
-            state.history = [];
-            state.gameOver = false;
-            state.gameWin = false;
-            state.currentNode = 'intro';
-
-            // Limpa diário
-            journalEl.innerHTML = '';
-
-            updateUI();
-            goToNode('intro');
-            addJournal('📜 Nova jornada iniciada. O futuro da humanidade está em suas mãos.');
+            updateTaskUI();
         }
 
-        // ---- EVENTOS ----
-        resetBtn.addEventListener('click', resetGame);
+        function checkAllTasksDone() {
+            return state.tasks.explored && state.tasks.machineFed && state.tasks.shopVisited;
+        }
+
+        function updateTaskUI() {
+            const total = 3;
+            let done = 0;
+            if (state.tasks.explored) done++;
+            if (state.tasks.machineFed) done++;
+            if (state.tasks.shopVisited) done++;
+            tasksVal.textContent = `${done}/${total}`;
+
+            surfaceBadge.textContent = state.tasks.explored ? '✅ feito' : 'pendente';
+            surfaceBadge.className = 'badge' + (state.tasks.explored ? ' done' : '');
+
+            machineBadge.textContent = state.tasks.machineFed ? '✅ feito' : 'pendente';
+            machineBadge.className = 'badge' + (state.tasks.machineFed ? ' done' : '');
+
+            shopBadge.textContent = state.tasks.shopVisited ? '✅ feito' : 'pendente';
+            shopBadge.className = 'badge' + (state.tasks.shopVisited ? ' done' : '');
+
+            const allDone = checkAllTasksDone();
+            roomBadge.textContent = allDone ? '✅ dormir' : '🔒 bloqueado';
+            roomBadge.className = 'badge' + (allDone ? ' done' : '');
+
+            // Atualiza lista de tarefas no computador se aberta
+            const taskList = document.getElementById('taskList');
+            if (taskList) {
+                taskList.innerHTML = `
+                    <div class="task-item">
+                        <span class="status ${state.tasks.explored ? 'done' : 'pending'}">${state.tasks.explored ? '✅' : '⬜'}</span>
+                        <span class="task-text ${state.tasks.explored ? 'done' : ''}">Explorar a superfície</span>
+                    </div>
+                    <div class="task-item">
+                        <span class="status ${state.tasks.machineFed ? 'done' : 'pending'}">${state.tasks.machineFed ? '✅' : '⬜'}</span>
+                        <span class="task-text ${state.tasks.machineFed ? 'done' : ''}">Abastecer a máquina com sucata</span>
+                    </div>
+                    <div class="task-item">
+                        <span class="status ${state.tasks.shopVisited ? 'done' : 'pending'}">${state.tasks.shopVisited ? '✅' : '⬜'}</span>
+                        <span class="task-text ${state.tasks.shopVisited ? 'done' : ''}">Visitar a loja</span>
+                    </div>
+                `;
+            }
+        }
+
+        // ---- AVANÇAR DIA ----
+        function advanceDay() {
+            if (!checkAllTasksDone()) {
+                alert('⚠️ Você ainda não concluiu todas as tarefas do dia!');
+                return;
+            }
+
+            state.day += 1;
+            state.cycle = (state.cycle + 1) % 2;
+            state.moral = Math.min(100, state.moral + 5);
+            state.energy = Math.min(100, state.energy + 10);
+            state.oxygen = Math.min(100, state.oxygen + 3);
+            resetTasks();
+            updateBunkerUI();
+            alert(`🌅 Dia ${Math.floor(state.day)} começou! Novas tarefas disponíveis.`);
+            closeSubScreen();
+        }
+
+        // ---- FUNÇÕES DE TELA ----
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            if (screenId === 'bunker-screen') {
+                updateBunkerUI();
+                subContainer.style.display = 'none';
+                subContainer.innerHTML = '';
+                bunkerGrid.style.display = 'grid';
+                if (!machineInterval) startMachineTimer();
+                if (state.day === 1) resetTasks();
+                updateTaskUI();
+            }
+        }
+
+        function updateBunkerUI() {
+            bunkerPlayerName.textContent = state.playerName;
+            oxyVal.textContent = Math.round(state.oxygen);
+            engVal.textContent = Math.round(state.energy);
+            morVal.textContent = Math.round(state.moral);
+            plantVal.textContent = state.plants;
+            dayVal.textContent = Math.floor(state.day);
+            updateMachineDisplay();
+            updateTaskUI();
+        }
+
+        // ---- SUBTELAS ----
+        function openSubScreen(title, contentHTML, backAction) {
+            bunkerGrid.style.display = 'none';
+            subContainer.style.display = 'block';
+            subContainer.innerHTML = `
+                <div class="sub-screen active">
+                    <div class="sub-header">
+                        <h3>${title}</h3>
+                        <button class="back-btn" id="subBackBtn">✕</button>
+                    </div>
+                    <div class="sub-content">
+                        ${contentHTML}
+                    </div>
+                </div>
+            `;
+            document.getElementById('subBackBtn').addEventListener('click', () => {
+                closeSubScreen();
+                if (backAction) backAction();
+            });
+            setTimeout(() => setupSubActions(), 30);
+        }
+
+        function closeSubScreen() {
+            subContainer.style.display = 'none';
+            subContainer.innerHTML = '';
+            bunkerGrid.style.display = 'grid';
+            updateBunkerUI();
+        }
+
+        // ---- CONTEÚDO DAS SUBTELAS ----
+        function getSurfaceContent() {
+            const resources = `🔩 ${state.metal}  |  🧬 ${state.biomass}  |  ⚙️ ${state.tech}  |  🔧 ${state.sucata}`;
+            return `
+                <p><span class="highlight">☣️ SUPERFÍCIE</span> — O mundo exterior está devastado.</p>
+                <p>Recursos atuais: ${resources}</p>
+                <p>${state.tasks.explored ? '✅ Tarefa concluída!' : '⚠️ Tarefa pendente: explorar a superfície.'}</p>
+                <div class="action-row">
+                    <button class="btn-action" id="actionExplore">🔍 Explorar (+ recursos + sucata)</button>
+                    <button class="btn-action" id="actionReturn">⬅ Voltar</button>
+                </div>
+            `;
+        }
+
+        function getComputerContent() {
+            const machineStatus = state.machineActive ?
+                `<span class="highlight">✅ ATIVA</span> (${formatTime(state.machineTime)} restante)` :
+                `<span class="danger">⛔ PARADA</span> (sem tempo)`;
+
+            const taskListHtml = `
+                <div id="taskList">
+                    <div class="task-item">
+                        <span class="status ${state.tasks.explored ? 'done' : 'pending'}">${state.tasks.explored ? '✅' : '⬜'}</span>
+                        <span class="task-text ${state.tasks.explored ? 'done' : ''}">Explorar a superfície</span>
+                    </div>
+                    <div class="task-item">
+                        <span class="status ${state.tasks.machineFed ? 'done' : 'pending'}">${state.tasks.machineFed ? '✅' : '⬜'}</span>
+                        <span class="task-text ${state.tasks.machineFed ? 'done' : ''}">Abastecer a máquina com sucata</span>
+                    </div>
+                    <div class="task-item">
+                        <span class="status ${state.tasks.shopVisited ? 'done' : 'pending'}">${state.tasks.shopVisited ? '✅' : '⬜'}</span>
+                        <span class="task-text ${state.tasks.shopVisited ? 'done' : ''}">Visitar a loja</span>
+                    </div>
+                </div>
+            `;
+
+            return `
+                <p><span class="highlight">🖥️ COMPUTADOR CENTRAL</span> — Painel de controle e tarefas do dia.</p>
+                <div class="stat-row"><span class="label">🔹 Oxigênio</span><span class="value">${Math.round(state.oxygen)}%</span></div>
+                <div class="stat-row"><span class="label">🔹 Energia</span><span class="value">${Math.round(state.energy)}%</span></div>
+                <div class="stat-row"><span class="label">🔹 Moral</span><span class="value">${Math.round(state.moral)}</span></div>
+                <div class="stat-row"><span class="label">🔹 Plantas</span><span class="value">${state.plants}</span></div>
+                <div class="stat-row"><span class="label">🔹 Dia</span><span class="value">${Math.floor(state.day)}</span></div>
+                <div class="stat-row"><span class="label">🔹 Máquina</span><span class="value" id="computerMachineStatus">${machineStatus}</span></div>
+                <div class="stat-row"><span class="label">🔹 Sucata</span><span class="value">${state.sucata}</span></div>
+                <div style="margin-top:6px; border-top:1px solid #1a2a22; padding-top:8px;">
+                    <p style="font-size:0.9rem; color:#80d0b0;">📋 Tarefas do Dia ${Math.floor(state.day)}</p>
+                    ${taskListHtml}
+                    <p style="font-size:0.8rem; color:#5a7a6a; margin-top:4px;">
+                        ${checkAllTasksDone() ? '✅ Todas as tarefas concluídas! Vá ao quarto para dormir.' : '⚠️ Complete todas as tarefas para avançar o dia.'}
+                    </p>
+                </div>
+                <div class="action-row">
+                    <button class="btn-action" id="actionCloseComputer">✕ Fechar</button>
+                </div>
+            `;
+        }
+
+        function getMachineContent() {
+            const timerHtml = state.machineActive ?
+                `<div class="machine-timer" id="machineTimerDisplay">${formatTime(state.machineTime)}</div>` :
+                `<div class="machine-timer warning" id="machineTimerDisplay">⛔ PARADA</div>`;
+
+            return `
+                <p><span class="highlight">⚙️ MÁQUINA DE FOTOSSÍNTESE</span> — Produz oxigênio.</p>
+                <p>🔹 Vida útil: ${timerHtml}</p>
+                <p>🔹 Produção atual: ${state.machineActive ? (state.plants * 0.04).toFixed(2) : '0.00'}/s</p>
+                <p>🔹 Sucata disponível: <span class="highlight">${state.sucata}</span></p>
+                <p>${state.tasks.machineFed ? '✅ Tarefa concluída!' : '⚠️ Pendente: abastecer a máquina.'}</p>
+                <div class="action-row">
+                    <button class="btn-action" id="actionAddSucata" ${state.sucata <= 0 ? 'disabled' : ''}>
+                        🔧 Abastecer (+30s) (${state.sucata > 0 ? '1 sucata' : 'sem sucata'})
+                    </button>
+                    <button class="btn-action" id="actionCloseMachine">✕ Fechar</button>
+                </div>
+            `;
+        }
+
+        function getRoomContent() {
+            const allDone = checkAllTasksDone();
+            const status = allDone ?
+                '✅ Todas as tarefas concluídas! Você pode dormir e avançar para o próximo dia.' :
+                '⚠️ Você precisa concluir todas as tarefas antes de dormir.';
+            return `
+                <p><span class="highlight">🛏️ QUARTO</span> — Descanse e avance o dia.</p>
+                <p>${status}</p>
+                <p>🔹 Dormir restaura <span class="highlight">+15 HP</span>, <span class="highlight">+10 Moral</span> e avança o tempo.</p>
+                <div class="action-row">
+                    <button class="btn-action primary" id="actionSleep" ${!allDone ? 'disabled' : ''}>
+                        ${allDone ? '😴 Dormir e avançar dia' : '🔒 Tarefas pendentes'}
+                    </button>
+                    <button class="btn-action" id="actionCloseRoom">✕ Fechar</button>
+                </div>
+            `;
+        }
+
+        function getShopContent() {
+            return `
+                <p><span class="highlight">🏪 LOJA</span> — Troque recursos por melhorias.</p>
+                <p>🔹 5 Metal → +2 Tecnologia</p>
+                <p>🔹 3 Biomassa → +1 Planta</p>
+                <p>🔹 4 Tecnologia → +10 Energia</p>
+                <p>🔹 2 Sucata → +5 Oxigênio</p>
+                <p>${state.tasks.shopVisited ? '✅ Tarefa concluída!' : '⚠️ Pendente: visitar a loja.'}</p>
+                <div class="action-row">
+                    <button class="btn-action" id="actionTradeMetal">🔄 Metal → Tech</button>
+                    <button class="btn-action" id="actionTradeBio">🔄 Biomassa → Planta</button>
+                    <button class="btn-action" id="actionTradeTech">🔄 Tech → Energia</button>
+                    <button class="btn-action" id="actionTradeSucata">🔄 Sucata → Oxigênio</button>
+                    <button class="btn-action" id="actionCloseShop">✕ Fechar</button>
+                </div>
+            `;
+        }
+
+        // ---- AÇÕES DAS SUBTELAS ----
+        function setupSubActions() {
+            // Superfície
+            const exploreBtn = document.getElementById('actionExplore');
+            if (exploreBtn) {
+                exploreBtn.addEventListener('click', () => {
+                    if (state.energy < 5) {
+                        alert('⚠️ Energia insuficiente para explorar!');
+                        return;
+                    }
+                    state.energy -= 5;
+                    const metalGain = 1 + Math.floor(Math.random() * 3);
+                    const bioGain = 1 + Math.floor(Math.random() * 3);
+                    const techGain = 1 + Math.floor(Math.random() * 2);
+                    const sucataGain = 1 + Math.floor(Math.random() * 4);
+                    state.metal += metalGain;
+                    state.biomass += bioGain;
+                    state.tech += techGain;
+                    state.sucata += sucataGain;
+                    state.totalExplorations++;
+                    state.totalResourcesCollected += metalGain + bioGain + techGain + sucataGain;
+                    state.tasks.explored = true;
+                    state.day += 0.3;
+                    state.moral += 2;
+                    if (Math.random() < 0.25) {
+                        state.totalEnemiesDefeated += 1;
+                        alert(`💀 Você enfrentou um mutante e o derrotou! +1 inimigo eliminado.`);
+                    }
+                    updateBunkerUI();
+                    alert(`✅ Exploração concluída! Recursos: +${metalGain} Metal, +${bioGain} Biomassa, +${techGain} Tech, +${sucataGain} Sucata`);
+                    closeSubScreen();
+                });
+            }
+            const returnBtn = document.getElementById('actionReturn');
+            if (returnBtn) returnBtn.addEventListener('click', closeSubScreen);
+
+            // Computador
+            const closeCompBtn = document.getElementById('actionCloseComputer');
+            if (closeCompBtn) closeCompBtn.addEventListener('click', closeSubScreen);
+
+            // Máquina
+            const addSucataBtn = document.getElementById('actionAddSucata');
+            if (addSucataBtn) {
+                addSucataBtn.addEventListener('click', () => {
+                    if (state.sucata <= 0) {
+                        alert('❌ Sem sucata disponível!');
+                        return;
+                    }
+                    state.sucata -= 1;
+                    state.machineTime += 30;
+                    if (state.machineTime > state.maxMachineTime) {
+                        state.machineTime = state.maxMachineTime;
+                    }
+                    state.machineActive = true;
+                    state.tasks.machineFed = true;
+                    updateBunkerUI();
+                    alert(`🔧 +30 segundos adicionados à máquina! Tempo restante: ${formatTime(state.machineTime)}`);
+                    const machineTimerEl = document.getElementById('machineTimerDisplay');
+                    if (machineTimerEl) {
+                        machineTimerEl.textContent = formatTime(state.machineTime);
+                        machineTimerEl.className = 'machine-timer';
+                    }
+                    const compStatus = document.getElementById('computerMachineStatus');
+                    if (compStatus) {
+                        compStatus.innerHTML = `<span class="highlight">✅ ATIVA</span> (${formatTime(state.machineTime)} restante)`;
+                    }
+                    if (state.sucata <= 0) {
+                        addSucataBtn.disabled = true;
+                        addSucataBtn.textContent = '🔧 Abastecer (sem sucata)';
+                    } else {
+                        addSucataBtn.textContent = `🔧 Abastecer (+30s) (${state.sucata} sucata)`;
+                    }
+                    closeSubScreen();
+                });
+            }
+            const closeMachineBtn = document.getElementById('actionCloseMachine');
+            if (closeMachineBtn) closeMachineBtn.addEventListener('click', closeSubScreen);
+
+            // Quarto
+            const sleepBtn = document.getElementById('actionSleep');
+            if (sleepBtn) {
+                sleepBtn.addEventListener('click', () => {
+                    if (!checkAllTasksDone()) {
+                        alert('⚠️ Você precisa concluir todas as tarefas antes de dormir!');
+                        return;
+                    }
+                    advanceDay();
+                    closeSubScreen();
+                });
+            }
+            const closeRoomBtn = document.getElementById('actionCloseRoom');
+            if (closeRoomBtn) closeRoomBtn.addEventListener('click', closeSubScreen);
+
+            // Loja
+            const tradeMetal = document.getElementById('actionTradeMetal');
+            if (tradeMetal) {
+                tradeMetal.addEventListener('click', () => {
+                    if (state.metal >= 5) {
+                        state.metal -= 5;
+                        state.tech += 2;
+                        state.tasks.shopVisited = true;
+                        updateBunkerUI();
+                        alert('🔄 Trocou 5 Metal por 2 Tecnologia!');
+                        closeSubScreen();
+                    } else {
+                        alert('❌ Metal insuficiente.');
+                    }
+                });
+            }
+            const tradeBio = document.getElementById('actionTradeBio');
+            if (tradeBio) {
+                tradeBio.addEventListener('click', () => {
+                    if (state.biomass >= 3) {
+                        state.biomass -= 3;
+                        state.plants += 1;
+                        state.tasks.shopVisited = true;
+                        updateBunkerUI();
+                        alert('🔄 Trocou 3 Biomassa por 1 Planta!');
+                        closeSubScreen();
+                    } else {
+                        alert('❌ Biomassa insuficiente.');
+                    }
+                });
+            }
+            const tradeTech = document.getElementById('actionTradeTech');
+            if (tradeTech) {
+                tradeTech.addEventListener('click', () => {
+                    if (state.tech >= 4) {
+                        state.tech -= 4;
+                        state.energy = Math.min(100, state.energy + 10);
+                        state.tasks.shopVisited = true;
+                        updateBunkerUI();
+                        alert('🔄 Trocou 4 Tecnologia por +10 Energia!');
+                        closeSubScreen();
+                    } else {
+                        alert('❌ Tecnologia insuficiente.');
+                    }
+                });
+            }
+            const tradeSucata = document.getElementById('actionTradeSucata');
+            if (tradeSucata) {
+                tradeSucata.addEventListener('click', () => {
+                    if (state.sucata >= 2) {
+                        state.sucata -= 2;
+                        state.oxygen = Math.min(100, state.oxygen + 5);
+                        state.tasks.shopVisited = true;
+                        updateBunkerUI();
+                        alert('🔄 Trocou 2 Sucata por +5 Oxigênio!');
+                        closeSubScreen();
+                    } else {
+                        alert('❌ Sucata insuficiente.');
+                    }
+                });
+            }
+            const closeShopBtn = document.getElementById('actionCloseShop');
+            if (closeShopBtn) closeShopBtn.addEventListener('click', closeSubScreen);
+
+            updateTaskUI();
+        }
+
+        // ---- ABRIR SUBTELA ----
+        function openSub(title, contentFn) {
+            const content = contentFn();
+            openSubScreen(title, content, () => {
+                bunkerGrid.style.display = 'grid';
+                updateBunkerUI();
+            });
+        }
+
+        // ---- EVENTOS DOS CARDS ----
+        bunkerGrid.querySelectorAll('.bunker-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const action = card.dataset.action;
+                switch (action) {
+                    case 'surface':
+                        openSub('☣️ SUPERFÍCIE', getSurfaceContent);
+                        break;
+                    case 'computer':
+                        openSub('🖥️ COMPUTADOR', getComputerContent);
+                        break;
+                    case 'machine':
+                        openSub('⚙️ MÁQUINA', getMachineContent);
+                        break;
+                    case 'room':
+                        openSub('🛏️ QUARTO', getRoomContent);
+                        break;
+                    case 'shop':
+                        openSub('🏪 LOJA', getShopContent);
+                        break;
+                    default:
+                        alert('Função em desenvolvimento...');
+                }
+            });
+        });
+
+        // ---- NAVEGAÇÃO PRINCIPAL ----
+        btnStartLore.addEventListener('click', () => showScreen('lore-screen'));
+
+        btnStartGame.addEventListener('click', () => {
+            const name = playerNameInput.value.trim() || 'Arion';
+            state.playerName = name;
+            showScreen('bunker-screen');
+            updateBunkerUI();
+            resetTasks();
+            if (!machineInterval) startMachineTimer();
+        });
+
+        btnBackToMenu.addEventListener('click', () => {
+            if (confirm('Deseja voltar ao menu? O progresso atual será mantido.')) {
+                showScreen('menu-screen');
+            }
+        });
+
+        playerNameInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') btnStartGame.click();
+        });
 
         // ---- INICIALIZAÇÃO ----
-        resetGame();
-
-        console.log('🌱 ECOSFERA 2200 – RPG de Escolhas carregado!');
-        console.log('📖 Use as escolhas para guiar o destino da humanidade.');
+        console.log('🌱 ECOSFERA 2200 – Jogo Completo carregado!');
+        console.log('📌 Funcionalidades: Menu → Lore → Bunker com tarefas diárias.');
     </script>
 
 </body>
