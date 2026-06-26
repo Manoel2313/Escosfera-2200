@@ -131,6 +131,9 @@
         .ramo:nth-child(4) {
             border-left-color: #012169;
         }
+        .ramo:nth-child(5) {
+            border-left-color: #FEDB00;
+        }
 
         .ramo h2 {
             font-size: 1.5rem;
@@ -162,7 +165,7 @@
         }
 
         .ramo ul li {
-            padding: 0.3rem 0 0.3rem 2rem;
+            padding: 0.4rem 0 0.4rem 2rem;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23009739" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>') left center no-repeat;
             background-size: 1.1rem;
             border-bottom: 1px dashed #d4e8d4;
@@ -180,6 +183,14 @@
 
         .destaque-amarelo {
             background: #FEDB00;
+            padding: 0.05rem 0.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .destaque-verde {
+            background: #009739;
+            color: white;
             padding: 0.05rem 0.4rem;
             border-radius: 8px;
             font-weight: 600;
@@ -380,87 +391,82 @@
                 <span class="tooltip-leve">☕ café financiou as primeiras fábricas</span>
             </div>
 
-            <!-- RAMO 3: DESENVOLVIMENTO (4 etapas) -->
-            <div class="ramo">
-                <h2><span class="emoji-ramo">📈</span> Desenvolvimento</h2>
-                <ul>
-                    <li><strong>1. Primeiras indústrias (fim do século XIX)</strong> — tecidos e alimentos, nas regiões <strong>Sudeste e Sul</strong></li>
-                    <li><strong>2. Crescimento (1930–1950)</strong> — governo passou a <strong>incentivar</strong> novas fábricas</li>
-                    <li><strong>3. Expansão (1950–1980)</strong> — Brasil passou a fabricar <strong>carros, eletrodomésticos e máquinas</strong></li>
-                    <li><strong>4. Modernização (1980 até hoje)</strong> — fábricas com <strong>computadores e robôs</strong></li>
-                </ul>
-                <span class="tooltip-leve">🚗 do tecido ao automóvel</span>
+            <!-- RAMO 3: DESENVOLVIMENTO (DETALHADO) -->
+            <div class="ramo" style="grid-column: 1 / -1; border-left-color: #009739;">
+                <h2><span class="emoji-ramo">📈</span> Desenvolvimento da Indústria no Brasil</h2>
+                <p style="font-size:0.95rem; margin-bottom:0.8rem;">A industrialização brasileira aconteceu em <strong>4 etapas</strong>, cada uma com suas características e avanços:</p>
+
+                <!-- ETAPA 1 -->
+                <div style="background: #f0f8f0; border-radius: 16px; padding: 0.8rem 1.2rem; margin-bottom: 0.8rem; border-left: 6px solid #012169;">
+                    <h4 style="color: #012169; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #012169; color: white; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">1</span>
+                        Primeiras indústrias (fim do século XIX)
+                    </h4>
+                    <p style="font-size:0.95rem; line-height:1.6; margin:0.2rem 0 0 0;">
+                        As primeiras fábricas brasileiras produziam <strong>tecidos, alimentos e produtos simples</strong>. Elas estavam principalmente nas regiões <strong>Sudeste e Sul</strong>, onde havia mais pessoas e mais dinheiro para investir. O dinheiro vinha da <strong>exportação do café</strong>, que era a atividade mais importante do país na época. Essas fábricas eram pequenas e usavam máquinas básicas, mas foram o <strong>primeiro passo</strong> para a industrialização.
+                    </p>
+                </div>
+
+                <!-- ETAPA 2 -->
+                <div style="background: #f0f8f0; border-radius: 16px; padding: 0.8rem 1.2rem; margin-bottom: 0.8rem; border-left: 6px solid #FEDB00;">
+                    <h4 style="color: #012169; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #FEDB00; color: #012169; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700;">2</span>
+                        Crescimento da indústria (1930–1950)
+                    </h4>
+                    <p style="font-size:0.95rem; line-height:1.6; margin:0.2rem 0 0 0;">
+                        A partir de <strong>1930</strong>, o governo começou a <strong>incentivar</strong> a criação de novas indústrias. O presidente <strong>Getúlio Vargas</strong> criou leis e investiu dinheiro público para ajudar as fábricas. Foram construídas <strong>grandes empresas</strong>, como a <strong>Companhia Siderúrgica Nacional (CSN)</strong>, que produzia o aço usado na construção de máquinas e prédios. A produção aumentou muito e <strong>milhares de pessoas</strong> deixaram o campo e foram trabalhar nas fábricas das cidades.
+                    </p>
+                </div>
+
+                <!-- ETAPA 3 -->
+                <div style="background: #f0f8f0; border-radius: 16px; padding: 0.8rem 1.2rem; margin-bottom: 0.8rem; border-left: 6px solid #009739;">
+                    <h4 style="color: #012169; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #009739; color: white; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span>
+                        Expansão industrial (1950–1980)
+                    </h4>
+                    <p style="font-size:0.95rem; line-height:1.6; margin:0.2rem 0 0 0;">
+                        Essa foi a época do <strong>"milagre econômico"</strong>. O Brasil passou a fabricar <strong>carros, eletrodomésticos, máquinas e muitos outros produtos</strong>. Grandes montadoras como <strong>Volkswagen, Ford e Fiat</strong> se instalaram no país. As <strong>cidades cresceram rapidamente</strong> e surgiram milhões de novos empregos. Foi também quando o Brasil começou a produzir <strong>aviões</strong>, com a criação da <strong>Embraer</strong> em 1969. A indústria se tornou mais diversificada e o país deixou de depender apenas de produtos agrícolas.
+                    </p>
+                </div>
+
+                <!-- ETAPA 4 -->
+                <div style="background: #f0f8f0; border-radius: 16px; padding: 0.8rem 1.2rem; border-left: 6px solid #012169;">
+                    <h4 style="color: #012169; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                        <span style="background: #012169; color: white; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">4</span>
+                        Modernização (1980 até hoje)
+                    </h4>
+                    <p style="font-size:0.95rem; line-height:1.6; margin:0.2rem 0 0 0;">
+                        Com a chegada dos <strong>computadores</strong>, as fábricas se tornaram mais automáticas. <strong>Robôs</strong> começaram a fazer tarefas repetitivas e máquinas mais modernas aumentaram a produção. Hoje, a indústria brasileira usa <strong>tecnologia de ponta</strong> em muitos setores, como a <strong>aviação</strong> (aviões da Embraer são vendidos para o mundo inteiro) e a <strong>produção de alimentos</strong>. As fábricas estão cada vez mais <strong>conectadas</strong> e buscam formas de produzir com <strong>menos poluição</strong>.
+                    </p>
+                </div>
+
+                <span class="tooltip-leve" style="margin-top:0.6rem;">🚗 do tecido ao avião · 4 etapas de transformação</span>
             </div>
 
-            <!-- RAMO 4: ATUALIDADE E 2050 -->
-            <div class="ramo" style="border-left-color: #FEDB00;">
-                <h2><span class="emoji-ramo">🔮</span> Hoje e 2050</h2>
-                <p><strong>Atualmente</strong>, o Brasil produz <strong>alimentos, carros, aviões, remédios, roupas</strong> e muitos outros produtos.</p>
-                <p style="font-size:0.9rem; color:#2d4a2d;">Desafios: poluição, concorrência e investimento em novas tecnologias.</p>
+            <!-- RAMO 4: PRESENTE (HOJE) -->
+            <div class="ramo">
+                <h2><span class="emoji-ramo">🏭</span> Presente (hoje)</h2>
+                <p>Atualmente, o Brasil possui indústrias que produzem <strong>alimentos, carros, aviões, remédios, roupas</strong> e muitos outros produtos.</p>
+                <ul>
+                    <li>O país é um dos maiores produtores de <strong>aviões</strong> do mundo (Embraer)</li>
+                    <li>Também é grande produtor de <strong>alimentos</strong>, carne, soja e suco de laranja</li>
+                    <li>As fábricas usam <strong>computadores e robôs</strong> para produzir mais rápido</li>
+                </ul>
+                <p style="font-size:0.9rem; color:#2d4a2d; margin-top:0.4rem; background:#f0f6f0; padding:0.3rem 1rem; border-radius:20px;">
+                    ⚠️ <strong>Desafios:</strong> poluição, concorrência com outros países e necessidade de investir em novas tecnologias
+                </p>
+                <span class="tooltip-leve">🌎 Brasil é o maior polo industrial da América Latina</span>
+            </div>
 
-                <div class="linha-pontilhada"></div>
+            <!-- RAMO 5: FUTURO (2050) -->
+            <div class="ramo" style="border-left-color: #FEDB00;">
+                <h2><span class="emoji-ramo">🔮</span> Futuro (2050)</h2>
+                <p>O que pode acontecer com a indústria brasileira até <strong>2050</strong>? Depende das escolhas que fizermos hoje!</p>
 
                 <div class="futuro-interno">
                     <div class="sub-ramo">
-                        <h4>✅ Futuro bom</h4>
-                        <p>Com <strong>robôs, inteligência artificial</strong> e energias renováveis, a indústria pode crescer, criar empregos e ser mais sustentável.</p>
-                        <span class="badge-2050 badge-verde">inovação</span>
-                    </div>
-                    <div class="sub-ramo negativo">
-                        <h4>⚠️ Futuro ruim</h4>
-                        <p>Sem investimentos em <strong>educação e tecnologia</strong>, o Brasil pode perder competitividade e a indústria pode encolher.</p>
-                        <span class="badge-2050 badge-vermelho">atenção</span>
-                    </div>
-                </div>
-
-                <div style="margin-top: 0.5rem; font-size: 0.9rem; background: #f0f8f0; border-radius: 20px; padding: 0.2rem 1rem; text-align: center;">
-                    <strong>📚 O segredo:</strong> investir em educação e tecnologia!
-                </div>
-            </div>
-
-        </div> <!-- fim grade-ramos -->
-
-        <!-- ====== LEGENDA ====== -->
-        <div class="legenda-mapa">
-            <div class="legenda-item">
-                <span class="legenda-cor" style="background: #012169;"></span> Tema central
-            </div>
-            <div class="legenda-item">
-                <span class="legenda-cor" style="background: #009739;"></span> Ramos principais
-            </div>
-            <div class="legenda-item">
-                <span class="legenda-cor" style="background: #FEDB00;"></span> Destaques
-            </div>
-            <div class="legenda-item">
-                <span class="legenda-cor" style="background: #cde0cd; border: 2px solid #012169;"></span> Sub-ramos (futuro)
-            </div>
-            <div style="font-size: 0.8rem; color: #3b5e3b; background: #e6f2e6; padding: 0.1rem 1.4rem; border-radius: 40px;">
-                🇧🇷 cores do Brasil
-            </div>
-        </div>
-
-        <!-- ====== RODAPÉ ====== -->
-        <div class="rodape-texto">
-            🧠 Mapa mental · Revolução Industrial no Brasil · linguagem fácil para todos
-        </div>
-
-    </div>
-
-    <!-- ====== INTERATIVIDADE ====== -->
-    <script>
-        (function() {
-            const ramos = document.querySelectorAll('.ramo');
-            ramos.forEach(ramo => {
-                ramo.addEventListener('click', function() {
-                    ramos.forEach(r => r.style.boxShadow = '');
-                    this.style.boxShadow = '0 0 0 4px #FEDB00, 0 10px 24px rgba(0,80,30,0.15)';
-                    setTimeout(() => {
-                        this.style.boxShadow = '';
-                    }, 1200);
-                });
-            });
-        })();
-    </script>
-
-</body>
-                </html>
+                        <h4>✅ Cenário bom</h4>
+                        <p>Se o Brasil investir em <strong>educação e tecnologia</strong>, a indústria poderá usar ainda mais <strong>robôs, inteligência artificial e energias renováveis</strong> (como solar e eólica). Isso vai:</p>
+                        <ul style="list-style:none; padding:0; margin:0.3rem 0 0 0;">
+                            <li style="padding:0.15rem 0 0.15rem 1.2rem; background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2214%22 height=%2214%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22009739%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22M22 11.08V12a10 10 0 1 1-5.93-9.14%22/><polyline points=%2222 4 12 14.01 9 11.01%22/></svg>') left center no-repeat; background-size:0.9rem; font-size:0.85rem;">Criar <strong>novos empregos</strong> em áreas tecnológicas</li>
+                            <li style="padding:0.15rem 0 0.15rem 1.2rem; background:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2214%22 height=%2214%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22009739%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%2
