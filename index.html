@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>📖 Livro · Revolução Industrial no Brasil</title>
     <style>
-        /* ----- RESET & BASE ----- */
+        /* ----- RESET & BASE (TEMA ESCURO) ----- */
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #dce8dc;
+            background: #0d0f0d;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -27,11 +27,11 @@
         .livro {
             max-width: 1100px;
             width: 100%;
-            background: #fafcfa;
+            background: #1a201a;
             border-radius: 20px 20px 16px 16px;
-            box-shadow: 0 20px 60px rgba(0, 40, 20, 0.25);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
             overflow: hidden;
-            border: 2px solid #b3cbb3;
+            border: 2px solid #2a3a2a;
             position: relative;
         }
 
@@ -49,9 +49,9 @@
 
         /* ----- CABEÇALHO DO LIVRO ----- */
         .cabecalho-livro {
-            background: #f4faf4;
+            background: #1f261f;
             padding: 1.2rem 2rem 0.8rem 2rem;
-            border-bottom: 3px solid #cde0cd;
+            border-bottom: 3px solid #2a3a2a;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
@@ -67,7 +67,7 @@
         .cabecalho-livro .titulo-livro h1 {
             font-size: 1.6rem;
             font-weight: 800;
-            color: #012169;
+            color: #FEDB00;
             letter-spacing: -0.02em;
         }
 
@@ -89,9 +89,9 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.3rem;
-            background: #eef6ee;
+            background: #151a15;
             padding: 0.6rem 1.5rem 0 1.5rem;
-            border-bottom: 3px solid #cde0cd;
+            border-bottom: 3px solid #2a3a2a;
         }
 
         .aba {
@@ -99,7 +99,7 @@
             border-radius: 16px 16px 0 0;
             font-weight: 600;
             font-size: 0.9rem;
-            color: #3a5a3a;
+            color: #8aaa8a;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -110,21 +110,21 @@
         }
 
         .aba:hover {
-            background: #d8e8d8;
-            color: #012169;
+            background: #2a3a2a;
+            color: #FEDB00;
         }
 
         .aba.ativa {
-            background: #ffffff;
-            color: #012169;
-            border-color: #cde0cd;
-            border-bottom: 3px solid #ffffff;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+            background: #1a201a;
+            color: #FEDB00;
+            border-color: #2a3a2a;
+            border-bottom: 3px solid #1a201a;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .aba .numero-aba {
-            background: #012169;
-            color: white;
+            background: #2a3a2a;
+            color: #8aaa8a;
             border-radius: 50%;
             width: 22px;
             height: 22px;
@@ -134,9 +134,15 @@
             font-size: 0.7rem;
             margin-right: 6px;
             font-weight: 700;
+            transition: 0.2s;
         }
 
         .aba.ativa .numero-aba {
+            background: #FEDB00;
+            color: #012169;
+        }
+
+        .aba:hover .numero-aba {
             background: #FEDB00;
             color: #012169;
         }
@@ -145,12 +151,13 @@
         .pagina-container {
             padding: 2rem 2.5rem 2.5rem 2.5rem;
             min-height: 420px;
-            background: #ffffff;
+            background: #1a201a;
         }
 
         .pagina {
             display: none;
             animation: fadeIn 0.3s ease;
+            color: #d4e8d4;
         }
 
         .pagina.ativa {
@@ -168,12 +175,12 @@
             }
         }
 
-        /* ----- ESTILOS DAS PÁGINAS ----- */
+        /* ----- ESTILOS DAS PÁGINAS (tema escuro) ----- */
         .pagina h2 {
             font-size: 2rem;
             font-weight: 700;
-            color: #012169;
-            border-bottom: 5px solid #FEDB00;
+            color: #FEDB00;
+            border-bottom: 5px solid #009739;
             padding-bottom: 0.3rem;
             display: inline-block;
             margin-bottom: 1.2rem;
@@ -182,7 +189,7 @@
         .pagina h3 {
             font-size: 1.3rem;
             font-weight: 700;
-            color: #1a5a2a;
+            color: #5cb85c;
             margin-top: 1.2rem;
             margin-bottom: 0.4rem;
             display: flex;
@@ -193,7 +200,7 @@
         .pagina p {
             font-size: 1rem;
             line-height: 1.8;
-            color: #1d2f1d;
+            color: #c8dcc8;
             margin-bottom: 0.8rem;
         }
 
@@ -207,9 +214,10 @@
             padding: 0.4rem 0 0.4rem 2rem;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%23009739" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>') left center no-repeat;
             background-size: 1.1rem;
-            border-bottom: 1px dashed #d4e8d4;
+            border-bottom: 1px dashed #2a3a2a;
             font-size: 0.98rem;
             line-height: 1.6;
+            color: #c8dcc8;
         }
 
         .pagina ul li:last-child {
@@ -217,11 +225,12 @@
         }
 
         .pagina ul li strong {
-            color: #012169;
+            color: #FEDB00;
         }
 
         .destaque-amarelo {
             background: #FEDB00;
+            color: #012169;
             padding: 0.05rem 0.4rem;
             border-radius: 6px;
             font-weight: 600;
@@ -236,7 +245,7 @@
         }
 
         .card-info {
-            background: #f4faf4;
+            background: #1f261f;
             border-radius: 16px;
             padding: 1rem 1.5rem;
             margin: 0.8rem 0;
@@ -252,13 +261,18 @@
         }
 
         .card-info h4 {
-            color: #012169;
+            color: #FEDB00;
             font-size: 1.1rem;
             margin-bottom: 0.2rem;
         }
 
         .card-info p {
             margin-bottom: 0;
+            color: #c8dcc8;
+        }
+
+        .card-info ul li {
+            border-bottom-color: #2a3a2a;
         }
 
         .grid-etapas {
@@ -269,7 +283,7 @@
         }
 
         .etapa-card {
-            background: #f4faf4;
+            background: #1f261f;
             border-radius: 16px;
             padding: 0.8rem 1.2rem;
             border-left: 6px solid #012169;
@@ -287,7 +301,7 @@
 
         .etapa-card h4 {
             font-size: 1rem;
-            color: #012169;
+            color: #FEDB00;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -297,6 +311,7 @@
             font-size: 0.92rem;
             line-height: 1.6;
             margin-bottom: 0;
+            color: #c8dcc8;
         }
 
         .badge {
@@ -325,11 +340,11 @@
         }
 
         .futuro-card {
-            background: white;
+            background: #1f261f;
             border-radius: 16px;
             padding: 1rem 1.2rem;
             border-top: 6px solid #009739;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
         }
 
         .futuro-card.negativo {
@@ -338,11 +353,11 @@
 
         .futuro-card h4 {
             font-size: 1.1rem;
-            color: #012169;
+            color: #FEDB00;
         }
 
         .futuro-card.negativo h4 {
-            color: #9e1a1a;
+            color: #e06060;
         }
 
         .futuro-card ul {
@@ -357,11 +372,21 @@
             background-size: 0.9rem;
             border-bottom: none;
             padding-left: 1.4rem;
+            color: #c8dcc8;
+            border-bottom: 1px dashed #2a3a2a;
+        }
+
+        .futuro-card ul li:last-child {
+            border-bottom: none;
         }
 
         .futuro-card.negativo ul li {
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%22b11f1f%22" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>') left center no-repeat;
             background-size: 0.9rem;
+        }
+
+        .futuro-card p {
+            color: #c8dcc8;
         }
 
         .mensagem-destaque {
@@ -376,13 +401,14 @@
         }
 
         .tooltip-leve {
-            background: #eef6ee;
+            background: #1f261f;
             border-radius: 40px;
             padding: 0.1rem 1.2rem;
             font-size: 0.8rem;
-            color: #1f4f1f;
+            color: #8aaa8a;
             display: inline-block;
             margin-top: 0.3rem;
+            border: 1px solid #2a3a2a;
         }
 
         /* ----- PÁGINA 1 ESPECIAL (pedido de desculpas) ----- */
@@ -400,19 +426,19 @@
         .pagina-desculpas .texto-desculpas {
             font-size: 1.4rem;
             font-weight: 700;
-            color: #012169;
+            color: #FEDB00;
             line-height: 1.6;
             max-width: 700px;
             margin: 0 auto;
         }
 
         .pagina-desculpas .texto-desculpas .destaque-vermelho {
-            color: #b11f1f;
+            color: #e06060;
         }
 
         .pagina-desculpas .texto-secundario {
             font-size: 1.1rem;
-            color: #2d4a2d;
+            color: #8aaa8a;
             margin-top: 0.5rem;
             font-style: italic;
         }
@@ -427,15 +453,15 @@
 
         /* ----- RODAPÉ ----- */
         .rodape-livro {
-            background: #eef6ee;
+            background: #1f261f;
             padding: 0.8rem 2rem;
-            border-top: 2px solid #cde0cd;
+            border-top: 2px solid #2a3a2a;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             font-size: 0.8rem;
-            color: #3a5a3a;
+            color: #8aaa8a;
         }
 
         .rodape-livro .nav-paginas {
@@ -444,12 +470,12 @@
         }
 
         .rodape-livro .nav-paginas button {
-            background: white;
-            border: 2px solid #b3cbb3;
+            background: #1a201a;
+            border: 2px solid #2a3a2a;
             border-radius: 12px;
             padding: 0.2rem 1rem;
             font-weight: 600;
-            color: #012169;
+            color: #8aaa8a;
             cursor: pointer;
             transition: 0.2s;
             font-family: inherit;
@@ -457,20 +483,20 @@
         }
 
         .rodape-livro .nav-paginas button:hover {
-            background: #012169;
-            color: white;
-            border-color: #012169;
+            background: #FEDB00;
+            color: #012169;
+            border-color: #FEDB00;
         }
 
         .rodape-livro .nav-paginas button:disabled {
-            opacity: 0.4;
+            opacity: 0.3;
             cursor: not-allowed;
         }
 
         .rodape-livro .nav-paginas button:disabled:hover {
-            background: white;
-            color: #012169;
-            border-color: #b3cbb3;
+            background: #1a201a;
+            color: #8aaa8a;
+            border-color: #2a3a2a;
         }
 
         /* ----- RESPONSIVO ----- */
@@ -596,7 +622,7 @@
                         <span style="background: #FEDB00; color: #012169; padding: 0.2rem 1.2rem; border-radius: 40px; font-weight: 600;">📖 linguagem fácil</span>
                         <span style="background: #012169; color: white; padding: 0.2rem 1.2rem; border-radius: 40px; font-weight: 600;">🇧🇷 cores do Brasil</span>
                     </div>
-                    <p style="margin-top: 1.2rem; font-size: 0.95rem; color: #3a5a3a;">
+                    <p style="margin-top: 1.2rem; font-size: 0.95rem; color: #8aaa8a;">
                         Clique nas abas acima para navegar pelos capítulos!
                     </p>
                 </div>
@@ -627,13 +653,4 @@
             <!-- PÁGINA 3: COMO COMEÇOU -->
             <div class="pagina" id="pagina3">
                 <h2>⏳ Como começou no Brasil?</h2>
-                <p>No Brasil, a industrialização começou <strong>mais tarde</strong> do que na Europa. Antes, a economia era baseada na agricultura, principalmente na produção de <span class="destaque-amarelo">café</span>.</p>
-
-                <div class="card-info amarelo">
-                    <h4>☕ O papel do café</h4>
-                    <p>O café era o <strong>produto mais importante</strong> do Brasil no século XIX. Os fazendeiros ficavam ricos com a venda do café para outros países. Uma parte desse dinheiro foi usada para <strong>construir as primeiras fábricas</strong>.</p>
-                </div>
-
-                <div class="card-info">
-                    <h4>🌍 A chegada dos imigrantes</h4>
-                    <p>Muitas pessoas vieram de <strong>outros países</strong> (como Itália,
+                <p>No Brasil, a industrialização começou <strong>mais tarde</strong> do que na Europa. Antes, a economia era baseada na agricultura, pr
