@@ -355,8 +355,8 @@
             padding: 0.2rem 0 0.2rem 1.4rem;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23009739" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>') left center no-repeat;
             background-size: 0.9rem;
-            font-size: 0.9rem;
             border-bottom: none;
+            padding-left: 1.4rem;
         }
 
         .futuro-card.negativo ul li {
@@ -462,6 +462,17 @@
             border-color: #012169;
         }
 
+        .rodape-livro .nav-paginas button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .rodape-livro .nav-paginas button:disabled:hover {
+            background: white;
+            color: #012169;
+            border-color: #b3cbb3;
+        }
+
         /* ----- RESPONSIVO ----- */
         @media (max-width: 820px) {
             .pagina-container {
@@ -526,7 +537,7 @@
 <body>
 
     <!-- ====== LIVRO ====== -->
-    <div class="livro">
+    <div class="livro" id="livro">
 
         <!-- faixa bandeira -->
         <div class="bandeira-topo"></div>
@@ -625,7 +636,4 @@
 
                 <div class="card-info">
                     <h4>🌍 A chegada dos imigrantes</h4>
-                    <p>Muitas pessoas vieram de <strong>outros países</strong> (como Itália, Alemanha, Portugal e Espanha) para trabalhar nas indústrias. Elas trouxeram <strong>conhecimentos</strong> sobre como fazer produtos e ajudaram as fábricas a crescer.</p>
-                </div>
-
-                <p style="font-size:0.95rem; background:#f0f6f0; padding:0.5rem 1.2rem; border-radius:16p
+                    <p>Muitas pessoas vieram de <strong>outros países</strong> (como Itália,
